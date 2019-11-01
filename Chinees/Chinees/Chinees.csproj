@@ -52,10 +52,49 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Kruiden.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kruiden.Designer.cs">
+      <DependentUpon>Kruiden.cs</DependentUpon>
+    </Compile>
+    <Compile Include="KruidenFormules.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="KruidenFormules.Designer.cs">
+      <DependentUpon>KruidenFormules.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PatentFormule.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PatentFormule.Designer.cs">
+      <DependentUpon>PatentFormule.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Syndromen.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Syndromen.Designer.cs">
+      <DependentUpon>Syndromen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SyndroomActie.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SyndroomActie.Designer.cs">
+      <DependentUpon>SyndroomActie.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kruiden.resx">
+      <DependentUpon>Kruiden.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="KruidenFormules.resx">
+      <DependentUpon>KruidenFormules.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PatentFormule.resx">
+      <DependentUpon>PatentFormule.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -66,6 +105,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="Syndromen.resx">
+      <DependentUpon>Syndromen.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SyndroomActie.resx">
+      <DependentUpon>SyndroomActie.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
