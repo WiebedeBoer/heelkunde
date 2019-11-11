@@ -15,6 +15,16 @@ namespace Chinees
     {
         Thread th;
 
+        /*
+             Layout = "~/_layout.cshtml";
+    Database db = app.db;
+    dynamic currentuser = app.user.getUser();
+    int userID = int.Parse(currentuser["Id"].ToString());
+    int userType = int.Parse(currentuser["usertype"].ToString());
+    var vstudieID = db.QueryValue("SELECT StudieID FROM users WHERE Id=@0", userID);
+             
+             */
+
         public Syndromen()
         {
             InitializeComponent();
@@ -32,5 +42,13 @@ namespace Chinees
         {
             Application.Run(new Form1());
         }
+
+        /*
+private void Execute()
+{
+
+}
+*/
+
     }
 }
