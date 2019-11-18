@@ -47,7 +47,7 @@ namespace Chinees
         {
             //connection
             conn = new DBHandler().getConnection();
-            //data binded form variables
+            //data form variables
             string Nederlands = textBox1.Text;
             string Latijns = textBox2.Text;
             string Familie = textBox3.Text;
@@ -60,23 +60,46 @@ namespace Chinees
             string Toepassingen = textBox10.Text;
             string Actie = textBox11.Text;
             string Gebruik = textBox12.Text;
-
             string Aantekeningen = textBox13.Text;
-
-            string Maxi;
+            //maximum
             int MaxID;
-
+            //command and query strings
+            SqlCommand cmd;
+            SqlCommand mcmd;
+            SqlCommand acmd;
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            SqlDataReader mdataReader;
+            SqlDataReader adataReader;
+            String query;
+            String mquery;
+            String aquery;
+            //db open
+            conn.Open();
             //insert
-            String query = "INSERT INTO Kruiden (Nederlands, Latijn, Familie, Inhoudsstoffen,GebruikteDelen,Eigenschappen,Smaak,Thermodynamisch,Orgaan,Toepassingen,Actie,Gebruik) VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11), Nederlands, Latijns, Familie, Inhoudsstoffen,GebruikteDelen,Eigenschappen,Smaak,Thermodynamisch,Orgaan,Toepassingen,Actie,Gebruik";
-            SqlCommand cmd = new SqlCommand(query, conn);
+            query = "INSERT INTO Kruiden (Nederlands, Latijn, Familie, Inhoudsstoffen,GebruikteDelen,Eigenschappen,Smaak,Thermodynamisch,Orgaan,Toepassingen,Actie,Gebruik) VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11), Nederlands, Latijns, Familie, Inhoudsstoffen,GebruikteDelen,Eigenschappen,Smaak,Thermodynamisch,Orgaan,Toepassingen,Actie,Gebruik";
+            cmd = new SqlCommand(query, conn);
+            //cmd.ExecuteReader();
+            adapter.InsertCommand = new SqlCommand(query, conn);
+            adapter.InsertCommand.ExecuteNonQuery();
             //select max
-            String mquery = "SELECT MAX(ID) AS Maxid FROM Kruiden";
-            SqlCommand mcmd = new SqlCommand(mquery, conn);
-            Maxi = "1"; //mcmd.QueryValue(mquery);
-            MaxID = Convert.ToInt32(Maxi);
+            mquery = "SELECT MAX(ID) AS Maxid FROM Kruiden";
+            mcmd = new SqlCommand(mquery, conn);
+            mdataReader = mcmd.ExecuteReader();
+            mdataReader.Read();
+            MaxID = Convert.ToInt32(mdataReader.GetValue(0));
             //aantekening
-            String aantekening = "INSERT INTO Kruidenaantekeningen (Kruid, Aantekening) VALUES(@0, @1), MaxID, Aantekeningen";
-            SqlCommand acmd = new SqlCommand(aantekening, conn);
+            aquery = "INSERT INTO Kruidenaantekeningen (Kruid, Aantekening) VALUES(@0, @1), MaxID, Aantekeningen";
+            acmd = new SqlCommand(aquery, conn);
+            //adataReader = acmd.ExecuteReader();
+            adapter.InsertCommand = new SqlCommand(aquery, conn);
+            adapter.InsertCommand.ExecuteNonQuery();
+            //db close
+            mdataReader.Close();
+            //adataReader.Close();
+            cmd.Dispose();
+            mcmd.Dispose();
+            acmd.Dispose();
+            conn.Close();
         }
 
     }
@@ -85,11 +108,11 @@ namespace Chinees
     public class DBHandler
     {
         //private Database db;
-        private SqlConnection con;
+        private SqlConnection con;        
         public DBHandler()
         {
             string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\wiebe\Documents\minor\heelkunde\Chinees\TCM2.mdb;Jet OLEDB:Database Password=admin123";
-            string provider = "System.Data.SqlClient";
+            //string provider = "System.Data.SqlClient";
             con = new SqlConnection(connectionString);
             //db = OpenConnectionString(connectionString, provider);
 
