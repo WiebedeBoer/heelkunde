@@ -90,6 +90,11 @@
     <Compile Include="SyndroomActie.Designer.cs">
       <DependentUpon>SyndroomActie.cs</DependentUpon>
     </Compile>
+    <Compile Include="TCM2DataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TCM2DataSet.xsd</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="EditForm.resx">
       <DependentUpon>EditForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -129,9 +134,25 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="TCM2DataSet.xsc">
+      <DependentUpon>TCM2DataSet.xsd</DependentUpon>
+    </None>
+    <None Include="TCM2DataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>TCM2DataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="TCM2DataSet.xss">
+      <DependentUpon>TCM2DataSet.xsd</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TCM2.mdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
