@@ -32,12 +32,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
+
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
             this.textBox4 = new System.Windows.Forms.TextBox();
-            this.textBox5 = new System.Windows.Forms.TextBox();
+
             this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -76,15 +76,7 @@
             this.label4.Size = new System.Drawing.Size(70, 13);
             this.label4.TabIndex = 3;
             this.label4.Text = "Opmerkingen";
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(399, 139);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(44, 13);
-            this.label5.TabIndex = 4;
-            this.label5.Text = "Formule";
+
             // 
             // textBox1
             // 
@@ -115,14 +107,6 @@
             this.textBox4.Size = new System.Drawing.Size(124, 68);
             this.textBox4.TabIndex = 8;
             // 
-            // textBox5
-            // 
-            this.textBox5.Location = new System.Drawing.Point(523, 128);
-            this.textBox5.Multiline = true;
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(124, 53);
-            this.textBox5.TabIndex = 9;
-            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(346, 313);
@@ -139,12 +123,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox5);
             this.Controls.Add(this.textBox4);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.label5);
+
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -162,12 +145,12 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Label label5;
+
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.TextBox textBox5;
+
         private System.Windows.Forms.Button button1;
     }
 }

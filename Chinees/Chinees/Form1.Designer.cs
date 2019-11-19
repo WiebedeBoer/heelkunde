@@ -128,7 +128,19 @@
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(203, 21);
             this.comboBox1.TabIndex = 8;
-            this.comboBox1.Text = "Nederlands";
+            //this.comboBox1.Text = "Nederlands";
+            this.comboBox1.Items.AddRange(new object[] {"Nederlandse naam kruid",
+                        "Latijnse naam kruid",
+                        "Thermodynamisch in kruid",
+                        "Indicaties in kruidenformule",
+                        "Naam kruidenformule",
+                        "Kruid in kruidenformule",
+                        "Nederlandse naam patentformule",
+                        "Engelse naam patentformule",
+                        "Pinjin naam patentformule",
+                        "Syndroom naam",
+                        "Syndroom op symptomen pols en tong",
+                        "Patentformule op symptoom"});
             // 
             // textBox1
             // 
