@@ -15,7 +15,9 @@ namespace Chinees
         private SqlConnection con;
         public DBHandler()
         {
-            string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\wiebe\Documents\minor\heelkunde\Chinees\TCM2.mdb;Jet OLEDB:Database Password=admin123";
+            //string connectionString = @"Provider=Microsoft.Jet.OLEDB.4.0;Data Source=C:\Users\wiebe\Documents\minor\heelkunde\Chinees\TCM2.mdb;Jet OLEDB:Database Password=admin123";
+           // string connectionString = @"Data Source=C:\Users\wiebe\Documents\minor\heelkunde\Chinees\TCM2.mdb;Jet OLEDB:Database Password=admin123";
+            string connectionString = @"Data Source=C:\Users\wiebe\Documents\minor\heelkunde\Chinees\TCM2.mdb";
             //string provider = "System.Data.SqlClient";
             con = new SqlConnection(connectionString);
             //db = OpenConnectionString(connectionString, provider);
