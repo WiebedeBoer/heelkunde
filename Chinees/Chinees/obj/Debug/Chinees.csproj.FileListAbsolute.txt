@@ -1,0 +1,17 @@
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\bin\Debug\TCM2.mdb
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\bin\Debug\Chinees.exe.config
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\bin\Debug\Chinees.exe
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\bin\Debug\Chinees.pdb
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.csprojAssemblyReference.cache
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.EditForm.resources
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.Form1.resources
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.Kruiden.resources
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.KruidenFormules.resources
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.PatentFormule.resources
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.Properties.Resources.resources
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.Syndromen.resources
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.SyndroomActie.resources
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.csproj.GenerateResource.cache
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.csproj.CoreCompileInputs.cache
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.exe
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.pdb
