@@ -76,10 +76,22 @@ namespace Chinees
             //db open
             conn.Open();
             //insert
-            query = "INSERT INTO Kruiden (Nederlands, Latijn, Familie, Inhoudsstoffen,GebruikteDelen,Eigenschappen,Smaak,Thermodynamisch,Orgaan,Toepassingen,Actie,Gebruik) VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11), Nederlands, Latijns, Familie, Inhoudsstoffen,GebruikteDelen,Eigenschappen,Smaak,Thermodynamisch,Orgaan,Toepassingen,Actie,Gebruik";
+            query = "INSERT INTO Kruiden (Nederlands, Latijn, Familie, Inhoudsstoffen,GebruikteDelen,Eigenschappen,Smaak,Thermodynamisch,Orgaan,Toepassingen,Actie,Gebruik) VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11)";
             cmd = new SqlCommand(query, conn);
             //cmd.ExecuteReader();
             adapter.InsertCommand = new SqlCommand(query, conn);
+            adapter.InsertCommand.Parameters.AddWithValue("@0", Nederlands);
+            adapter.InsertCommand.Parameters.AddWithValue("@1", Latijns);
+            adapter.InsertCommand.Parameters.AddWithValue("@2", Familie);
+            adapter.InsertCommand.Parameters.AddWithValue("@3", Inhoudsstoffen);
+            adapter.InsertCommand.Parameters.AddWithValue("@4", GebruikteDelen);
+            adapter.InsertCommand.Parameters.AddWithValue("@5", Eigenschappen);
+            adapter.InsertCommand.Parameters.AddWithValue("@6", Smaak);
+            adapter.InsertCommand.Parameters.AddWithValue("@7", Thermodynamisch);
+            adapter.InsertCommand.Parameters.AddWithValue("@8", Orgaan);
+            adapter.InsertCommand.Parameters.AddWithValue("@9", Toepassingen);
+            adapter.InsertCommand.Parameters.AddWithValue("@10", Actie);
+            adapter.InsertCommand.Parameters.AddWithValue("@11", Gebruik);
             adapter.InsertCommand.ExecuteNonQuery();
             //select max
             mquery = "SELECT MAX(ID) AS Maxid FROM Kruiden";
