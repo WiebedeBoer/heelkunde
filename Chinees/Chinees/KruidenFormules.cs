@@ -68,10 +68,18 @@ namespace Chinees
             //db open
             conn.Open();
             //insert
-            query = "INSERT INTO Kruidenformules (Naam, Indicaties, Werking, Klasse, Smaak, Meridiaan, Qi, Contraindicaties) VALUES (@0, @1, @2, @3, @4, @5, @6, @7), Naam, Indicaties, Werking, Klasse, Smaak, Meridiaan, Qi, Contraindicaties";
+            query = "INSERT INTO Kruidenformules (Naam, Indicaties, Werking, Klasse, Smaak, Meridiaan, Qi, Contraindicaties) VALUES (@0, @1, @2, @3, @4, @5, @6, @7)";
             cmd = new SqlCommand(query, conn);
             //cmd.ExecuteReader();
             adapter.InsertCommand = new SqlCommand(query, conn);
+            adapter.InsertCommand.Parameters.AddWithValue("@0", Naam);
+            adapter.InsertCommand.Parameters.AddWithValue("@1", Indicaties);
+            adapter.InsertCommand.Parameters.AddWithValue("@2", Werking);
+            adapter.InsertCommand.Parameters.AddWithValue("@3", Klasse);
+            adapter.InsertCommand.Parameters.AddWithValue("@4", Smaak);
+            adapter.InsertCommand.Parameters.AddWithValue("@5", Meridiaan);
+            adapter.InsertCommand.Parameters.AddWithValue("@6", Qi);
+            adapter.InsertCommand.Parameters.AddWithValue("@7", Contraindicaties);
             adapter.InsertCommand.ExecuteNonQuery();
             //select max
             mquery = "SELECT MAX(ID) AS Maxid FROM Kruidenformules";
@@ -84,6 +92,8 @@ namespace Chinees
             acmd = new SqlCommand(aquery, conn);
             //adataReader = acmd.ExecuteReader();
             adapter.InsertCommand = new SqlCommand(aquery, conn);
+            adapter.InsertCommand.Parameters.AddWithValue("@0", MaxID);
+            adapter.InsertCommand.Parameters.AddWithValue("@1", Aantekeningen);
             adapter.InsertCommand.ExecuteNonQuery();
             //db close
             mdataReader.Close();

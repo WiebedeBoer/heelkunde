@@ -68,10 +68,18 @@ namespace Chinees
             //db open
             conn.Open();
             //insert
-            query = "INSERT INTO Patentformules (Nederlands, Engels, Pinjin, Werking, Tong, Pols, Contraindicaties, Indicaties) VALUES (@0, @1, @2, @3, @4, @5, @6, @7), Nederlands, Engels, Pinjin, Werking, Tong, Pols, Contraindicaties, Indicaties";
+            query = "INSERT INTO Patentformules (Nederlands, Engels, Pinjin, Werking, Tong, Pols, Contraindicaties, Indicaties) VALUES (@0, @1, @2, @3, @4, @5, @6, @7)";
             cmd = new SqlCommand(query, conn);
             //cmd.ExecuteReader();
             adapter.InsertCommand = new SqlCommand(query, conn);
+            adapter.InsertCommand.Parameters.AddWithValue("@0", Nederlands);
+            adapter.InsertCommand.Parameters.AddWithValue("@1", Engels);
+            adapter.InsertCommand.Parameters.AddWithValue("@2", Pinjin);
+            adapter.InsertCommand.Parameters.AddWithValue("@3", Werking);
+            adapter.InsertCommand.Parameters.AddWithValue("@4", Tong);
+            adapter.InsertCommand.Parameters.AddWithValue("@5", Pols);
+            adapter.InsertCommand.Parameters.AddWithValue("@6", Contraindicaties);
+            adapter.InsertCommand.Parameters.AddWithValue("@7", Indicaties);
             adapter.InsertCommand.ExecuteNonQuery();
             //select max
             mquery = "SELECT MAX(ID) AS Maxid FROM Patentformules";
@@ -84,6 +92,8 @@ namespace Chinees
             acmd = new SqlCommand(aquery, conn);
             //adataReader = acmd.ExecuteReader();
             adapter.InsertCommand = new SqlCommand(aquery, conn);
+            adapter.InsertCommand.Parameters.AddWithValue("@0", MaxID);
+            adapter.InsertCommand.Parameters.AddWithValue("@1", Aantekeningen);
             adapter.InsertCommand.ExecuteNonQuery();
             //db close
             mdataReader.Close();

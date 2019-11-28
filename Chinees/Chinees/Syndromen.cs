@@ -61,10 +61,19 @@ namespace Chinees
             //db open
             conn.Open();
             //insert
-            query = "INSERT INTO Syndromen (Syndroom, Symptoom, Hoofdsymptoom, Tong, Pols, Etiologie, Pathologie, Voorlopers, Ontwikkelingen) VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8), Syndroom, Symptoom, Hoofdsymptoom, Tong, Pols, Etiologie, Pathologie, Voorlopers, Ontwikkelingen";
+            query = "INSERT INTO Syndromen (Syndroom, Symptoom, Hoofdsymptoom, Tong, Pols, Etiologie, Pathologie, Voorlopers, Ontwikkelingen) VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8)";
             cmd = new SqlCommand(query, conn);
             //cmd.ExecuteReader();
             adapter.InsertCommand = new SqlCommand(query, conn);
+            adapter.InsertCommand.Parameters.AddWithValue("@0", Syndroom);
+            adapter.InsertCommand.Parameters.AddWithValue("@1", Symptoom);
+            adapter.InsertCommand.Parameters.AddWithValue("@2", Hoofdsymptoom);
+            adapter.InsertCommand.Parameters.AddWithValue("@3", Tong);
+            adapter.InsertCommand.Parameters.AddWithValue("@4", Pols);
+            adapter.InsertCommand.Parameters.AddWithValue("@5", Etiologie);
+            adapter.InsertCommand.Parameters.AddWithValue("@6", Pathologie);
+            adapter.InsertCommand.Parameters.AddWithValue("@7", Voorlopers);
+            adapter.InsertCommand.Parameters.AddWithValue("@8", Ontwikkelingen);
             adapter.InsertCommand.ExecuteNonQuery();
             //db close
             //adataReader.Close();

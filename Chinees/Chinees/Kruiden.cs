@@ -104,6 +104,8 @@ namespace Chinees
             acmd = new SqlCommand(aquery, conn);
             //adataReader = acmd.ExecuteReader();
             adapter.InsertCommand = new SqlCommand(aquery, conn);
+            adapter.InsertCommand.Parameters.AddWithValue("@0", MaxID);
+            adapter.InsertCommand.Parameters.AddWithValue("@1", Aantekeningen);
             adapter.InsertCommand.ExecuteNonQuery();
             //db close
             mdataReader.Close();

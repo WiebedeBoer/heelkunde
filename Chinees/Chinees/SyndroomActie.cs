@@ -60,6 +60,10 @@ namespace Chinees
             cmd = new SqlCommand(query, conn);
             //cmd.ExecuteReader();
             adapter.InsertCommand = new SqlCommand(query, conn);
+            adapter.InsertCommand.Parameters.AddWithValue("@0", Syndroom);
+            adapter.InsertCommand.Parameters.AddWithValue("@1", Actie);
+            adapter.InsertCommand.Parameters.AddWithValue("@2", Acupunctuurpunten);
+            adapter.InsertCommand.Parameters.AddWithValue("@3", Opmerkingen);
             adapter.InsertCommand.ExecuteNonQuery();
             //db close
             //adataReader.Close();
