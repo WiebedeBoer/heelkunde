@@ -145,15 +145,17 @@ namespace Chinees
             //execute select
             cmd = new SqlCommand(query, conn);
             mdataReader = cmd.ExecuteReader();
-            mdataReader.Read();
-            //display output
-            output = mdataReader.GetString(0);
-            Label outputlabel = new System.Windows.Forms.Label();
-            outputlabel.Text = output;
-            Button buttonedit = new System.Windows.Forms.Button();
-            buttonedit.Text = "Aanpassen";
-            Button buttondelete = new System.Windows.Forms.Button();
-            buttondelete.Text = "Verwijderen";
+            while (mdataReader.Read())
+            {
+                //display output
+                output = mdataReader.GetString(0);
+                Label outputlabel = new System.Windows.Forms.Label();
+                outputlabel.Text = output;
+                Button buttonedit = new System.Windows.Forms.Button();
+                buttonedit.Text = "Aanpassen";
+                Button buttondelete = new System.Windows.Forms.Button();
+                buttondelete.Text = "Verwijderen";
+            }
             //db close
             mdataReader.Close();
             cmd.Dispose();
