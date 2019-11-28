@@ -73,6 +73,14 @@ namespace Chinees
             Search(searchtext, searchtype);
         }
 
+        private void button8_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            th = new Thread(openpinjinkruiden);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
+        }
+
         //search
         private void Search(string searchtext, string searchtype)
         {
@@ -175,6 +183,12 @@ namespace Chinees
         {
             
             Application.Run(new PatentFormule());
+        }
+
+        private void openpinjinkruiden(object obj)
+        {
+
+            Application.Run(new ChineseKruiden());
         }
 
 

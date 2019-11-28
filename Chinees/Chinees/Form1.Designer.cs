@@ -41,11 +41,12 @@
             this.label3 = new System.Windows.Forms.Label();
             this.button7 = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
+            this.button8 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(236, 46);
+            this.button1.Location = new System.Drawing.Point(25, 46);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(203, 35);
             this.button1.TabIndex = 0;
@@ -55,7 +56,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(236, 97);
+            this.button2.Location = new System.Drawing.Point(25, 105);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(203, 33);
             this.button2.TabIndex = 1;
@@ -65,7 +66,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(236, 145);
+            this.button3.Location = new System.Drawing.Point(445, 99);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(203, 39);
             this.button3.TabIndex = 2;
@@ -124,23 +125,23 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Nederlandse naam kruid",
+            "Latijnse naam kruid",
+            "Thermodynamisch in kruid",
+            "Indicaties in kruidenformule",
+            "Naam kruidenformule",
+            "Kruid in kruidenformule",
+            "Nederlandse naam patentformule",
+            "Engelse naam patentformule",
+            "Pinjin naam patentformule",
+            "Syndroom naam",
+            "Syndroom op symptomen pols en tong",
+            "Patentformule op symptoom"});
             this.comboBox1.Location = new System.Drawing.Point(236, 325);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(203, 21);
             this.comboBox1.TabIndex = 8;
-            //this.comboBox1.Text = "Nederlands";
-            this.comboBox1.Items.AddRange(new object[] {"Nederlandse naam kruid",
-                        "Latijnse naam kruid",
-                        "Thermodynamisch in kruid",
-                        "Indicaties in kruidenformule",
-                        "Naam kruidenformule",
-                        "Kruid in kruidenformule",
-                        "Nederlandse naam patentformule",
-                        "Engelse naam patentformule",
-                        "Pinjin naam patentformule",
-                        "Syndroom naam",
-                        "Syndroom op symptomen pols en tong",
-                        "Patentformule op symptoom"});
             // 
             // textBox1
             // 
@@ -176,11 +177,22 @@
             this.label4.TabIndex = 12;
             this.label4.Text = "Zoekterm";
             // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(445, 46);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(203, 34);
+            this.button8.TabIndex = 13;
+            this.button8.Text = "Chinese Kruiden";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button8);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.label3);
@@ -216,7 +228,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.TextBox textBox1;
-        
+        private System.Windows.Forms.Button button8;
     }
 }
 
