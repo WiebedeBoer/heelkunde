@@ -15,3 +15,4 @@ C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.cspro
 C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.csproj.CoreCompileInputs.cache
 C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.exe
 C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.pdb
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.ChineseKruiden.resources
