@@ -70,7 +70,12 @@ namespace Chinees
             string searchtext = textBox1.Text;
             string searchtype = comboBox1.SelectedText;
             //executing search
-            Search(searchtext, searchtype);
+            //Search(searchtext, searchtype);
+
+            this.Close();
+            th = new Thread(openactiessyndromen);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
         }
 
         private void button8_Click(object sender, EventArgs e)
@@ -81,86 +86,7 @@ namespace Chinees
             th.Start();
         }
 
-        //search
-        private void Search(string searchtext, string searchtype)
-        {
-            string search = searchtext;
-            string searchkind = searchtype;
-            //connection
-            conn = new DBHandler().getConnection();
-            //command and query strings
-            SqlCommand cmd;
-            SqlDataReader mdataReader;
-            String query,output;
-            //db open
-            conn.Open();
-            //select query according to type search
-            switch (searchkind)
-            {
-                //kruiden
-                case "Nederlandse naam kruid":
-                    query = "SELECT * FROM Kruiden WHERE Nederlands=search";
-                    break;
-                case "Latijnse naam kruid":
-                    query = "SELECT * FROM Kruiden WHERE Latijns=search";
-                    break;
-                case "Thermodynamisch in kruid":
-                    query = "SELECT * FROM Kruiden WHERE Thermodynamisch=search";
-                    break;
-                //kruidenformules
-                case "Indicaties in kruidenformule":
-                    query = "SELECT * FROM Kruidenformules WHERE Indicaties=search";
-                    break;
-                case "Naam kruidenformule":
-                    query = "SELECT * FROM Kruidenformules WHERE Naam=search";
-                    break;
-                case "Kruid in kruidenformule":
-                    query = "SELECT * FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND Kruiden.Nederlands=search";
-                    break;
-                //patent formules
-                case "Nederlandse naam patentformule":
-                    query = "SELECT * FROM Patentformules WHERE Nederlands=search";
-                    break;
-                case "Engelse naam patentformule":
-                    query = "SELECT * FROM Patentformules WHERE Engels=search";
-                    break;
-                case "Pinjin naam patentformule":
-                    query = "SELECT * FROM Patentformules WHERE Pinjin=search";
-                    break;
-                //syndromen
-                case "Syndroom naam":
-                    query = "SELECT * FROM Syndromen WHERE Syndroom=search";
-                    break;
-                case "Syndroom op symptomen pols en tong":
-                    query = "SELECT * FROM Syndromen WHERE Pols=search OR Tong=search";
-                    break;
-                //complex
-                case "Patentformule op symptoom":
-                    query = "SELECT * FROM Syndromen, Actiesformules, Patentformules WHERE Syndromen.ID=Actieformules.Syndroom AND Actieformules.Patentformule=Patentformules.ID AND Syndromen.Hoofdsymptoom =search";
-                    break;
-                default:
-                    query = "SELECT * FROM Kruiden WHERE Nederlands=search";
-                    break;
-            }          
-            //execute select
-            cmd = new SqlCommand(query, conn);
-            mdataReader = cmd.ExecuteReader();
-            while (mdataReader.Read())
-            {
-                //display output
-                output = mdataReader.GetString(0);
-                Label outputlabel = new System.Windows.Forms.Label();
-                outputlabel.Text = output;
-                Button buttonedit = new System.Windows.Forms.Button();
-                buttonedit.Text = "Aanpassen";
-                Button buttondelete = new System.Windows.Forms.Button();
-                buttondelete.Text = "Verwijderen";
-            }
-            //db close
-            mdataReader.Close();
-            cmd.Dispose();
-            conn.Close();
-        }
+
 
         //open other input forms
         private void openenkelkruiden(object obj)
