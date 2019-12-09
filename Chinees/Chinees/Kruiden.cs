@@ -31,11 +31,6 @@ namespace Chinees
         {
             //executing storage
             Execute();
-            //closing thread
-            this.Close();
-            th = new Thread(openhoofdmenu);
-            th.SetApartmentState(ApartmentState.STA);
-            th.Start();
         }
 
         private void openhoofdmenu(object obj)
@@ -116,6 +111,14 @@ namespace Chinees
             conn.Close();
         }
 
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //closing thread
+            this.Close();
+            th = new Thread(openhoofdmenu);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
+        }
     }
 
 

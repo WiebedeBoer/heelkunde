@@ -64,20 +64,6 @@ namespace Chinees
             th.Start();
         }
 
-        //search trigger
-        private void button6_Click(object sender, EventArgs e)
-        {
-            string searchtext = textBox1.Text;
-            string searchtype = comboBox1.SelectedText;
-            //executing search
-            //Search(searchtext, searchtype);
-
-            this.Close();
-            th = new Thread(openactiessyndromen);
-            th.SetApartmentState(ApartmentState.STA);
-            th.Start();
-        }
-
         private void button8_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -86,45 +72,57 @@ namespace Chinees
             th.Start();
         }
 
+        //search trigger
+        private void button6_Click(object sender, EventArgs e)
+        {           
+            this.Close();
+            th = new Thread(opensearch);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
+        }
 
+        //open search forms
+        private void opensearch(object obj)
+        {
+            Application.Run(new EditForm());
+        }
 
         //open other input forms
+        //kruiden
         private void openenkelkruiden(object obj)
         {
-            
             Application.Run(new Kruiden());
         }
 
+        //kruidenformules
         private void openwesterskruiden(object obj)
         {
-            
             Application.Run(new KruidenFormules());
         }
 
+        //patentformules
         private void openchinesekruiden(object obj)
         {
-            
             Application.Run(new PatentFormule());
         }
 
+        //syndromen
         private void opensyndromen(object obj)
         {
-            
             Application.Run(new Syndromen());
         }
 
+        //syndromenacties
         private void openactiessyndromen(object obj)
         {
-            
-            Application.Run(new PatentFormule());
+            Application.Run(new SyndroomActie());
         }
 
+        //chinesekruiden
         private void openpinjinkruiden(object obj)
         {
-
             Application.Run(new ChineseKruiden());
         }
-
 
     }
 }

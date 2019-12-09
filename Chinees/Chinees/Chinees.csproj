@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChineseKruiden.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChineseKruiden.Designer.cs">
+      <DependentUpon>ChineseKruiden.cs</DependentUpon>
+    </Compile>
     <Compile Include="DBHandler.cs" />
     <Compile Include="EditForm.cs">
       <SubType>Form</SubType>
@@ -96,6 +102,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TCM2DataSet.xsd</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ChineseKruiden.resx">
+      <DependentUpon>ChineseKruiden.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="EditForm.resx">
       <DependentUpon>EditForm.cs</DependentUpon>
     </EmbeddedResource>

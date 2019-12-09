@@ -17,6 +17,10 @@ namespace Chinees
     {
         Thread th;
         public SqlConnection conn;
+        private int selimiter, maxi;
+        private int prev, next;
+        private string sekind;
+        private string search;
 
         public EditForm()
         {
@@ -24,127 +28,423 @@ namespace Chinees
         }
 
         //search
-        private void Search(string searchtext, string searchtype)
+        private void Search(string searchtext, string searchtype, int searchstart)
         {
-            string search = searchtext;
-            string searchkind = searchtype;
+            search = searchtext;
+            sekind = searchtype;
+            selimiter = searchstart;
             //connection
             conn = new DBHandler().getConnection();
             //command and query strings
-            SqlCommand cmd;
+            SqlCommand cmd, ccmd;
             SqlDataReader mdataReader;
-            String query, output;
+            String query, cquery, output, did;
+
             //db open
             conn.Open();
             //select query according to type search
-            switch (searchkind)
+            switch (sekind)
             {
                 //kruiden
                 case "Nederlandse naam kruid":
-                    query = "SELECT * FROM Kruiden WHERE Nederlands=search";
+                    query = "SELECT ID, Nederlands FROM Kruiden WHERE Nederlands=@search LIMIT @limiter,10";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Nederlands=@search ";
                     break;
                 case "Latijnse naam kruid":
-                    query = "SELECT * FROM Kruiden WHERE Latijns=search";
+                    query = "SELECT ID, Latijns FROM Kruiden WHERE Latijns=@search LIMIT @limiter,10";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Latijns=@search";
                     break;
                 case "Thermodynamisch in kruid":
-                    query = "SELECT * FROM Kruiden WHERE Thermodynamisch=search";
+                    query = "SELECT ID, Thermodynamisch FROM Kruiden WHERE Thermodynamisch=@search LIMIT @limiter,10";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Thermodynamisch=@search";
                     break;
                 //kruidenformules
                 case "Indicaties in kruidenformule":
-                    query = "SELECT * FROM Kruidenformules WHERE Indicaties=search";
+                    query = "SELECT ID, Indicaties FROM Kruidenformules WHERE Indicaties=@search LIMIT @limiter,10";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Kruidenformules WHERE Indicaties=@search";
                     break;
                 case "Naam kruidenformule":
-                    query = "SELECT * FROM Kruidenformules WHERE Naam=search";
+                    query = "SELECT ID, Naam FROM Kruidenformules WHERE Naam=@search LIMIT @limiter,10";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Kruidenformules WHERE Naam=@search ";
                     break;
                 case "Kruid in kruidenformule":
-                    query = "SELECT * FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND Kruiden.Nederlands=search";
+                    query = "SELECT FormulesEnKruiden.ID, Kruidenformules.Naam FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND Kruiden.Nederlands=@search LIMIT @limiter,10";
+                    cquery = "SELECT COUNT(FormulesEnKruiden.ID) as counter FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND Kruiden.Nederlands=@search";
                     break;
                 //patent formules
                 case "Nederlandse naam patentformule":
-                    query = "SELECT * FROM Patentformules WHERE Nederlands=search";
+                    query = "SELECT ID, Nederlands FROM Patentformules WHERE Nederlands=@search LIMIT @limiter,10";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Patentformules WHERE Nederlands=@search";
                     break;
                 case "Engelse naam patentformule":
-                    query = "SELECT * FROM Patentformules WHERE Engels=search";
+                    query = "SELECT ID, Engels FROM Patentformules WHERE Engels=@search LIMIT @limiter,10";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Patentformules WHERE Engels=@search";
                     break;
                 case "Pinjin naam patentformule":
-                    query = "SELECT * FROM Patentformules WHERE Pinjin=search";
+                    query = "SELECT ID, Pinjin FROM Patentformules WHERE Pinjin=@search LIMIT @limiter,10";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Patentformules WHERE Pinjin=@search";
                     break;
                 //syndromen
                 case "Syndroom naam":
-                    query = "SELECT * FROM Syndromen WHERE Syndroom=search";
+                    query = "SELECT ID, Syndroom FROM Syndromen WHERE Syndroom=@search LIMIT @limiter,10";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Syndromen WHERE Syndroom=@search ";
                     break;
                 case "Syndroom op symptomen pols en tong":
-                    query = "SELECT * FROM Syndromen WHERE Pols=search OR Tong=search";
+                    query = "SELECT ID, Pols FROM Syndromen WHERE Pols=search OR Tong=@search LIMIT @limiter,10";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Syndromen WHERE Pols=search OR Tong=@search";
                     break;
                 //complex
                 case "Patentformule op symptoom":
-                    query = "SELECT * FROM Syndromen, Actiesformules, Patentformules WHERE Syndromen.ID=Actieformules.Syndroom AND Actieformules.Patentformule=Patentformules.ID AND Syndromen.Hoofdsymptoom =search";
+                    query = "SELECT Actieformules.ID, Patentformules.Nederlands FROM Syndromen, Actiesformules, Patentformules WHERE Syndromen.ID=Actieformules.Syndroom AND Actieformules.Patentformule=Patentformules.ID AND Syndromen.Hoofdsymptoom =@search LIMIT @limiter,10";
+                    cquery = "SELECT COUNT(Actieformules.ID) AS counter FROM Syndromen, Actiesformules, Patentformules WHERE Syndromen.ID=Actieformules.Syndroom AND Actieformules.Patentformule=Patentformules.ID AND Syndromen.Hoofdsymptoom =@search";
                     break;
                 default:
-                    query = "SELECT * FROM Kruiden WHERE Nederlands=search";
+                    query = "SELECT ID, Nederlands FROM Kruiden WHERE Nederlands=@search LIMIT @limiter,10";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Nederlands=@search";
                     break;
             }
             //execute select
             cmd = new SqlCommand(query, conn);
+            cmd.Parameters.Add(new SqlParameter("@search", search));
+            cmd.Parameters.Add(new SqlParameter("@limiter", selimiter));
             int verticalpos = 110;
             mdataReader = cmd.ExecuteReader();
             while (mdataReader.Read())
             {
+                //display id
+                did = mdataReader.GetString(0);
+                Label idlabel = new System.Windows.Forms.Label();
+                idlabel.Location = new System.Drawing.Point(20, verticalpos);
+                idlabel.Name = "label1";
+                idlabel.Size = new System.Drawing.Size(40, 20);
+                idlabel.Text = did;
                 //display output
-                output = mdataReader.GetString(0);
+                output = mdataReader.GetString(1);
                 Label outputlabel = new System.Windows.Forms.Label();
+                outputlabel.Location = new System.Drawing.Point(80, verticalpos);
+                outputlabel.Name = "label2";
+                outputlabel.Size = new System.Drawing.Size(280, 20);
                 outputlabel.Text = output;
+                //edit
                 Button buttonedit = new System.Windows.Forms.Button();
                 buttonedit.Location = new System.Drawing.Point(380, verticalpos);
                 buttonedit.Text = "Aanpassen";
                 buttonedit.Size = new System.Drawing.Size(75, 35);
-                buttonedit.Click += new System.EventHandler(this.button2_Click);
+                buttonedit.Click += new System.EventHandler(this.buttonedit_Click);
+                buttonedit.Name = did;
+                //verwijder
                 Button buttondelete = new System.Windows.Forms.Button();
                 buttondelete.Location = new System.Drawing.Point(500, verticalpos);
                 buttondelete.Text = "Verwijderen";
                 buttondelete.Size = new System.Drawing.Size(75, 35);
-                buttondelete.Click += new System.EventHandler(this.button2_Click);
+                buttondelete.Click += new System.EventHandler(this.buttondelete_Click);
+                buttondelete.Name = did;
+                //increment position
                 verticalpos = verticalpos + 45;
+
             }
+            //count maximum
+            ccmd = new SqlCommand(cquery, conn);
+            ccmd.Parameters.Add(new SqlParameter("@search", search));
+            mdataReader = ccmd.ExecuteReader();
+            maxi = Convert.ToInt32(mdataReader.GetString(0));
             //db close
             mdataReader.Close();
             cmd.Dispose();
             conn.Close();
+            //vorige en volgende
+            prev = selimiter - 10;
+            next = selimiter + 10;
+            //if vorige
+            if (prev > 0)
+            {
+                Button buttonprev = new System.Windows.Forms.Button();
+                buttonprev.Location = new System.Drawing.Point(20, 65);
+                buttonprev.Text = "Vorige";
+                buttonprev.Size = new System.Drawing.Size(75, 35);
+                buttonprev.Click += new System.EventHandler(this.buttonvorige_Click);
+                buttonprev.Name = "Vorige";
+            }
+            //if volgende
+            if (next < maxi)
+            {
+                Button buttonnext = new System.Windows.Forms.Button();
+                buttonnext.Location = new System.Drawing.Point(380, 65);
+                buttonnext.Text = "Volgende";
+                buttonnext.Size = new System.Drawing.Size(75, 35);
+                buttonnext.Click += new System.EventHandler(this.buttonvolgende_Click);
+                buttonnext.Name = "Volgende";
+            }
+
         }
 
 
 
-        private void button1_Click(object sender, EventArgs e)
+
+        //wijzig
+        private void buttonedit_Click(object sender, EventArgs e)
         {
-
+            Button buttonedit = (Button)sender;
+            int ClickedNum = Convert.ToInt32(buttonedit.Name);
+            Execute();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        //verwijder
+        private void buttondelete_Click(object sender, EventArgs e)
         {
-
+            Button buttondelete = (Button)sender;
+            int ClickedNum = Convert.ToInt32(buttondelete.Name);
+            Removal(ClickedNum);
         }
 
+        //go to edit
         private void Execute()
         {
-
+            switch (sekind)
+            {
+                //kruiden
+                case "Nederlandse naam kruid":
+                    //closing thread
+                    this.Close();
+                    th = new Thread(openenkelkruiden);
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                case "Latijnse naam kruid":
+                    //closing thread
+                    this.Close();
+                    th = new Thread(openenkelkruiden);
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                case "Thermodynamisch in kruid":
+                    //closing thread
+                    this.Close();
+                    th = new Thread(openenkelkruiden);
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                //kruidenformules
+                case "Indicaties in kruidenformule":
+                    //closing thread
+                    this.Close();
+                    th = new Thread(openwesterskruiden);
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                case "Naam kruidenformule":
+                    //closing thread
+                    this.Close();
+                    th = new Thread(openwesterskruiden);
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                case "Kruid in kruidenformule":
+                    //closing thread
+                    this.Close();
+                    th = new Thread(openwesterskruiden);
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                //patent formules
+                case "Nederlandse naam patentformule":
+                    //closing thread
+                    this.Close();
+                    th = new Thread(openchinesekruiden);
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                case "Engelse naam patentformule":
+                    //closing thread
+                    this.Close();
+                    th = new Thread(openchinesekruiden);
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                case "Pinjin naam patentformule":
+                    //closing thread
+                    this.Close();
+                    th = new Thread(openchinesekruiden);
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                //syndromen
+                case "Syndroom naam":
+                    //closing thread
+                    this.Close();
+                    th = new Thread(opensyndromen);
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                case "Syndroom op symptomen pols en tong":
+                    //closing thread
+                    this.Close();
+                    th = new Thread(opensyndromen);
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                //complex
+                case "Patentformule op symptoom":
+                    //closing thread
+                    this.Close();
+                    th = new Thread(opensyndromen);
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                default:
+                    //closing thread
+                    this.Close();
+                    th = new Thread(openhoofdmenu);
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+            }
         }
 
-        /*
-                            string data = "SELECT ID, Nederlands, Latijn, Familie, Inhoudsstof, Toepassingen, Eigenschappen, Actie, Gebruik, Contraindicaties, Foto,Smaak, Dosering, Thermodynamisch, GebruikteDelen, Orgaan FROM Kruiden LIMIT 0,100";
-                                dynamic courses = db.Query(data, ID, i);
+        //remove item
+        private void Removal(int delid)
+        {
+            int deleteid = delid;
+            //connection
+            conn = new DBHandler().getConnection();
+            //command and query strings
+            SqlCommand cmd;
+            String query;
 
+            switch (sekind)
+            {
+                //kruiden
+                case "Nederlandse naam kruid":
+                    query = "DELETE FROM Kruiden WHERE ID=@deleteid";
+                    break;
+                case "Latijnse naam kruid":
+                    query = "DELETE FROM Kruiden WHERE ID=@deleteid";
+                    break;
+                case "Thermodynamisch in kruid":
+                    query = "DELETE FROM Kruiden WHERE ID=@deleteid";
+                    break;
+                //kruidenformules
+                case "Indicaties in kruidenformule":
+                    query = "DELETE FROM Kruidenformules WHERE ID=@deleteid";
+                    break;
+                case "Naam kruidenformule":
+                    query = "DELETE FROM Kruidenformules WHERE ID=@deleteid";
+                    break;
+                case "Kruid in kruidenformule":
+                    query = "DELETE FROM FormulesEnKruiden WHERE ID=@deleteid";
+                    break;
+                //patent formules
+                case "Nederlandse naam patentformule":
+                    query = "DELETE FROM Patentformules WHERE ID=@deleteid";
+                    break;
+                case "Engelse naam patentformule":
+                    query = "DELETE FROM Patentformules WHERE ID=@deleteid";
+                    break;
+                case "Pinjin naam patentformule":
+                    query = "DELETE FROM Patentformules WHERE ID=@deleteid";
+                    break;
+                //syndromen
+                case "Syndroom naam":
+                    query = "DELETE FROM Syndromen WHERE ID=@deleteid";
+                    break;
+                case "Syndroom op symptomen pols en tong":
+                    query = "DELETE FROM Syndromen WHERE ID=@deleteid";
+                    break;
+                //complex
+                case "Patentformule op symptoom":
+                    query = "DELETE FROM Actiesformules WHERE ID=@deleteid";
+                    break;
+                default:
+                    query = "DELETE FROM Kruiden WHERE ID=@deleteid";
+                    break;
+            }
+            //execute delete
+            cmd = new SqlCommand(query, conn);
+            cmd.Parameters.Add(new SqlParameter("@search", deleteid));
+            cmd.ExecuteNonQuery();
+            //db close
+            cmd.Dispose();
+            conn.Close();
+        }
 
-          string data = "SELECT ID, Naam, Indicaties, Werking, Smaak, Meridiaan, Qi, Contraindicaties FROM Kruidenformules LIMIT 0,100";
-                                dynamic courses = db.Query(data, userID, userType, i);
+        //hoofdmenu
+        private void openhoofdmenu(object obj)
+        {
+            Application.Run(new Form1());
+        }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            //closing thread
+            this.Close();
+            th = new Thread(openhoofdmenu);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
+        }
 
-           string data = "SELECT ID, Nederlands, Engels, Pinjin, Indicaties, Werking, Tong, Pols, Contraindicaties, Indicaties FROM Patentformules LIMIT 0,100";
-                                dynamic courses = db.Query(data, userID, userType, i);
-         
-         
-         */
+        //open other input forms
+        //kruiden
+        private void openenkelkruiden(object obj)
+        {
+            Application.Run(new Kruiden());
+        }
 
+        //kruidenformules
+        private void openwesterskruiden(object obj)
+        {
+            Application.Run(new KruidenFormules());
+        }
 
+        //patentformules
+        private void openchinesekruiden(object obj)
+        {
+            Application.Run(new PatentFormule());
+        }
 
+        //syndromen
+        private void opensyndromen(object obj)
+        {
+            Application.Run(new Syndromen());
+        }
+
+        //syndromenacties
+        private void openactiessyndromen(object obj)
+        {
+            Application.Run(new SyndroomActie());
+        }
+
+        //chinesekruiden
+        private void openpinjinkruiden(object obj)
+        {
+            Application.Run(new ChineseKruiden());
+        }
+
+        //volgende en vorige buttons
+        //volgende
+        private void buttonvolgende_Click(object sender, EventArgs e)
+        {
+            string searchtext = search;
+            string searchtype = sekind;
+            int searchstart = next;
+            Search(searchtext, searchtype, searchstart);
+        }
+
+        //vorige
+        private void buttonvorige_Click(object sender, EventArgs e)
+        {
+            string searchtext = search;
+            string searchtype = sekind;
+            int searchstart = prev;
+            Search(searchtext, searchtype, searchstart);
+        }
+
+        //zoeken
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string searchtext = textBox1.Text;
+            string searchtype = comboBox1.SelectedText;
+            int searchstart = 0;
+            Search(searchtext, searchtype, searchstart);
+        }
     }
 }
