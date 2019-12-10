@@ -45,7 +45,7 @@ namespace Chinees
             else
             {
                 button1.Location = new System.Drawing.Point(321, 315);
-                button1.Name = "button1";
+                button1.Name = "button";
                 button1.Size = new System.Drawing.Size(75, 23);
                 button1.Text = "Invoeren";
                 button1.UseVisualStyleBackColor = true;
