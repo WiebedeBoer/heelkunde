@@ -22,9 +22,18 @@ namespace Chinees
         public Syndromen()
         {
             InitializeComponent();
+        }
+
+        private void form_load(object sender, EventArgs e)
+        {
+            buttonmaker();
+        }
+
+        private void buttonmaker()
+        {
             //check stage
             Button button1 = new System.Windows.Forms.Button();
-            if (updatestage != null)
+            if (this.updatestage != null)
             {
                 button1.Location = new System.Drawing.Point(321, 315);
                 button1.Name = updatestage;

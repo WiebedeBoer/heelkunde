@@ -316,6 +316,7 @@
             this.Name = "Kruiden";
             this.Text = "Kruiden";
             this.ResumeLayout(false);
+            this.Load += new System.EventHandler(this.form_load);
             this.PerformLayout();
 
         }

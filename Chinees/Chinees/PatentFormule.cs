@@ -22,9 +22,18 @@ namespace Chinees
         public PatentFormule()
         {
             InitializeComponent();
+        }
+
+        private void form_load(object sender, EventArgs e)
+        {
+            buttonmaker();
+        }
+
+        private void buttonmaker()
+        {
             //check stage
             Button button1 = new System.Windows.Forms.Button();
-            if (updatestage != null)
+            if (this.updatestage != null)
             {
                 button1.Location = new System.Drawing.Point(544, 228);
                 button1.Name = updatestage;
@@ -148,7 +157,6 @@ namespace Chinees
             //insert
             query = "INSERT INTO Patentformules (Nederlands, Engels, Pinjin, Werking, Tong, Pols, Contraindicaties, Indicaties) VALUES (@0, @1, @2, @3, @4, @5, @6, @7)";
             cmd = new SqlCommand(query, conn);
-            //cmd.ExecuteReader();
             adapter.InsertCommand = new SqlCommand(query, conn);
             adapter.InsertCommand.Parameters.AddWithValue("@0", Nederlands);
             adapter.InsertCommand.Parameters.AddWithValue("@1", Engels);

@@ -22,9 +22,19 @@ namespace Chinees
         public ChineseKruiden()
         {
             InitializeComponent();
+            
+        }
+
+        private void form_load(object sender, EventArgs e)
+        {
+            buttonmaker();
+        }
+
+        private void buttonmaker()
+        {
             //check stage
             Button button1 = new System.Windows.Forms.Button();
-            if (updatestage !=null)
+            if (this.updatestage != null)
             {
                 button1.Location = new System.Drawing.Point(322, 369);
                 button1.Name = updatestage;
@@ -153,7 +163,6 @@ namespace Chinees
             SqlCommand acmd;
             SqlDataAdapter adapter = new SqlDataAdapter();
             SqlDataReader mdataReader;
-            //SqlDataReader adataReader;
             String query;
             String mquery;
             String aquery;

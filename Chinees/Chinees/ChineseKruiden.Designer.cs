@@ -269,8 +269,9 @@
             this.Controls.Add(this.label1);
             this.Name = "ChineseKruiden";
             this.Text = "ChineseKruiden";
+            this.Load += new System.EventHandler(this.form_load);
             this.ResumeLayout(false);
-            this.PerformLayout();
+            //this.PerformLayout();
 
         }
 

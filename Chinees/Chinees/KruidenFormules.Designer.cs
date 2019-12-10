@@ -244,6 +244,7 @@
             this.Name = "KruidenFormules";
             this.Text = "KruidenFormules";
             this.ResumeLayout(false);
+            this.Load += new System.EventHandler(this.form_load);
             this.PerformLayout();
 
         }

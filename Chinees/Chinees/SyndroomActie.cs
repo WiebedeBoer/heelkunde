@@ -22,9 +22,18 @@ namespace Chinees
         public SyndroomActie()
         {
             InitializeComponent();
+        }
+
+        private void form_load(object sender, EventArgs e)
+        {
+            buttonmaker();
+        }
+
+        private void buttonmaker()
+        {
             //check stage
             Button button1 = new System.Windows.Forms.Button();
-            if (updatestage != null)
+            if (this.updatestage != null)
             {
                 button1.Location = new System.Drawing.Point(394, 161);
                 button1.Name = updatestage;
@@ -128,7 +137,6 @@ namespace Chinees
             //insert
             query = "INSERT INTO Syndromenacties (Syndroom, Actie, Acupunctuurpunten, Opmerkingen) VALUES (@0, @1, @2, @3), Syndroom, Actie, Acupunctuurpunten, Opmerkingen";
             cmd = new SqlCommand(query, conn);
-            //cmd.ExecuteReader();
             adapter.InsertCommand = new SqlCommand(query, conn);
             adapter.InsertCommand.Parameters.AddWithValue("@0", Syndroom);
             adapter.InsertCommand.Parameters.AddWithValue("@1", Actie);

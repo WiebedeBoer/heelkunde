@@ -22,9 +22,18 @@ namespace Chinees
         public KruidenFormules()
         {
             InitializeComponent();
+        }
+
+        private void form_load(object sender, EventArgs e)
+        {
+            buttonmaker();
+        }
+
+        private void buttonmaker()
+        {
             //check stage
             Button button1 = new System.Windows.Forms.Button();
-            if (updatestage != null)
+            if (this.updatestage != null)
             {
                 button1.Location = new System.Drawing.Point(315, 357);
                 button1.Name = updatestage;
@@ -140,7 +149,6 @@ namespace Chinees
             SqlCommand acmd;
             SqlDataAdapter adapter = new SqlDataAdapter();
             SqlDataReader mdataReader;
-            //SqlDataReader adataReader;
             String query;
             String mquery;
             String aquery;
@@ -149,7 +157,6 @@ namespace Chinees
             //insert
             query = "INSERT INTO Kruidenformules (Naam, Indicaties, Werking, Klasse, Smaak, Meridiaan, Qi, Contraindicaties) VALUES (@0, @1, @2, @3, @4, @5, @6, @7)";
             cmd = new SqlCommand(query, conn);
-            //cmd.ExecuteReader();
             adapter.InsertCommand = new SqlCommand(query, conn);
             adapter.InsertCommand.Parameters.AddWithValue("@0", Naam);
             adapter.InsertCommand.Parameters.AddWithValue("@1", Indicaties);
@@ -173,14 +180,12 @@ namespace Chinees
             //aantekening
             aquery = "INSERT INTO Formulesaantekeningen (Kruid, Aantekening) VALUES(@0, @1), MaxID, Aantekeningen";
             acmd = new SqlCommand(aquery, conn);
-            //adataReader = acmd.ExecuteReader();
             adapter.InsertCommand = new SqlCommand(aquery, conn);
             adapter.InsertCommand.Parameters.AddWithValue("@0", MaxID);
             adapter.InsertCommand.Parameters.AddWithValue("@1", Aantekeningen);
             adapter.InsertCommand.ExecuteNonQuery();
             //db close
             mdataReader.Close();
-            //adataReader.Close();
             cmd.Dispose();
             mcmd.Dispose();
             acmd.Dispose();

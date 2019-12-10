@@ -26,9 +26,18 @@ namespace Chinees
         public Kruiden()
         {
             InitializeComponent();
+        }
+
+        private void form_load(object sender, EventArgs e)
+        {
+            buttonmaker();
+        }
+
+        private void buttonmaker()
+        {
             //check stage
             Button button1 = new System.Windows.Forms.Button();
-            if (updatestage != null)
+            if (this.updatestage != null)
             {
                 button1.Location = new System.Drawing.Point(324, 358);
                 button1.Name = updatestage;
@@ -161,7 +170,6 @@ namespace Chinees
             SqlCommand acmd;
             SqlDataAdapter adapter = new SqlDataAdapter();
             SqlDataReader mdataReader;
-            //SqlDataReader adataReader;
             String query;
             String mquery;
             String aquery;
@@ -170,7 +178,6 @@ namespace Chinees
             //insert
             query = "INSERT INTO Kruiden (Nederlands, Latijn, Familie, Inhoudsstoffen, GebruikteDelen, Eigenschappen, Smaak, Thermodynamisch, Orgaan, Toepassingen, Actie, Gebruik) VALUES (@0, @1, @2, @3, @4, @5, @6, @7, @8, @9, @10, @11)";
             cmd = new SqlCommand(query, conn);
-            //cmd.ExecuteReader();
             adapter.InsertCommand = new SqlCommand(query, conn);
             adapter.InsertCommand.Parameters.AddWithValue("@0", Nederlands);
             adapter.InsertCommand.Parameters.AddWithValue("@1", Latijns);

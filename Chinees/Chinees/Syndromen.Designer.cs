@@ -237,6 +237,7 @@
             this.Name = "Syndromen";
             this.Text = "Syndromen";
             this.ResumeLayout(false);
+            this.Load += new System.EventHandler(this.form_load);
             this.PerformLayout();
 
         }
