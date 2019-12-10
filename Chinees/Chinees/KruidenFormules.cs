@@ -17,22 +17,105 @@ namespace Chinees
     {
         Thread th;
         public SqlConnection conn;
+        private string updatestage;
 
         public KruidenFormules()
         {
             InitializeComponent();
+            //check stage
+            Button button1 = new System.Windows.Forms.Button();
+            if (updatestage != null)
+            {
+                button1.Location = new System.Drawing.Point(315, 357);
+                button1.Name = updatestage;
+                button1.Size = new System.Drawing.Size(75, 23);
+                button1.Text = "Aanpassen";
+                button1.UseVisualStyleBackColor = true;
+                button1.Click += new System.EventHandler(button1_Click);
+            }
+            else
+            {
+                button1.Location = new System.Drawing.Point(315, 357);
+                button1.Name = "button1";
+                button1.Size = new System.Drawing.Size(75, 23);
+                button1.Text = "Invoeren";
+                button1.UseVisualStyleBackColor = true;
+                button1.Click += new System.EventHandler(button1_Click);
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //executing storage
-            Execute();
-
+            Button buttoned = (Button)sender;
+            string ClickedButton = buttoned.Name;
+            if (ClickedButton == "button")
+            {
+                //executing storage
+                Execute();
+            }
+            else
+            {
+                //executing update
+                Updating(ClickedButton);
+            }
         }
 
-        private void openhoofdmenu(object obj)
+        private void Updating(string Clicking)
         {
-            Application.Run(new Form1());
+            //connection
+            conn = new DBHandler().getConnection();
+            //which one
+            int maxi = Convert.ToInt32(Clicking);
+            //command and query strings
+            SqlCommand cmd;
+            SqlCommand mcmd;
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            SqlDataReader mdataReader;
+            //SqlDataReader adataReader;
+            String query;
+            String mquery;
+            //select max
+            mquery = "SELECT * FROM Kruidenformules WHERE ID =@search";
+            mcmd = new SqlCommand(mquery, conn);
+            mcmd.Parameters.Add(new SqlParameter("@search", maxi));
+            mdataReader = mcmd.ExecuteReader();
+            mdataReader.Read();
+            //convert to string
+            textBox1.Text = Convert.ToString(mdataReader.GetValue(1));
+            textBox2.Text = Convert.ToString(mdataReader.GetValue(2));
+            textBox3.Text = Convert.ToString(mdataReader.GetValue(3));
+            textBox4.Text = Convert.ToString(mdataReader.GetValue(4));
+            textBox5.Text = Convert.ToString(mdataReader.GetValue(5));
+            textBox6.Text = Convert.ToString(mdataReader.GetValue(6));
+            textBox7.Text = Convert.ToString(mdataReader.GetValue(7));
+            textBox8.Text = Convert.ToString(mdataReader.GetValue(8));
+            //data form variables
+            string Naam = textBox1.Text;
+            string Indicaties = textBox2.Text;
+            string Werking = textBox3.Text;
+            string Klasse = textBox4.Text;
+            string Smaak = textBox5.Text;
+            string Meridiaan = textBox6.Text;
+            string Qi = textBox7.Text;
+            string Contraindicaties = textBox8.Text;
+            //updating
+            query = "UPDATE Kruidenformules SET Naam =@0, Indicaties =@1, Werking =@2, Klasse =@3, Smaak =@4, Meridiaan =@5, Qi =@6, Contraindicaties =@7 WHERE ID =@search";
+            cmd = new SqlCommand(query, conn);
+            cmd.Parameters.Add(new SqlParameter("@search", maxi));
+            cmd.Parameters.AddWithValue("@0", Naam);
+            cmd.Parameters.AddWithValue("@1", Indicaties);
+            cmd.Parameters.AddWithValue("@2", Werking);
+            cmd.Parameters.AddWithValue("@3", Klasse);
+            cmd.Parameters.AddWithValue("@4", Smaak);
+            cmd.Parameters.AddWithValue("@5", Meridiaan);
+            cmd.Parameters.AddWithValue("@6", Qi);
+            cmd.Parameters.AddWithValue("@7", Contraindicaties);
+            cmd.ExecuteNonQuery();
+            //db close
+            mdataReader.Close();
+            cmd.Dispose();
+            mcmd.Dispose();
+            conn.Close();
         }
 
         private void Execute()
@@ -82,7 +165,11 @@ namespace Chinees
             mcmd = new SqlCommand(mquery, conn);
             mdataReader = mcmd.ExecuteReader();
             mdataReader.Read();
-            MaxID = Convert.ToInt32(mdataReader.GetValue(0));
+            //convert to string
+            string Max = Convert.ToString(mdataReader.GetValue(0));
+            MaxID = Convert.ToInt32(Max);
+            //set updatestage
+            this.updatestage = Max;
             //aantekening
             aquery = "INSERT INTO Formulesaantekeningen (Kruid, Aantekening) VALUES(@0, @1), MaxID, Aantekeningen";
             acmd = new SqlCommand(aquery, conn);
@@ -98,6 +185,12 @@ namespace Chinees
             mcmd.Dispose();
             acmd.Dispose();
             conn.Close();
+        }
+
+        //hoofdmenu
+        private void openhoofdmenu(object obj)
+        {
+            Application.Run(new Form1());
         }
 
         private void button2_Click(object sender, EventArgs e)
