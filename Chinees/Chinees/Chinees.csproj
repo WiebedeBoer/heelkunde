@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actieformules.cs" />
     <Compile Include="ChineseKruiden.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -102,6 +103,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TCM2DataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Verhoudingen.cs" />
     <EmbeddedResource Include="ChineseKruiden.resx">
       <DependentUpon>ChineseKruiden.cs</DependentUpon>
     </EmbeddedResource>
