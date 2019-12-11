@@ -169,5 +169,30 @@ namespace Chinees
             cmd.Dispose();
             conn.Close();
         }
+
+        private void Inserter(int syndroomid, int formuleid, int patentid)
+        {
+            int syndroom = syndroomid;
+            int formule = formuleid;
+            int patent = patentid;
+            //connection
+            conn = new DBHandler().getConnection();
+            //command and query strings
+            SqlCommand cmd;
+            String query;
+            SqlDataAdapter adapter = new SqlDataAdapter();          
+            query = "INSERT INTO Actieformules (Syndroom, Patentformule, Kruidenformule) VALUES(@0, @1, @2)";                  
+            //execute delete
+            cmd = new SqlCommand(query, conn);
+            adapter.InsertCommand = new SqlCommand(query, conn);
+            adapter.InsertCommand.Parameters.AddWithValue("@0", syndroom);
+            adapter.InsertCommand.Parameters.AddWithValue("@1", patent);
+            adapter.InsertCommand.Parameters.AddWithValue("@1", formule);
+            adapter.InsertCommand.ExecuteNonQuery();
+            //db close
+            cmd.Dispose();
+            conn.Close();
+        }
+
     }
 }

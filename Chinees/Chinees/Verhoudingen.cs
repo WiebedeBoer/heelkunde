@@ -240,5 +240,52 @@ namespace Chinees
             conn.Close();
         }
 
+        private void Inserter(int kruidid, int formuleid, int hoeveelheid)
+        {
+            int kruid = kruidid;
+            int formule = formuleid;
+            int verhouding = hoeveelheid;
+            //connection
+            conn = new DBHandler().getConnection();
+            //command and query strings
+            SqlCommand cmd;
+            String query;
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            string couple = this.coupling;
+
+            switch (couple)
+            {
+                //kruiden
+                case "Kruiden":
+                    query = "INSERT INTO FormulesEnKruiden (IDKruidenformule, IDKruiden, Verhouding) VALUES(@0, @1, @2)";
+                    break;
+                //kruidenformules
+                case "Kruidenformules":
+                    query = "INSERT INTO FormulesEnKruiden (IDKruidenformule, IDKruiden, Verhouding) VALUES(@0, @1, @2)";
+                    break;
+                //chinese kruiden
+                case "Chinesekruiden":
+                    query = "INSERT INTO PatentEnKruiden (Patentformule, Chinesekruiden, Verhouding) VALUES(@0, @1, @2)";
+                    break;
+                //patent formules
+                case "Patentformules":
+                    query = "INSERT INTO PatentEnKruiden (Patentformule, Chinesekruiden, Verhouding) VALUES(@0, @1, @2)";
+                    break;
+                default:
+                    query = "INSERT INTO FormulesEnKruiden (IDKruidenformule, IDKruiden, Verhouding) VALUES(@0, @1, @2)";
+                    break;
+            }
+            //execute delete
+            cmd = new SqlCommand(query, conn);
+            adapter.InsertCommand = new SqlCommand(query, conn);
+            adapter.InsertCommand.Parameters.AddWithValue("@0", kruid);
+            adapter.InsertCommand.Parameters.AddWithValue("@1", formule);
+            adapter.InsertCommand.Parameters.AddWithValue("@1", verhouding);
+            adapter.InsertCommand.ExecuteNonQuery();
+            //db close
+            cmd.Dispose();
+            conn.Close();
+        }
+
     }
 }

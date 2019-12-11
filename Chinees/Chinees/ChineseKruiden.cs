@@ -194,7 +194,7 @@ namespace Chinees
             //set updatestage
             this.updatestage = Max;
             //aantekening
-            aquery = "INSERT INTO Chineesaantekeningen (Kruid, Aantekening) VALUES(@0, @1), MaxID, Aantekeningen";
+            aquery = "INSERT INTO Chineesaantekeningen (Kruid, Aantekening) VALUES(@0, @1)";
             acmd = new SqlCommand(aquery, conn);
             adapter.InsertCommand = new SqlCommand(aquery, conn);
             adapter.InsertCommand.Parameters.AddWithValue("@0", MaxID);
