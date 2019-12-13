@@ -41,6 +41,7 @@ namespace Chinees
                 button1.Text = "Aanpassen";
                 button1.UseVisualStyleBackColor = true;
                 button1.Click += new System.EventHandler(button1_Click);
+                Controls.Add(button1);
             }
             else
             {
@@ -50,6 +51,7 @@ namespace Chinees
                 button1.Text = "Invoeren";
                 button1.UseVisualStyleBackColor = true;
                 button1.Click += new System.EventHandler(button1_Click);
+                Controls.Add(button1);
             }
         }
 
