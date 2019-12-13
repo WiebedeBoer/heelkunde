@@ -127,17 +127,20 @@ namespace Chinees
                 sidlabel.Name = "label1";
                 sidlabel.Size = new System.Drawing.Size(40, 20);
                 sidlabel.Text = Convert.ToString(names[i]);
+                //Controls.Add(sidlabel);
                 Label outlabel = new System.Windows.Forms.Label();
                 outlabel.Location = new System.Drawing.Point(780, verticalpos);
                 outlabel.Name = "label1";
                 outlabel.Size = new System.Drawing.Size(40, 20);
                 outlabel.Text = Convert.ToString(names[i]);
+                //Controls.Add(outlabel);
                 Button buttonrem = new System.Windows.Forms.Button();
                 buttonrem.Location = new System.Drawing.Point(500, verticalpos);
                 buttonrem.Text = "Verwijderen";
                 buttonrem.Size = new System.Drawing.Size(75, 35);
                 buttonrem.Click += new System.EventHandler(this.buttonrem_Click);
                 buttonrem.Name = Convert.ToString(names[i]);
+                //Controls.Add(buttonrem);
                 i++;
             }
 
