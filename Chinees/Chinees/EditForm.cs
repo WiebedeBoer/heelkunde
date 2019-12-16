@@ -118,6 +118,7 @@ namespace Chinees
                 idlabel.Name = "label1";
                 idlabel.Size = new System.Drawing.Size(40, 20);
                 idlabel.Text = did;
+                Controls.Add(idlabel);
                 //display output
                 output = mdataReader.GetString(1);
                 Label outputlabel = new System.Windows.Forms.Label();
@@ -125,6 +126,7 @@ namespace Chinees
                 outputlabel.Name = "label2";
                 outputlabel.Size = new System.Drawing.Size(280, 20);
                 outputlabel.Text = output;
+                Controls.Add(outputlabel);
                 //edit
                 Button buttonedit = new System.Windows.Forms.Button();
                 buttonedit.Location = new System.Drawing.Point(380, verticalpos);
@@ -132,6 +134,7 @@ namespace Chinees
                 buttonedit.Size = new System.Drawing.Size(75, 35);
                 buttonedit.Click += new System.EventHandler(this.buttonedit_Click);
                 buttonedit.Name = did;
+                Controls.Add(buttonedit);
                 //verwijder
                 Button buttondelete = new System.Windows.Forms.Button();
                 buttondelete.Location = new System.Drawing.Point(500, verticalpos);
@@ -139,6 +142,7 @@ namespace Chinees
                 buttondelete.Size = new System.Drawing.Size(75, 35);
                 buttondelete.Click += new System.EventHandler(this.buttondelete_Click);
                 buttondelete.Name = did;
+                Controls.Add(buttondelete);
                 //increment position
                 verticalpos = verticalpos + 45;
 
@@ -164,6 +168,7 @@ namespace Chinees
                 buttonprev.Size = new System.Drawing.Size(75, 35);
                 buttonprev.Click += new System.EventHandler(this.buttonvorige_Click);
                 buttonprev.Name = "Vorige";
+                Controls.Add(buttonprev);
             }
             //if volgende
             if (next < maxi)
@@ -174,6 +179,7 @@ namespace Chinees
                 buttonnext.Size = new System.Drawing.Size(75, 35);
                 buttonnext.Click += new System.EventHandler(this.buttonvolgende_Click);
                 buttonnext.Name = "Volgende";
+                Controls.Add(buttonnext);
             }
 
         }

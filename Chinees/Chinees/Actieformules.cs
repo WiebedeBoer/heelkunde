@@ -18,41 +18,47 @@ namespace Chinees
             this.selectedid = selectedid;
         }
 
-        //list checking
+        //dropdown checking
         public int VerhoudingCheck()
         {
             //search id
             int sid = this.selectedid;
-            int leftcount, rightcount, checking;
+            int leftcount, rightcount, bottomcount, checking;
             //connection
             conn = new DBHandler().getConnection();
             //command and query strings
-            SqlCommand ccmd, accmd;
-            String cquery, acquery;
-            SqlDataReader cdataReader, acdataReader;
+            SqlCommand ccmd, accmd, cccmd;
+            String cquery, acquery, ccquery;
+            SqlDataReader cdataReader, acdataReader, ccdataReader;
             //db open
             conn.Open();
             //queries
-            cquery = "SELECT COUNT(ID) AS Maxid FROM Kruidenformules WHERE ID =@sid";
-            acquery = "SELECT COUNT(ID) AS Maxid FROM Patentformules WHERE ID =@sid";
+            cquery = "SELECT COUNT(ID) AS Maxid FROM Kruidenformules";
+            acquery = "SELECT COUNT(ID) AS Maxid FROM Patentformules";
+            ccquery = "SELECT COUNT(ID) AS Maxid FROM Syndromen";
             //counting
             ccmd = new SqlCommand(cquery, conn);
-            ccmd.Parameters.Add(new SqlParameter("@sid", sid));
+            //ccmd.Parameters.Add(new SqlParameter("@sid", sid));
             cdataReader = ccmd.ExecuteReader();
             cdataReader.Read();
             leftcount = Convert.ToInt32(cdataReader.GetString(0));
             accmd = new SqlCommand(acquery, conn);
-            accmd.Parameters.Add(new SqlParameter("@sid", sid));
+            //accmd.Parameters.Add(new SqlParameter("@sid", sid));
             acdataReader = accmd.ExecuteReader();
             acdataReader.Read();
             rightcount = Convert.ToInt32(acdataReader.GetString(0));
+            cccmd = new SqlCommand(acquery, conn);
+            //cccmd.Parameters.Add(new SqlParameter("@sid", sid));
+            ccdataReader = accmd.ExecuteReader();
+            ccdataReader.Read();
+            bottomcount = Convert.ToInt32(ccdataReader.GetString(0));
             //db close
             cdataReader.Close();
             acdataReader.Close();
             ccmd.Dispose();
             accmd.Dispose();
             conn.Close();
-            if (leftcount > 0 && rightcount > 0)
+            if (leftcount > 0 && rightcount > 0 && bottomcount > 0)
             {
                 checking = 1;
             }
@@ -63,28 +69,29 @@ namespace Chinees
             return checking;
         }
 
-        //list selecting
+        //dropdown selecting
         private List<List<string>> Verhoudingmaker()
         {
             List<List<string>> list = new List<List<string>>();
             //search id
             int sid = this.selectedid;
-            string did, output, aid, aoutput;
+            string did, output, aid, aoutput, cid, coutput;
 
             //connection
             conn = new DBHandler().getConnection();
             //command and query strings
-            SqlCommand cmd, acmd;
-            String query, aquery;
-            SqlDataReader dataReader, adataReader;
+            SqlCommand cmd, acmd, ccmd;
+            String query, aquery, cquery;
+            SqlDataReader dataReader, adataReader, cdataReader;
             //db open
             conn.Open();
             //queries
-            query = "SELECT ID, Naam FROM Kruidenformules WHERE ID =@sid ORDER BY Naam ASC";
-            aquery = "SELECT ID, Nederlands FROM Patentformules WHERE ID =@sid ORDER BY Nederlands ASC";
+            query = "SELECT ID, Naam FROM Kruidenformules ORDER BY Naam ASC";
+            aquery = "SELECT ID, Nederlands FROM Patentformules ORDER BY Nederlands ASC";
+            cquery = "SELECT ID, Syndroom FROM Syndromen ORDER BY Syndroom ASC";
             //selecting
             cmd = new SqlCommand(query, conn);
-            cmd.Parameters.Add(new SqlParameter("@sid", sid));
+            //cmd.Parameters.Add(new SqlParameter("@sid", sid));
             dataReader = cmd.ExecuteReader();
             while (dataReader.Read())
             {
@@ -93,7 +100,7 @@ namespace Chinees
                 //list.Add(did,output);
             }
             acmd = new SqlCommand(aquery, conn);
-            acmd.Parameters.Add(new SqlParameter("@sid", sid));
+            //acmd.Parameters.Add(new SqlParameter("@sid", sid));
             adataReader = acmd.ExecuteReader();
             while (adataReader.Read())
             {
@@ -101,52 +108,175 @@ namespace Chinees
                 aoutput = adataReader.GetString(1);
                 //list.Add(aid,aoutput);
             }
+            ccmd = new SqlCommand(cquery, conn);
+            //ccmd.Parameters.Add(new SqlParameter("@sid", sid));
+            cdataReader = ccmd.ExecuteReader();
+            while (cdataReader.Read())
+            {
+                cid = adataReader.GetString(0);
+                coutput = adataReader.GetString(1);
+                //list.Add(aid,aoutput);
+            }
             //db close
             dataReader.Close();
             adataReader.Close();
+            cdataReader.Close();
             cmd.Dispose();
             acmd.Dispose();
+            ccmd.Dispose();
             conn.Close();
             return list;
         }
 
-        //list display
-        public void MenuMaker()
+        //dropdown display
+        public void DropdownMaker()
         {
-            int verticalpos = 110;
-            //string did, output;
+            List<List<string>> list = new List<List<string>>();
+            ComboBox comboBox1 = new System.Windows.Forms.ComboBox();
+            comboBox1.FormattingEnabled = true;
+            /*
+            comboBox1.Items.AddRange(new object[] {
+                foreach (string name in names)
+                {
+                ""
 
+
+                }
+            });
+            */
+            comboBox1.Location = new System.Drawing.Point(700, 40);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new System.Drawing.Size(180, 23);
+
+            ComboBox comboBox2 = new System.Windows.Forms.ComboBox();
+            comboBox1.FormattingEnabled = true;
+            /*
+            comboBox2.Items.AddRange(new object[] {
+                foreach (string name in names)
+                {
+                ""
+
+
+                }
+            });
+            */
+            comboBox2.Location = new System.Drawing.Point(900, 40);
+            comboBox2.Name = "comboBox1";
+            comboBox2.Size = new System.Drawing.Size(180, 23);
+
+            ComboBox comboBox3 = new System.Windows.Forms.ComboBox();
+            comboBox3.FormattingEnabled = true;
+            /*
+            comboBox2.Items.AddRange(new object[] {
+                foreach (string name in names)
+                {
+                ""
+
+
+                }
+            });
+            */
+            comboBox3.Location = new System.Drawing.Point(1100, 40);
+            comboBox3.Name = "comboBox1";
+            comboBox3.Size = new System.Drawing.Size(180, 23);
+        }
+
+        //list checking
+        public int ListCheck()
+        {
+            //search id
+            int sid = this.selectedid;
+            int ccount, checking;
+            
+            //connection
+            conn = new DBHandler().getConnection();
+            //command and query strings
+            SqlCommand ccmd;
+            String cquery;
+            SqlDataReader cdataReader;
+            //db open
+            conn.Open();
+            //counting
+            cquery = "SELECT COUNT(ID) AS cco FROM Actieformules WHERE ID=@sid";
+            ccmd = new SqlCommand(cquery, conn);
+            ccmd.Parameters.Add(new SqlParameter("@sid", sid));
+            cdataReader = ccmd.ExecuteReader();
+            cdataReader.Read();
+            ccount = Convert.ToInt32(cdataReader.GetString(0));
+            //db close
+            cdataReader.Close();
+            ccmd.Dispose();
+            conn.Close();
+            if (ccount > 0)
+            {
+                checking = 1;
+            }
+            else
+            {
+                checking = 999;
+            }
+            return checking;
+        }
+
+        //list display
+        public void MenuMaker(int searchid)
+        {
+            
+            int selimiter = searchid;
+            //connection
+            conn = new DBHandler().getConnection();
+            //command and query strings
+            SqlCommand cmd;
+            SqlDataReader mdataReader;
+            String query;
+
+            //db open
+            conn.Open();
+            //select query according to type search
+            //start position
+            int verticalpos = 110;
             int i = 0;
 
-            //List<List<string>> list = new List<List<string>>();
-            var names = new List<string>();
-            foreach (string name in names)
+            query = "SELECT Actieformules.ID, Kruidenformules.Naam, Patentformules.Nederlands, Syndromen.Syndroom FROM Actieformules, Kruidenformules, Patentformules, Syndromen WHERE Actieformules.Syndroom=Syndromen.ID AND Actieformules.Patentformule=Patentformules.ID AND Actieformules.Kruidenformule=Kruidenformules.ID AND Actieformules.ID=@sid";
+
+            cmd = new SqlCommand(query, conn);
+            cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
+
+            mdataReader = cmd.ExecuteReader();
+            while (mdataReader.Read())
             {
-                Label sidlabel = new System.Windows.Forms.Label();
-                sidlabel.Location = new System.Drawing.Point(700, verticalpos);
-                sidlabel.Name = "label1";
-                sidlabel.Size = new System.Drawing.Size(40, 20);
-                sidlabel.Text = Convert.ToString(names[i]);
-                //Controls.Add(sidlabel);
+                //kruidenformule naam
                 Label outlabel = new System.Windows.Forms.Label();
-                outlabel.Location = new System.Drawing.Point(780, verticalpos);
-                outlabel.Name = "label1";
-                outlabel.Size = new System.Drawing.Size(40, 20);
-                outlabel.Text = Convert.ToString(names[i]);
-                //Controls.Add(outlabel);
+                outlabel.Location = new System.Drawing.Point(700, verticalpos);
+                outlabel.Name = "outlabel";
+                outlabel.Size = new System.Drawing.Size(180, 20);
+                outlabel.Text = Convert.ToString(mdataReader.GetString(1));
+                //patent formule nederlands
+                Label outlabel2 = new System.Windows.Forms.Label();
+                outlabel2.Location = new System.Drawing.Point(900, verticalpos);
+                outlabel2.Name = "outlabel2";
+                outlabel2.Size = new System.Drawing.Size(180, 20);
+                outlabel2.Text = Convert.ToString(mdataReader.GetString(2));
+                //syndroom
+                Label outlabel3 = new System.Windows.Forms.Label();
+                outlabel3.Location = new System.Drawing.Point(1100, verticalpos);
+                outlabel3.Name = "outlabel3";
+                outlabel3.Size = new System.Drawing.Size(40, 20);
+                outlabel3.Text = Convert.ToString(mdataReader.GetString(3));
+                //id
                 Button buttonrem = new System.Windows.Forms.Button();
-                buttonrem.Location = new System.Drawing.Point(500, verticalpos);
+                buttonrem.Location = new System.Drawing.Point(1160, verticalpos);
                 buttonrem.Text = "Verwijderen";
                 buttonrem.Size = new System.Drawing.Size(75, 35);
                 buttonrem.Click += new System.EventHandler(this.buttonrem_Click);
-                buttonrem.Name = Convert.ToString(names[i]);
-                //Controls.Add(buttonrem);
+                buttonrem.Name = Convert.ToString(mdataReader.GetString(0));
+
                 i++;
             }
 
         }
 
-        //verwijder
+        //list removal event
         private void buttonrem_Click(object sender, EventArgs e)
         {
             Button buttondelete = (Button)sender;
@@ -154,7 +284,7 @@ namespace Chinees
             Removal(ClickedNum);
         }
 
-        //remove item
+        //list remove item
         private void Removal(int delid)
         {
             int deleteid = delid;
@@ -173,6 +303,7 @@ namespace Chinees
             conn.Close();
         }
 
+        //list inserting
         private void Inserter(int syndroomid, int formuleid, int patentid)
         {
             int syndroom = syndroomid;

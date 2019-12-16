@@ -72,11 +72,7 @@ namespace Chinees
             }
         }
 
-        private void openhoofdmenu(object obj)
-        {
-            Application.Run(new Form1());
-        }
-
+        //updating
         private void Updating(string Clicking)
         {            
             //connection
@@ -141,6 +137,7 @@ namespace Chinees
             conn.Close();
         }
 
+        //inserting
         private void Execute()
         {
             //connection
@@ -208,6 +205,20 @@ namespace Chinees
             mcmd.Dispose();
             acmd.Dispose();
             conn.Close();
+        }
+
+        //koppelen
+
+        //Controls.Add(outlabel);
+        //Controls.Add(outlabel2);
+        //Controls.Add(outlabel3);
+        //Controls.Add(buttonrem);
+
+
+        //hoofdmenu
+        private void openhoofdmenu(object obj)
+        {
+            Application.Run(new Form1());
         }
 
         private void button2_Click(object sender, EventArgs e)
