@@ -166,6 +166,7 @@ namespace Chinees
             List<List<string>> list = new List<List<string>>();
             ComboBox comboBox1 = new System.Windows.Forms.ComboBox();
             comboBox1.FormattingEnabled = true;
+            //data binding
             /*
             comboBox1.Items.AddRange(new object[] {
                 foreach (string name in names)
