@@ -163,7 +163,35 @@ namespace Chinees
         //dropdown display
         public void DropdownMaker ()
         {
-            List<List<string>> list = new List<List<string>>();
+            //List<List<string>> list = new List<List<string>>();
+            string couple = this.coupling;
+
+            String query, aquery;
+
+            switch (couple)
+            {
+                case "Kruiden":
+                    query = "SELECT ID, Naam FROM Kruidenformules WHERE ID =@sid ORDER BY Naam ASC";
+                    aquery = "SELECT ID, Nederlands FROM Kruiden WHERE ID =@sid ORDER BY Nederlands ASC";
+                    break;
+                case "Kruidenformules":
+                    query = "SELECT ID, Naam FROM Kruidenformules WHERE ID =@sid ORDER BY Naam ASC";
+                    aquery = "SELECT ID, Nederlands FROM Kruiden WHERE ID =@sid ORDER BY Nederlands ASC";
+                    break;
+                case "Chinesekruiden":
+                    query = "SELECT ID, Naam FROM Patentformules WHERE ID =@sid ORDER BY Naam ASC";
+                    aquery = "SELECT ID, Nederlands FROM ChineseKruiden WHERE ID =@sid ORDER BY Nederlands ASC";
+                    break;
+                case "Patentformules":
+                    query = "SELECT ID, Naam FROM Patentformules WHERE ID =@sid ORDER BY Naam ASC";
+                    aquery = "SELECT ID, Nederlands FROM ChineseKruiden WHERE ID =@sid ORDER BY Nederlands ASC";
+                    break;
+                default:
+                    query = "SELECT ID, Naam FROM Kruidenformules WHERE ID =@sid ORDER BY Naam ASC";
+                    aquery = "SELECT ID, Nederlands FROM Kruiden WHERE ID =@sid ORDER BY Nederlands ASC";
+                    break;
+            }
+
             ComboBox comboBox1 = new System.Windows.Forms.ComboBox();
             comboBox1.FormattingEnabled = true;
             //data binding
@@ -180,7 +208,29 @@ namespace Chinees
             comboBox1.Location = new System.Drawing.Point(700, 40);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new System.Drawing.Size(180, 23);
-            
+
+            //connection
+            conn = new DBHandler().getConnection();
+
+            //first select
+            SqlCommand sc = new SqlCommand(query, conn);
+            SqlDataReader reader;
+
+            reader = sc.ExecuteReader();
+            DataTable dt = new DataTable();
+
+            dt.Columns.Add("ID", typeof(string));
+            dt.Columns.Add("Naam", typeof(string));
+            dt.Load(reader);
+
+            comboBox1.ValueMember = "ID";
+            comboBox1.DisplayMember = "Naam";
+            comboBox1.DataSource = dt;
+
+
+
+
+
             ComboBox comboBox2 = new System.Windows.Forms.ComboBox();
             comboBox1.FormattingEnabled = true;
             /*
@@ -196,6 +246,29 @@ namespace Chinees
             comboBox2.Location = new System.Drawing.Point(900, 40);
             comboBox2.Name = "comboBox1";
             comboBox2.Size = new System.Drawing.Size(180, 23);
+
+            //first select
+            SqlCommand sca = new SqlCommand(aquery, conn);
+            SqlDataReader areader;
+
+            areader = sca.ExecuteReader();
+            DataTable dta = new DataTable();
+
+            dta.Columns.Add("ID", typeof(string));
+            dta.Columns.Add("Naam", typeof(string));
+            dta.Load(areader);
+
+            comboBox2.ValueMember = "ID";
+            comboBox2.DisplayMember = "Naam";
+            comboBox2.DataSource = dt;
+
+
+            //db close
+            reader.Close();
+            areader.Close();
+            sc.Dispose();
+            sca.Dispose();
+            conn.Close();
 
         }
 
