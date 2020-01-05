@@ -137,7 +137,7 @@ namespace Chinees
             //db open
             conn.Open();
             //insert
-            query = "INSERT INTO Syndromenacties (Syndroom, Actie, Acupunctuurpunten, Opmerkingen) VALUES (@0, @1, @2, @3), Syndroom, Actie, Acupunctuurpunten, Opmerkingen";
+            query = "INSERT INTO Syndromenacties (Syndroom, Actie, Acupunctuurpunten, Opmerkingen) VALUES (@0, @1, @2, @3)";
             cmd = new SqlCommand(query, conn);
             adapter.InsertCommand = new SqlCommand(query, conn);
             adapter.InsertCommand.Parameters.AddWithValue("@0", Syndroom);

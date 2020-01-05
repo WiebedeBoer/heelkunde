@@ -27,6 +27,7 @@ namespace Chinees
         private void form_load(object sender, EventArgs e)
         {
             buttonmaker();
+
         }
 
         private void buttonmaker()
@@ -52,8 +53,34 @@ namespace Chinees
                 button1.UseVisualStyleBackColor = true;
                 button1.Click += new System.EventHandler(button1_Click);
                 Controls.Add(button1);
+                int updatenum = Convert.ToInt32(this.updatestage);
+                //actieformules
+                int verhouding = new Actieformules(updatenum).VerhoudingCheck();
+                if (verhouding >=1)
+                {
+                    ComboBox comboBox1 = new System.Windows.Forms.ComboBox();
+                    Controls.Add(comboBox1);
+                    ComboBox comboBox2 = new System.Windows.Forms.ComboBox();
+                    Controls.Add(comboBox2);
+                    ComboBox comboBox3 = new System.Windows.Forms.ComboBox();
+                    Controls.Add(comboBox3);
+                    Button button12 = new System.Windows.Forms.Button();
+                    button12.Click += new System.EventHandler(button12_Click);
+                }
+
+
             }
         }
+
+        //actieformules
+        private void button12_Click(object sender, EventArgs e)
+        {
+            int updatenum = Convert.ToInt32(this.updatestage);
+            //actieformules
+            //new Actieformules(updatenum).buttonin_Click(object sender, EventArgs e);
+        }
+
+
 
         private void button1_Click(object sender, EventArgs e)
         {
