@@ -150,6 +150,7 @@ namespace Chinees
             SqlCommand mcmd;
             SqlCommand acmd;
             SqlDataAdapter adapter = new SqlDataAdapter();
+            SqlDataAdapter nadapter = new SqlDataAdapter();
             SqlDataReader mdataReader;
             String query;
             String mquery;
@@ -179,16 +180,17 @@ namespace Chinees
             MaxID = Convert.ToInt32(Max);
             //set updatestage
             this.updatestage = Max;
-            //aantekening
-            aquery = "INSERT INTO Patentaantekeningen (Kruid, Aantekening) VALUES(@0, @1)";
-            acmd = new SqlCommand(aquery, conn);
-            adapter.InsertCommand = new SqlCommand(aquery, conn);
-            adapter.InsertCommand.Parameters.AddWithValue("@0", MaxID);
-            adapter.InsertCommand.Parameters.AddWithValue("@1", Aantekeningen);
-            adapter.InsertCommand.ExecuteNonQuery();
             //db close
             mdataReader.Close();
             cmd.Dispose();
+            //aantekening
+            aquery = "INSERT INTO Patentaantekeningen (Patent, Aantekening) VALUES(@0, @1)";
+            acmd = new SqlCommand(aquery, conn);
+            nadapter.InsertCommand = new SqlCommand(aquery, conn);
+            nadapter.InsertCommand.Parameters.AddWithValue("@0", MaxID);
+            nadapter.InsertCommand.Parameters.AddWithValue("@1", Aantekeningen);
+            nadapter.InsertCommand.ExecuteNonQuery();
+            //db close
             mcmd.Dispose();
             acmd.Dispose();
             conn.Close();

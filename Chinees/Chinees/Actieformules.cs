@@ -9,7 +9,7 @@ using System.Data;
 
 namespace Chinees
 {
-    class Actieformules
+    public class Actieformules
     {
         public SqlConnection conn;
         private int selectedid;
@@ -48,22 +48,27 @@ namespace Chinees
             //ccmd.Parameters.Add(new SqlParameter("@sid", sid));
             cdataReader = ccmd.ExecuteReader();
             cdataReader.Read();
-            leftcount = Convert.ToInt32(cdataReader.GetString(0));
+            leftcount = cdataReader.GetInt32(0);
+            cdataReader.Close();
+            ccmd.Dispose();
+
             accmd = new SqlCommand(acquery, conn);
             //accmd.Parameters.Add(new SqlParameter("@sid", sid));
             acdataReader = accmd.ExecuteReader();
             acdataReader.Read();
-            rightcount = Convert.ToInt32(acdataReader.GetString(0));
+            rightcount = acdataReader.GetInt32(0);
+            acdataReader.Close();
+            accmd.Dispose();
+
             cccmd = new SqlCommand(acquery, conn);
             //cccmd.Parameters.Add(new SqlParameter("@sid", sid));
-            ccdataReader = accmd.ExecuteReader();
+            ccdataReader = cccmd.ExecuteReader();
             ccdataReader.Read();
-            bottomcount = Convert.ToInt32(ccdataReader.GetString(0));
+            bottomcount = ccdataReader.GetInt32(0);
+            ccdataReader.Close();
+            cccmd.Dispose();
             //db close
-            cdataReader.Close();
-            acdataReader.Close();
-            ccmd.Dispose();
-            accmd.Dispose();
+
             conn.Close();
             if (leftcount > 0 && rightcount > 0 && bottomcount > 0)
             {

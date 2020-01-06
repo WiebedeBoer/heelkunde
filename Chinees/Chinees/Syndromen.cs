@@ -137,6 +137,8 @@ namespace Chinees
             string Pathologie = textBox7.Text;
             string Voorlopers = textBox8.Text;
             string Ontwikkelingen = textBox9.Text;
+            //db close
+            mdataReader.Close();
             //updating
             query = "UPDATE Syndromen SET Syndroom =@0, Symptoom =@1, Hoofdsymptoom =@2, Tong =@3, Pols =@4, Etiologie =@5, Pathologie =@6, Voorlopers =@7, Ontwikkelingen =@8 WHERE ID =@search";
             cmd = new SqlCommand(query, conn);
@@ -151,9 +153,7 @@ namespace Chinees
             cmd.Parameters.AddWithValue("@7", Voorlopers);
             cmd.Parameters.AddWithValue("@8", Ontwikkelingen);
             cmd.ExecuteNonQuery();
-
             //db close
-            mdataReader.Close();
             cmd.Dispose();
             mcmd.Dispose();
             conn.Close();
