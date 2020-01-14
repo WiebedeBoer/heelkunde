@@ -22,6 +22,8 @@ namespace Chinees
         Thread th;
         public SqlConnection conn;
         private string updatestage;
+        public string updatetype = "kruiden";
+        private int updatenum;
 
         public Kruiden()
         {
@@ -220,6 +222,26 @@ namespace Chinees
             mcmd.Dispose();
             acmd.Dispose();
             conn.Close();
+            //refresh
+            //this.Refresh();
+            //this.Invalidate();
+            //this.Update();
+            //Kruiden
+            //th.Refresh();
+            //buttonmaker();
+            //button1.Text = "Aanpassen";
+            //closing thread
+            this.updatenum = MaxID;
+            this.Close();
+            th = new Thread(openupdate);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
+        }
+
+        //hoofdmenu
+        private void openupdate(object obj)
+        {
+            Application.Run(new Updateform(this.updatenum,this.updatetype));
         }
 
         //hoofdmenu
