@@ -213,6 +213,8 @@ namespace Chinees
             cmd.Dispose();
             mcmd.Dispose();
             conn.Close();
+            //refresh
+            this.Refresh();
         }
 
         //hoofdmenu

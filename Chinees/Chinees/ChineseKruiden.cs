@@ -19,10 +19,12 @@ namespace Chinees
         public SqlConnection conn;
         private string updatestage;
 
-        public ChineseKruiden()
+        TextBox textBox11 = new System.Windows.Forms.TextBox();
+
+        public ChineseKruiden(string updatestage)
         {
             InitializeComponent();
-            
+            this.updatestage = updatestage;
         }
 
         private void form_load(object sender, EventArgs e)
@@ -34,10 +36,10 @@ namespace Chinees
         {
             //check stage
             Button button1 = new System.Windows.Forms.Button();
-            if (this.updatestage != null)
+            if (this.updatestage != null && this.updatestage !="0")
             {
                 button1.Location = new System.Drawing.Point(322, 369);
-                button1.Name = updatestage;
+                button1.Name = this.updatestage;
                 button1.Size = new System.Drawing.Size(108, 30);
                 button1.Text = "Aanpassen";
                 button1.UseVisualStyleBackColor = true;
@@ -53,6 +55,30 @@ namespace Chinees
                 button1.UseVisualStyleBackColor = true;
                 button1.Click += new System.EventHandler(button1_Click);
                 Controls.Add(button1);
+
+                Label label11 = new System.Windows.Forms.Label();
+
+                // 
+                // label11
+                // 
+                label11.AutoSize = true;
+                label11.Location = new System.Drawing.Point(433, 274);
+                label11.Name = "label11";
+                label11.Size = new System.Drawing.Size(79, 13);
+                label11.TabIndex = 11;
+                label11.Text = "Aantekeningen";
+
+                // 
+                // textBox11
+                // 
+                textBox11.Location = new System.Drawing.Point(536, 271);
+                textBox11.Name = "textBox11";
+                textBox11.Size = new System.Drawing.Size(202, 20);
+                textBox11.TabIndex = 22;
+
+                Controls.Add(textBox11);
+                Controls.Add(label11);
+
             }
         }
 
@@ -191,6 +217,8 @@ namespace Chinees
             //convert to string
             string Max = Convert.ToString(mdataReader.GetValue(0));
             MaxID = Convert.ToInt32(Max);
+            //closer
+            mdataReader.Close();
             //set updatestage
             this.updatestage = Max;
             //aantekening
@@ -201,11 +229,16 @@ namespace Chinees
             nadapter.InsertCommand.Parameters.AddWithValue("@1", Aantekeningen);
             nadapter.InsertCommand.ExecuteNonQuery();
             //db close
-            mdataReader.Close();
+
             cmd.Dispose();
             mcmd.Dispose();
             acmd.Dispose();
             conn.Close();
+
+            this.Close();
+            th = new Thread(openupdate);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
         }
 
         //koppelen
@@ -214,6 +247,13 @@ namespace Chinees
         //Controls.Add(outlabel2);
         //Controls.Add(outlabel3);
         //Controls.Add(buttonrem);
+
+        //update
+        private void openupdate(object obj)
+        {
+            //Application.Run(new Updateform(this.updatenum,this.updatetype));
+            Application.Run(new ChineseKruiden(this.updatestage));
+        }
 
 
         //hoofdmenu

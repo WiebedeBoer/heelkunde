@@ -36,7 +36,7 @@ namespace Chinees
             if (this.updatestage != null)
             {
                 button1.Location = new System.Drawing.Point(315, 357);
-                button1.Name = updatestage;
+                button1.Name = this.updatestage;
                 button1.Size = new System.Drawing.Size(75, 23);
                 button1.Text = "Aanpassen";
                 button1.UseVisualStyleBackColor = true;
@@ -194,6 +194,8 @@ namespace Chinees
             mcmd.Dispose();
             acmd.Dispose();
             conn.Close();
+            //refresh
+            this.Refresh();
         }
 
         //hoofdmenu

@@ -194,6 +194,8 @@ namespace Chinees
             mcmd.Dispose();
             acmd.Dispose();
             conn.Close();
+            //refresh
+            this.Refresh();
         }
 
         //hoofdmenu

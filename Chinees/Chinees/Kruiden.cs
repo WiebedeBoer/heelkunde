@@ -25,9 +25,12 @@ namespace Chinees
         public string updatetype = "kruiden";
         private int updatenum;
 
-        public Kruiden()
+        TextBox textBox13 = new System.Windows.Forms.TextBox();
+
+        public Kruiden(string updatestage)
         {
             InitializeComponent();
+            this.updatestage = updatestage;
         }
 
         private void form_load(object sender, EventArgs e)
@@ -39,15 +42,18 @@ namespace Chinees
         {
             //check stage
             Button button1 = new System.Windows.Forms.Button();
-            if (this.updatestage != null)
+            if (this.updatestage != null && this.updatestage !="0")
             {
                 button1.Location = new System.Drawing.Point(324, 358);
-                button1.Name = updatestage;
+                button1.Name = this.updatestage;
                 button1.Size = new System.Drawing.Size(75, 23);
                 button1.Text = "Aanpassen";
                 button1.UseVisualStyleBackColor = true;
                 button1.Click += new System.EventHandler(button1_Click);
                 Controls.Add(button1);
+
+
+
             }
             else
             {
@@ -58,6 +64,30 @@ namespace Chinees
                 button1.UseVisualStyleBackColor = true;
                 button1.Click += new System.EventHandler(button1_Click);
                 Controls.Add(button1);
+
+                Label label13 = new System.Windows.Forms.Label();
+                
+
+                // 
+                // label13
+                // 
+                label13.AutoSize = true;
+                label13.Location = new System.Drawing.Point(405, 289);
+                label13.Name = "label13";
+                label13.Size = new System.Drawing.Size(79, 13);
+                label13.TabIndex = 24;
+                label13.Text = "Aantekeningen";
+                // 
+                // textBox13
+                // 
+                textBox13.Location = new System.Drawing.Point(490, 248);
+                textBox13.Multiline = true;
+                textBox13.Name = "textBox13";
+                textBox13.Size = new System.Drawing.Size(100, 80);
+                textBox13.TabIndex = 25;
+
+                Controls.Add(textBox13);
+                Controls.Add(label13);
             }
         }
 
@@ -123,7 +153,7 @@ namespace Chinees
             string Toepassingen = textBox10.Text;
             string Actie = textBox11.Text;
             string Gebruik = textBox12.Text;
-            string Aantekeningen = textBox13.Text;
+            //string Aantekeningen = textBox13.Text;
             //updating
             query = "UPDATE Kruiden SET Nederlands =@0, Latijn =@1, Familie =@2, Inhoudsstoffen =@3, GebruikteDelen =@4, Eigenschappen =@5, Smaak =@6, Thermodynamisch =@7, Orgaan =@8, Toepassingen =@9, Actie =@10, Gebruik =@11 WHERE ID =@search";
             cmd = new SqlCommand(query, conn);
@@ -238,10 +268,11 @@ namespace Chinees
             th.Start();
         }
 
-        //hoofdmenu
+        //update
         private void openupdate(object obj)
         {
-            Application.Run(new Updateform(this.updatenum,this.updatetype));
+            //Application.Run(new Updateform(this.updatenum,this.updatetype));
+            Application.Run(new Kruiden(this.updatestage));
         }
 
         //hoofdmenu

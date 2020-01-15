@@ -21,6 +21,7 @@ namespace Chinees
         private int prev, next;
         private string sekind;
         private string search;
+        private string number;
 
         public EditForm()
         {
@@ -192,7 +193,7 @@ namespace Chinees
         {
             Button buttonedit = (Button)sender;
             int ClickedNum = Convert.ToInt32(buttonedit.Name);
-            Execute();
+            Execute(ClickedNum);
         }
 
         //verwijder
@@ -200,12 +201,14 @@ namespace Chinees
         {
             Button buttondelete = (Button)sender;
             int ClickedNum = Convert.ToInt32(buttondelete.Name);
+            this.number = Convert.ToString(ClickedNum);
             Removal(ClickedNum);
         }
 
         //go to edit
-        private void Execute()
+        private void Execute(int num)
         {
+            int number = num;
             switch (sekind)
             {
                 //kruiden
@@ -392,18 +395,21 @@ namespace Chinees
         //kruiden
         private void openenkelkruiden(object obj)
         {
-            Application.Run(new Kruiden());
+            string numbr = this.number;
+            Application.Run(new Kruiden(numbr));
         }
 
         //kruidenformules
         private void openwesterskruiden(object obj)
         {
+            string numbr = this.number;
             Application.Run(new KruidenFormules());
         }
 
         //patentformules
         private void openchinesekruiden(object obj)
         {
+            string numbr = this.number;
             Application.Run(new PatentFormule());
         }
 
@@ -416,13 +422,15 @@ namespace Chinees
         //syndromenacties
         private void openactiessyndromen(object obj)
         {
+            string numbr = this.number;
             Application.Run(new SyndroomActie());
         }
 
         //chinesekruiden
         private void openpinjinkruiden(object obj)
         {
-            Application.Run(new ChineseKruiden());
+            string numbr = this.number;
+            Application.Run(new ChineseKruiden(numbr));
         }
 
         //volgende en vorige buttons

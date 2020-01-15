@@ -104,6 +104,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TCM2DataSet.xsd</DependentUpon>
     </Compile>
+    <Compile Include="Updateform.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Updateform.Designer.cs">
+      <DependentUpon>Updateform.cs</DependentUpon>
+    </Compile>
     <Compile Include="Verhoudingen.cs" />
     <EmbeddedResource Include="ChineseKruiden.resx">
       <DependentUpon>ChineseKruiden.cs</DependentUpon>
@@ -137,6 +143,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SyndroomActie.resx">
       <DependentUpon>SyndroomActie.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Updateform.resx">
+      <DependentUpon>Updateform.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

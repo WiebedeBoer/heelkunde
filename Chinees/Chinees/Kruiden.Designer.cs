@@ -52,8 +52,7 @@
             this.label12 = new System.Windows.Forms.Label();
             this.textBox11 = new System.Windows.Forms.TextBox();
             this.textBox12 = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.textBox13 = new System.Windows.Forms.TextBox();
+
             this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -253,23 +252,7 @@
             this.textBox12.Name = "textBox12";
             this.textBox12.Size = new System.Drawing.Size(100, 74);
             this.textBox12.TabIndex = 23;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(405, 289);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(79, 13);
-            this.label13.TabIndex = 24;
-            this.label13.Text = "Aantekeningen";
-            // 
-            // textBox13
-            // 
-            this.textBox13.Location = new System.Drawing.Point(490, 248);
-            this.textBox13.Multiline = true;
-            this.textBox13.Name = "textBox13";
-            this.textBox13.Size = new System.Drawing.Size(100, 80);
-            this.textBox13.TabIndex = 25;
+
             // 
             // button2
             // 
@@ -287,8 +270,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.textBox13);
-            this.Controls.Add(this.label13);
+
             this.Controls.Add(this.textBox12);
             this.Controls.Add(this.textBox11);
             this.Controls.Add(this.label12);
@@ -347,8 +329,8 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox textBox11;
         private System.Windows.Forms.TextBox textBox12;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox textBox13;
+        //private System.Windows.Forms.Label label13;
+        //private System.Windows.Forms.TextBox textBox13;
         private System.Windows.Forms.Button button2;
     }
 }

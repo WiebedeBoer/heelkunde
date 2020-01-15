@@ -17,6 +17,7 @@ namespace Chinees
     {
         Thread th;
         public SqlConnection conn;
+        public string stager = "0";
 
         public Form1()
         {
@@ -91,7 +92,7 @@ namespace Chinees
         //kruiden
         private void openenkelkruiden(object obj)
         {
-            Application.Run(new Kruiden());
+            Application.Run(new Kruiden(stager));
         }
 
         //kruidenformules
@@ -121,7 +122,7 @@ namespace Chinees
         //chinesekruiden
         private void openpinjinkruiden(object obj)
         {
-            Application.Run(new ChineseKruiden());
+            Application.Run(new ChineseKruiden(stager));
         }
 
     }

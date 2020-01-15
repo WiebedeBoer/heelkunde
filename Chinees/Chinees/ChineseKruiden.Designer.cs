@@ -38,7 +38,7 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
+
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox3 = new System.Windows.Forms.TextBox();
@@ -49,7 +49,7 @@
             this.textBox8 = new System.Windows.Forms.TextBox();
             this.textBox9 = new System.Windows.Forms.TextBox();
             this.textBox10 = new System.Windows.Forms.TextBox();
-            this.textBox11 = new System.Windows.Forms.TextBox();
+
             this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -142,15 +142,7 @@
             this.label10.Size = new System.Drawing.Size(49, 13);
             this.label10.TabIndex = 10;
             this.label10.Text = "Dosering";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(433, 274);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(79, 13);
-            this.label11.TabIndex = 11;
-            this.label11.Text = "Aantekeningen";
+
             // 
             // textBox1
             // 
@@ -221,13 +213,7 @@
             this.textBox10.Name = "textBox10";
             this.textBox10.Size = new System.Drawing.Size(202, 20);
             this.textBox10.TabIndex = 21;
-            // 
-            // textBox11
-            // 
-            this.textBox11.Location = new System.Drawing.Point(536, 271);
-            this.textBox11.Name = "textBox11";
-            this.textBox11.Size = new System.Drawing.Size(202, 20);
-            this.textBox11.TabIndex = 22;
+
             // 
             // button2
             // 
@@ -245,7 +231,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.textBox11);
+
             this.Controls.Add(this.textBox10);
             this.Controls.Add(this.textBox9);
             this.Controls.Add(this.textBox8);
@@ -256,7 +242,7 @@
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.label11);
+
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
@@ -297,7 +283,7 @@
         private System.Windows.Forms.TextBox textBox8;
         private System.Windows.Forms.TextBox textBox9;
         private System.Windows.Forms.TextBox textBox10;
-        private System.Windows.Forms.TextBox textBox11;
+        //private System.Windows.Forms.TextBox textBox11;
         private System.Windows.Forms.Button button2;
     }
 }
