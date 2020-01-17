@@ -27,15 +27,42 @@ namespace Chinees
         private void form_load(object sender, EventArgs e)
         {
             buttonmaker();
-
         }
 
         private void buttonmaker()
         {
             //check stage
             Button button1 = new System.Windows.Forms.Button();
-            if (this.updatestage != null)
+            if (this.updatestage != null && this.updatestage != "0")
             {
+                //connection
+                conn = new DBHandler().getConnection();
+                //which one
+                int maxi = Convert.ToInt32(this.updatestage);
+                SqlCommand mcmd;
+                SqlDataReader mdataReader;
+                String mquery;
+                //select max
+                mquery = "SELECT * FROM Syndromen WHERE ID =@search";
+                mcmd = new SqlCommand(mquery, conn);
+                mcmd.Parameters.Add(new SqlParameter("@search", maxi));
+                mdataReader = mcmd.ExecuteReader();
+                mdataReader.Read();
+                //convert to string
+                textBox1.Text = Convert.ToString(mdataReader.GetValue(1));
+                textBox2.Text = Convert.ToString(mdataReader.GetValue(2));
+                textBox3.Text = Convert.ToString(mdataReader.GetValue(3));
+                textBox4.Text = Convert.ToString(mdataReader.GetValue(4));
+                textBox5.Text = Convert.ToString(mdataReader.GetValue(5));
+                textBox6.Text = Convert.ToString(mdataReader.GetValue(6));
+                textBox7.Text = Convert.ToString(mdataReader.GetValue(7));
+                textBox8.Text = Convert.ToString(mdataReader.GetValue(8));
+                textBox9.Text = Convert.ToString(mdataReader.GetValue(9));
+                //db close
+                mdataReader.Close();
+                mcmd.Dispose();
+                conn.Close();
+                //button
                 button1.Location = new System.Drawing.Point(321, 315);
                 button1.Name = updatestage;
                 button1.Size = new System.Drawing.Size(75, 23);
@@ -106,27 +133,8 @@ namespace Chinees
             int maxi = Convert.ToInt32(Clicking);
             //command and query strings
             SqlCommand cmd;
-            SqlCommand mcmd;
             SqlDataAdapter adapter = new SqlDataAdapter();
-            SqlDataReader mdataReader;
             String query;
-            String mquery;
-            //select max
-            mquery = "SELECT * FROM Syndromen WHERE ID =@search";
-            mcmd = new SqlCommand(mquery, conn);
-            mcmd.Parameters.Add(new SqlParameter("@search", maxi));
-            mdataReader = mcmd.ExecuteReader();
-            mdataReader.Read();
-            //convert to string
-            textBox1.Text = Convert.ToString(mdataReader.GetValue(1));
-            textBox2.Text = Convert.ToString(mdataReader.GetValue(2));
-            textBox3.Text = Convert.ToString(mdataReader.GetValue(3));
-            textBox4.Text = Convert.ToString(mdataReader.GetValue(4));
-            textBox5.Text = Convert.ToString(mdataReader.GetValue(5));
-            textBox6.Text = Convert.ToString(mdataReader.GetValue(6));
-            textBox7.Text = Convert.ToString(mdataReader.GetValue(7));
-            textBox8.Text = Convert.ToString(mdataReader.GetValue(8));
-            textBox9.Text = Convert.ToString(mdataReader.GetValue(9));
             //data form variables
             string Syndroom = textBox1.Text;
             string Symptoom = textBox2.Text;
@@ -137,8 +145,6 @@ namespace Chinees
             string Pathologie = textBox7.Text;
             string Voorlopers = textBox8.Text;
             string Ontwikkelingen = textBox9.Text;
-            //db close
-            mdataReader.Close();
             //updating
             query = "UPDATE Syndromen SET Syndroom =@0, Symptoom =@1, Hoofdsymptoom =@2, Tong =@3, Pols =@4, Etiologie =@5, Pathologie =@6, Voorlopers =@7, Ontwikkelingen =@8 WHERE ID =@search";
             cmd = new SqlCommand(query, conn);
@@ -155,7 +161,6 @@ namespace Chinees
             cmd.ExecuteNonQuery();
             //db close
             cmd.Dispose();
-            mcmd.Dispose();
             conn.Close();
         }
 

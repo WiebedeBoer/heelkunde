@@ -33,8 +33,31 @@ namespace Chinees
         {
             //check stage
             Button button1 = new System.Windows.Forms.Button();
-            if (this.updatestage != null)
+            if (this.updatestage != null && this.updatestage != "0")
             {
+                //connection
+                conn = new DBHandler().getConnection();
+                //which one
+                int maxi = Convert.ToInt32(this.updatestage);
+                String mquery;
+                SqlCommand mcmd;
+                SqlDataReader mdataReader;
+                //select max
+                mquery = "SELECT * FROM Syndromenacties WHERE ID =@search";
+                mcmd = new SqlCommand(mquery, conn);
+                mcmd.Parameters.Add(new SqlParameter("@search", maxi));
+                mdataReader = mcmd.ExecuteReader();
+                mdataReader.Read();
+                //convert to string
+                textBox1.Text = Convert.ToString(mdataReader.GetValue(1));
+                textBox2.Text = Convert.ToString(mdataReader.GetValue(2));
+                textBox3.Text = Convert.ToString(mdataReader.GetValue(3));
+                textBox4.Text = Convert.ToString(mdataReader.GetValue(4));
+                //db close
+                mdataReader.Close();
+                mcmd.Dispose();
+                conn.Close();
+                //button
                 button1.Location = new System.Drawing.Point(394, 161);
                 button1.Name = updatestage;
                 button1.Size = new System.Drawing.Size(75, 23);
@@ -79,22 +102,8 @@ namespace Chinees
             int maxi = Convert.ToInt32(Clicking);
             //command and query strings
             SqlCommand cmd;
-            SqlCommand mcmd;
             SqlDataAdapter adapter = new SqlDataAdapter();
-            SqlDataReader mdataReader;
             String query;
-            String mquery;
-            //select max
-            mquery = "SELECT * FROM Syndromenacties WHERE ID =@search";
-            mcmd = new SqlCommand(mquery, conn);
-            mcmd.Parameters.Add(new SqlParameter("@search", maxi));
-            mdataReader = mcmd.ExecuteReader();
-            mdataReader.Read();
-            //convert to string
-            textBox1.Text = Convert.ToString(mdataReader.GetValue(1));
-            textBox2.Text = Convert.ToString(mdataReader.GetValue(2));
-            textBox3.Text = Convert.ToString(mdataReader.GetValue(3));
-            textBox4.Text = Convert.ToString(mdataReader.GetValue(4));
             //data form variables
             string Syndroom = textBox1.Text;
             string Actie = textBox2.Text;
@@ -110,9 +119,7 @@ namespace Chinees
             cmd.Parameters.AddWithValue("@3", Opmerkingen);
             cmd.ExecuteNonQuery();
             //db close
-            mdataReader.Close();
             cmd.Dispose();
-            mcmd.Dispose();
             conn.Close();
         }
 

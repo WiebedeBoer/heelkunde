@@ -33,8 +33,35 @@ namespace Chinees
         {
             //check stage
             Button button1 = new System.Windows.Forms.Button();
-            if (this.updatestage != null)
+            if (this.updatestage != null && this.updatestage != "0")
             {
+                //connection
+                conn = new DBHandler().getConnection();
+                String mquery;
+                SqlCommand mcmd;
+                SqlDataReader mdataReader;
+                //which one
+                int maxi = Convert.ToInt32(this.updatestage);
+                //select max
+                mquery = "SELECT * FROM Patentformules WHERE ID =@search";
+                mcmd = new SqlCommand(mquery, conn);
+                mcmd.Parameters.Add(new SqlParameter("@search", maxi));
+                mdataReader = mcmd.ExecuteReader();
+                mdataReader.Read();
+                //convert to string
+                textBox1.Text = Convert.ToString(mdataReader.GetValue(1));
+                textBox2.Text = Convert.ToString(mdataReader.GetValue(2));
+                textBox3.Text = Convert.ToString(mdataReader.GetValue(3));
+                textBox4.Text = Convert.ToString(mdataReader.GetValue(4));
+                textBox5.Text = Convert.ToString(mdataReader.GetValue(5));
+                textBox6.Text = Convert.ToString(mdataReader.GetValue(6));
+                textBox7.Text = Convert.ToString(mdataReader.GetValue(7));
+                textBox8.Text = Convert.ToString(mdataReader.GetValue(8));
+                //close
+                mdataReader.Close();
+                mcmd.Dispose();
+                conn.Close();
+                //button
                 button1.Location = new System.Drawing.Point(544, 228);
                 button1.Name = updatestage;
                 button1.Size = new System.Drawing.Size(185, 23);
@@ -79,26 +106,8 @@ namespace Chinees
             int maxi = Convert.ToInt32(Clicking);
             //command and query strings
             SqlCommand cmd;
-            SqlCommand mcmd;
             SqlDataAdapter adapter = new SqlDataAdapter();
-            SqlDataReader mdataReader;
             String query;
-            String mquery;
-            //select max
-            mquery = "SELECT * FROM Patentformules WHERE ID =@search";
-            mcmd = new SqlCommand(mquery, conn);
-            mcmd.Parameters.Add(new SqlParameter("@search", maxi));
-            mdataReader = mcmd.ExecuteReader();
-            mdataReader.Read();
-            //convert to string
-            textBox1.Text = Convert.ToString(mdataReader.GetValue(1));
-            textBox2.Text = Convert.ToString(mdataReader.GetValue(2));
-            textBox3.Text = Convert.ToString(mdataReader.GetValue(3));
-            textBox4.Text = Convert.ToString(mdataReader.GetValue(4));
-            textBox5.Text = Convert.ToString(mdataReader.GetValue(5));
-            textBox6.Text = Convert.ToString(mdataReader.GetValue(6));
-            textBox7.Text = Convert.ToString(mdataReader.GetValue(7));
-            textBox8.Text = Convert.ToString(mdataReader.GetValue(8));
             //data form variables
             string Nederlands = textBox1.Text;
             string Engels = textBox2.Text;
@@ -123,9 +132,7 @@ namespace Chinees
             cmd.Parameters.AddWithValue("@7", Indicaties);
             cmd.ExecuteNonQuery();
             //db close
-            mdataReader.Close();
             cmd.Dispose();
-            mcmd.Dispose();
             conn.Close();
         }
 

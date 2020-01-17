@@ -44,6 +44,37 @@ namespace Chinees
             Button button1 = new System.Windows.Forms.Button();
             if (this.updatestage != null && this.updatestage !="0")
             {
+                //fill text
+                //connection
+                conn = new DBHandler().getConnection();
+                SqlCommand mcmd;
+                String mquery;
+                SqlDataReader mdataReader;
+                int maxi = Convert.ToInt32(this.updatestage);
+                //select max
+                mquery = "SELECT * FROM Kruiden WHERE ID =@search";
+                mcmd = new SqlCommand(mquery, conn);
+                mcmd.Parameters.Add(new SqlParameter("@search", maxi));
+                mdataReader = mcmd.ExecuteReader();
+                mdataReader.Read();
+                //convert to string
+                textBox1.Text = Convert.ToString(mdataReader.GetValue(1));
+                textBox2.Text = Convert.ToString(mdataReader.GetValue(2));
+                textBox3.Text = Convert.ToString(mdataReader.GetValue(3));
+                textBox4.Text = Convert.ToString(mdataReader.GetValue(4));
+                textBox5.Text = Convert.ToString(mdataReader.GetValue(5));
+                textBox6.Text = Convert.ToString(mdataReader.GetValue(6));
+                textBox7.Text = Convert.ToString(mdataReader.GetValue(7));
+                textBox8.Text = Convert.ToString(mdataReader.GetValue(8));
+                textBox9.Text = Convert.ToString(mdataReader.GetValue(9));
+                textBox10.Text = Convert.ToString(mdataReader.GetValue(10));
+                textBox11.Text = Convert.ToString(mdataReader.GetValue(11));
+                textBox12.Text = Convert.ToString(mdataReader.GetValue(12));
+                //close
+                mdataReader.Close();
+                mcmd.Dispose();
+                conn.Close();
+                //button
                 button1.Location = new System.Drawing.Point(324, 358);
                 button1.Name = this.updatestage;
                 button1.Size = new System.Drawing.Size(75, 23);
@@ -51,9 +82,6 @@ namespace Chinees
                 button1.UseVisualStyleBackColor = true;
                 button1.Click += new System.EventHandler(button1_Click);
                 Controls.Add(button1);
-
-
-
             }
             else
             {
@@ -115,31 +143,9 @@ namespace Chinees
             int maxi = Convert.ToInt32(Clicking);
             //command and query strings
             SqlCommand cmd;
-            SqlCommand mcmd;
             SqlDataAdapter adapter = new SqlDataAdapter();
-            SqlDataReader mdataReader;
             //SqlDataReader adataReader;
             String query;
-            String mquery;
-            //select max
-            mquery = "SELECT * FROM Kruiden WHERE ID =@search";
-            mcmd = new SqlCommand(mquery, conn);
-            mcmd.Parameters.Add(new SqlParameter("@search", maxi));
-            mdataReader = mcmd.ExecuteReader();
-            mdataReader.Read();
-            //convert to string
-            textBox1.Text = Convert.ToString(mdataReader.GetValue(1));
-            textBox2.Text = Convert.ToString(mdataReader.GetValue(2));
-            textBox3.Text = Convert.ToString(mdataReader.GetValue(3));
-            textBox4.Text = Convert.ToString(mdataReader.GetValue(4));
-            textBox5.Text = Convert.ToString(mdataReader.GetValue(5));
-            textBox6.Text = Convert.ToString(mdataReader.GetValue(6));
-            textBox7.Text = Convert.ToString(mdataReader.GetValue(7));
-            textBox8.Text = Convert.ToString(mdataReader.GetValue(8));
-            textBox9.Text = Convert.ToString(mdataReader.GetValue(9));
-            textBox10.Text = Convert.ToString(mdataReader.GetValue(10));
-            textBox11.Text = Convert.ToString(mdataReader.GetValue(11));
-            textBox12.Text = Convert.ToString(mdataReader.GetValue(12));
             //data form variables
             string Nederlands = textBox1.Text;
             string Latijns = textBox2.Text;
@@ -172,9 +178,7 @@ namespace Chinees
             cmd.Parameters.AddWithValue("@11", Gebruik);
             cmd.ExecuteNonQuery();
             //db close
-            mdataReader.Close();
             cmd.Dispose();
-            mcmd.Dispose();
             conn.Close();
         }
 
