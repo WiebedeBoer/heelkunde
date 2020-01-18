@@ -23,24 +23,36 @@ namespace Chinees
         private string search;
         private string number;
 
-        public EditForm()
+        public EditForm(string search, string sekind, int selimiter)
         {
             InitializeComponent();
+            this.search = search;
+            this.sekind = sekind;
+            this.selimiter = selimiter;
+
+        }
+
+        private void form_load(object sender, EventArgs e)
+        {
+            if (this.search !="NULL" && this.sekind !="NULL")
+            {
+                Search(this.search, this.sekind, this.selimiter);
+            }            
         }
 
         //search
         private void Search(string searchtext, string searchtype, int searchstart)
         {
-            search = searchtext;
-            sekind = searchtype;
-            selimiter = searchstart;
+            this.search = searchtext;
+            this.sekind = searchtype;
+            this.selimiter = searchstart;
             //connection
             conn = new DBHandler().getConnection();
             //command and query strings
             SqlCommand cmd, ccmd;
             SqlDataReader mdataReader;
+            SqlDataReader cmdataReader;
             String query, cquery, output, did;
-
             //db open
             conn.Open();
             //select query according to type search
@@ -148,20 +160,23 @@ namespace Chinees
                 verticalpos = verticalpos + 45;
 
             }
+            //close reader
+            mdataReader.Close();
+            cmd.Dispose();
             //count maximum
             ccmd = new SqlCommand(cquery, conn);
             ccmd.Parameters.Add(new SqlParameter("@search", search));
-            mdataReader = ccmd.ExecuteReader();
-            maxi = Convert.ToInt32(mdataReader.GetString(0));
+            cmdataReader = ccmd.ExecuteReader();
+            maxi = Convert.ToInt32(cmdataReader.GetString(0));
             //db close
-            mdataReader.Close();
-            cmd.Dispose();
+            cmdataReader.Close();
+            ccmd.Dispose();
             conn.Close();
-            //vorige en volgende
-            prev = selimiter - 10;
-            next = selimiter + 10;
+            //vorige en volgende button
+            this.prev = this.selimiter - 10;
+            this.next = this.selimiter + 10;
             //if vorige
-            if (prev > 0)
+            if (this.prev > 0)
             {
                 Button buttonprev = new System.Windows.Forms.Button();
                 buttonprev.Location = new System.Drawing.Point(20, 65);
@@ -172,7 +187,7 @@ namespace Chinees
                 Controls.Add(buttonprev);
             }
             //if volgende
-            if (next < maxi)
+            if (this.next < maxi)
             {
                 Button buttonnext = new System.Windows.Forms.Button();
                 buttonnext.Location = new System.Drawing.Point(380, 65);
@@ -185,15 +200,13 @@ namespace Chinees
 
         }
 
-
-
-
         //wijzig
         private void buttonedit_Click(object sender, EventArgs e)
         {
             Button buttonedit = (Button)sender;
             int ClickedNum = Convert.ToInt32(buttonedit.Name);
-            Execute(ClickedNum);
+            //switch form
+            Switchform(ClickedNum);
         }
 
         //verwijder
@@ -202,14 +215,20 @@ namespace Chinees
             Button buttondelete = (Button)sender;
             int ClickedNum = Convert.ToInt32(buttondelete.Name);
             this.number = Convert.ToString(ClickedNum);
-            Removal(ClickedNum);
+            //verwijder
+            bool rem = Removal(ClickedNum);
+            //refresh
+            if (rem ==true)
+            {
+                Renew();
+            }            
         }
 
-        //go to edit
-        private void Execute(int num)
+        //switch to editing form
+        private void Switchform(int num)
         {
             int number = num;
-            switch (sekind)
+            switch (this.sekind)
             {
                 //kruiden
                 case "Nederlandse naam kruid":
@@ -310,8 +329,24 @@ namespace Chinees
             }
         }
 
+        //renewing
+        //refresh search form
+        private void Renew()
+        {
+            this.Close();
+            th = new Thread(opensearch);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
+        }
+
+        //open search forms
+        private void opensearch(object obj)
+        {
+            Application.Run(new EditForm(this.search,this.sekind,this.selimiter));
+        }
+
         //remove item
-        private void Removal(int delid)
+        private bool Removal(int delid)
         {
             int deleteid = delid;
             //connection
@@ -319,8 +354,8 @@ namespace Chinees
             //command and query strings
             SqlCommand cmd;
             String query;
-
-            switch (sekind)
+            //type
+            switch (this.sekind)
             {
                 //kruiden
                 case "Nederlandse naam kruid":
@@ -374,6 +409,8 @@ namespace Chinees
             //db close
             cmd.Dispose();
             conn.Close();
+            //return type
+            return true;
         }
 
         //hoofdmenu
@@ -403,27 +440,28 @@ namespace Chinees
         private void openwesterskruiden(object obj)
         {
             string numbr = this.number;
-            Application.Run(new KruidenFormules());
+            Application.Run(new KruidenFormules(numbr));
         }
 
         //patentformules
         private void openchinesekruiden(object obj)
         {
             string numbr = this.number;
-            Application.Run(new PatentFormule());
+            Application.Run(new PatentFormule(numbr));
         }
 
         //syndromen
         private void opensyndromen(object obj)
         {
-            Application.Run(new Syndromen());
+            string numbr = this.number;
+            Application.Run(new Syndromen(numbr));
         }
 
         //syndromenacties
         private void openactiessyndromen(object obj)
         {
             string numbr = this.number;
-            Application.Run(new SyndroomActie());
+            Application.Run(new SyndroomActie(numbr));
         }
 
         //chinesekruiden
@@ -437,28 +475,34 @@ namespace Chinees
         //volgende
         private void buttonvolgende_Click(object sender, EventArgs e)
         {
-            string searchtext = search;
-            string searchtype = sekind;
-            int searchstart = next;
-            Search(searchtext, searchtype, searchstart);
+            //string searchtext = this.search;
+            //string searchtype = this.sekind;
+            this.selimiter = this.next;
+            //Search(searchtext, searchtype, searchstart);
+            //refresh
+            Renew();
         }
 
         //vorige
         private void buttonvorige_Click(object sender, EventArgs e)
         {
-            string searchtext = search;
-            string searchtype = sekind;
-            int searchstart = prev;
-            Search(searchtext, searchtype, searchstart);
+            //string searchtext = this.search;
+            //string searchtype = this.sekind;
+            this.selimiter = this.prev;
+            //Search(searchtext, searchtype, searchstart);
+            //refresh
+            Renew();
         }
 
         //zoeken
         private void button1_Click(object sender, EventArgs e)
         {
-            string searchtext = textBox1.Text;
-            string searchtype = comboBox1.SelectedText;
-            int searchstart = 0;
-            Search(searchtext, searchtype, searchstart);
+            this.search = textBox1.Text;
+            this.sekind = comboBox1.SelectedText;
+            this.selimiter = 0;
+            //Search(searchtext, searchtype, searchstart);
+            //refresh
+            Renew();
         }
     }
 }

@@ -94,6 +94,7 @@
             this.Name = "EditForm";
             this.Text = "EditForm";
             this.ResumeLayout(false);
+            this.Load += new System.EventHandler(this.form_load);
             this.PerformLayout();
 
         }

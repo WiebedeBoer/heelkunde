@@ -241,7 +241,6 @@ namespace Chinees
             MaxID = Convert.ToInt32(Max);
             //db close
             mdataReader.Close();
-
             //set updatestage
             this.updatestage = Max;
             //aantekening

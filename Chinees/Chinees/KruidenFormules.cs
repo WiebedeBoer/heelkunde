@@ -19,9 +19,10 @@ namespace Chinees
         public SqlConnection conn;
         private string updatestage;
 
-        public KruidenFormules()
+        public KruidenFormules(string updatestage)
         {
             InitializeComponent();
+            this.updatestage = updatestage;
         }
 
         private void form_load(object sender, EventArgs e)

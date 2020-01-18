@@ -19,9 +19,10 @@ namespace Chinees
         public SqlConnection conn;
         private string updatestage;
 
-        public Syndromen()
+        public Syndromen(string updatestage)
         {
             InitializeComponent();
+            this.updatestage = updatestage;
         }
 
         private void form_load(object sender, EventArgs e)
