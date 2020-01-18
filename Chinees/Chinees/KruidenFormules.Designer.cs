@@ -121,15 +121,7 @@
             this.label8.Size = new System.Drawing.Size(85, 13);
             this.label8.TabIndex = 7;
             this.label8.Text = "Contra indicaties";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(89, 273);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(70, 13);
-            this.label9.TabIndex = 8;
-            this.label9.Text = "Opmerkingen";
+
             // 
             // label10
             // 
@@ -198,13 +190,7 @@
             this.textBox8.Name = "textBox8";
             this.textBox8.Size = new System.Drawing.Size(100, 20);
             this.textBox8.TabIndex = 17;
-            // 
-            // textBox9
-            // 
-            this.textBox9.Location = new System.Drawing.Point(564, 210);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(101, 20);
-            this.textBox9.TabIndex = 18;
+
             // 
             // button2
             // 
@@ -222,7 +208,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.textBox9);
+
             this.Controls.Add(this.textBox8);
             this.Controls.Add(this.textBox7);
             this.Controls.Add(this.textBox6);
@@ -232,7 +218,7 @@
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label10);
-            this.Controls.Add(this.label9);
+
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);

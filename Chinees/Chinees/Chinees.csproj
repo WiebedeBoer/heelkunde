@@ -46,7 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Aantekening.cs" />
+    <Compile Include="Aantekening.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Aantekening.Designer.cs">
+      <DependentUpon>Aantekening.cs</DependentUpon>
+    </Compile>
     <Compile Include="Actieformules.cs" />
     <Compile Include="ChineseKruiden.cs">
       <SubType>Form</SubType>
@@ -106,6 +111,9 @@
       <DependentUpon>TCM2DataSet.xsd</DependentUpon>
     </Compile>
     <Compile Include="Verhoudingen.cs" />
+    <EmbeddedResource Include="Aantekening.resx">
+      <DependentUpon>Aantekening.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ChineseKruiden.resx">
       <DependentUpon>ChineseKruiden.cs</DependentUpon>
     </EmbeddedResource>

@@ -82,6 +82,15 @@ namespace Chinees
                 button1.UseVisualStyleBackColor = true;
                 button1.Click += new System.EventHandler(button1_Click);
                 Controls.Add(button1);
+                //aantekening button
+                Button buttonnote = new System.Windows.Forms.Button();
+                buttonnote.Location = new System.Drawing.Point(405, 289);
+                buttonnote.Name = "Aantekening";
+                buttonnote.Size = new System.Drawing.Size(100, 20);
+                buttonnote.Text = "Terug";
+                buttonnote.UseVisualStyleBackColor = true;
+                buttonnote.Click += new System.EventHandler(buttonnote_Click);
+                Controls.Add(buttonnote);
             }
             else
             {
@@ -118,6 +127,23 @@ namespace Chinees
                 Controls.Add(label13);
             }
         }
+
+        //aantekening
+        private void buttonnote_Click(object sender, EventArgs e)
+        {
+            //refresh
+            this.Close();
+            th = new Thread(openaantekening);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
+        }
+
+        private void openaantekening(object obj)
+        {
+            int updatenum = Convert.ToInt32(this.updatestage);
+            Application.Run(new Aantekening("Kruiden",updatenum));
+        }
+
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -256,14 +282,6 @@ namespace Chinees
             acmd.Dispose();
             conn.Close();
             //refresh
-            //this.Refresh();
-            //this.Invalidate();
-            //this.Update();
-            //Kruiden
-            //th.Refresh();
-            //buttonmaker();
-            //button1.Text = "Aanpassen";
-            //closing thread
             this.updatenum = MaxID;
             this.Close();
             th = new Thread(openupdate);

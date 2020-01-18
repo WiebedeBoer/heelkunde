@@ -155,15 +155,7 @@
             this.label7.Size = new System.Drawing.Size(85, 13);
             this.label7.TabIndex = 13;
             this.label7.Text = "Contra indicaties";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(448, 145);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(70, 13);
-            this.label8.TabIndex = 14;
-            this.label8.Text = "Opmerkingen";
+
             // 
             // textBox7
             // 
@@ -187,14 +179,7 @@
             this.label9.Size = new System.Drawing.Size(116, 13);
             this.label9.TabIndex = 17;
             this.label9.Text = "Indicaties / symptomen";
-            // 
-            // textBox9
-            // 
-            this.textBox9.Location = new System.Drawing.Point(544, 125);
-            this.textBox9.Multiline = true;
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(185, 77);
-            this.textBox9.TabIndex = 18;
+
             // 
             // button2
             // 
@@ -212,11 +197,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.textBox9);
+            //this.Controls.Add(this.textBox9);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.textBox8);
             this.Controls.Add(this.textBox7);
-            this.Controls.Add(this.label8);
+            //this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.textBox6);

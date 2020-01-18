@@ -42,14 +42,6 @@ namespace Chinees
             Syndromes syndromesSwitch = new Syndromes(switcher);
             Syndromeactions syndromeactionsSwitch = new Syndromeactions(switcher);
             Invoker invoked = new Invoker();
-            /*
-            invoked.Switchform(westersekruidenSwitch);
-            invoked.Switchform(kruidenformulesSwitch);
-            invoked.Switchform(chinesekruidenSwitch);
-            invoked.Switchform(patentformulesSwitch);
-            invoked.Switchform(syndromesSwitch);
-            invoked.Switchform(syndromeactionsSwitch);
-            */
 
             switch (trigname)
             {
@@ -103,7 +95,6 @@ namespace Chinees
                     th.Start();
                     break;
             }
-
 
         }
 

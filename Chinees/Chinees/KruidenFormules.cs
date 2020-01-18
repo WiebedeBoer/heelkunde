@@ -70,6 +70,15 @@ namespace Chinees
                 button1.UseVisualStyleBackColor = true;
                 button1.Click += new System.EventHandler(button1_Click);
                 Controls.Add(button1);
+                //aantekening button
+                Button buttonnote = new System.Windows.Forms.Button();
+                buttonnote.Location = new System.Drawing.Point(89, 273);
+                buttonnote.Name = "Aantekening";
+                buttonnote.Size = new System.Drawing.Size(100, 20);
+                buttonnote.Text = "Terug";
+                buttonnote.UseVisualStyleBackColor = true;
+                buttonnote.Click += new System.EventHandler(buttonnote_Click);
+                Controls.Add(buttonnote);
             }
             else
             {
@@ -80,7 +89,41 @@ namespace Chinees
                 button1.UseVisualStyleBackColor = true;
                 button1.Click += new System.EventHandler(button1_Click);
                 Controls.Add(button1);
+                // 
+                // label9
+                // 
+                label9.AutoSize = true;
+                label9.Location = new System.Drawing.Point(89, 273);
+                label9.Name = "label9";
+                label9.Size = new System.Drawing.Size(70, 13);
+                label9.TabIndex = 8;
+                label9.Text = "Opmerkingen";
+                Controls.Add(label9);
+                // 
+                // textBox9
+                // 
+                textBox9.Location = new System.Drawing.Point(564, 210);
+                textBox9.Name = "textBox9";
+                textBox9.Size = new System.Drawing.Size(101, 20);
+                textBox9.TabIndex = 18;
+                Controls.Add(textBox9);
             }
+        }
+
+        //aantekening
+        private void buttonnote_Click(object sender, EventArgs e)
+        {
+            //refresh
+            this.Close();
+            th = new Thread(openaantekening);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
+        }
+
+        private void openaantekening(object obj)
+        {
+            int updatenum = Convert.ToInt32(this.updatestage);
+            Application.Run(new Aantekening("Kruidenformules", updatenum));
         }
 
         private void button1_Click(object sender, EventArgs e)

@@ -70,6 +70,15 @@ namespace Chinees
                 button1.UseVisualStyleBackColor = true;
                 button1.Click += new System.EventHandler(button1_Click);
                 Controls.Add(button1);
+                //aantekening button
+                Button buttonnote = new System.Windows.Forms.Button();
+                buttonnote.Location = new System.Drawing.Point(448, 145);
+                buttonnote.Name = "Aantekening";
+                buttonnote.Size = new System.Drawing.Size(100, 20);
+                buttonnote.Text = "Terug";
+                buttonnote.UseVisualStyleBackColor = true;
+                buttonnote.Click += new System.EventHandler(buttonnote_Click);
+                Controls.Add(buttonnote);
             }
             else
             {
@@ -80,7 +89,42 @@ namespace Chinees
                 button1.UseVisualStyleBackColor = true;
                 button1.Click += new System.EventHandler(button1_Click);
                 Controls.Add(button1);
+                // 
+                // label8
+                // 
+                label8.AutoSize = true;
+                label8.Location = new System.Drawing.Point(448, 145);
+                label8.Name = "label8";
+                label8.Size = new System.Drawing.Size(70, 13);
+                label8.TabIndex = 14;
+                label8.Text = "Opmerkingen";
+                Controls.Add(label8);
+                // 
+                // textBox9
+                // 
+                textBox9.Location = new System.Drawing.Point(544, 125);
+                textBox9.Multiline = true;
+                textBox9.Name = "textBox9";
+                textBox9.Size = new System.Drawing.Size(185, 77);
+                textBox9.TabIndex = 18;
+                Controls.Add(textBox9);
             }
+        }
+
+        //aantekening
+        private void buttonnote_Click(object sender, EventArgs e)
+        {
+            //refresh
+            this.Close();
+            th = new Thread(openaantekening);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
+        }
+
+        private void openaantekening(object obj)
+        {
+            int updatenum = Convert.ToInt32(this.updatestage);
+            Application.Run(new Aantekening("Patentformules", updatenum));
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -118,7 +162,7 @@ namespace Chinees
             string Pols = textBox6.Text;
             string Contraindicaties = textBox7.Text;
             string Indicaties = textBox8.Text;
-            string Aantekeningen = textBox9.Text;
+            //string Aantekeningen = textBox9.Text;
             //updating
             query = "UPDATE Patentformules SET Nederlands =@0, Engels =@1, Pinjin =@2, Werking =@3, Tong =@4, Pols =@5, Contraindicaties =@6, Indicaties =@7 WHERE ID =@search";
             cmd = new SqlCommand(query, conn);

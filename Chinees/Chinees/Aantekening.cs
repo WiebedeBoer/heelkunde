@@ -1,18 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using System.Data.SqlClient;
 using System.Windows.Forms;
+using System.Data.SqlClient;
 
 namespace Chinees
 {
-    class Aantekening
+    public partial class Aantekening : Form
     {
         public SqlConnection conn;
         private string coupling;
         private int selectedid;
+        Thread th;
 
         public Aantekening(string coupling, int selectedid)
         {
@@ -20,29 +25,27 @@ namespace Chinees
             this.selectedid = selectedid;
         }
 
+        private void form_load(object sender, EventArgs e)
+        {
+            AantekeningFormulier();
+            int countnote = ListCheck(this.coupling);
+            if (countnote >=1)
+            {
+                MenuMaker(this.coupling, this.selectedid);
+            }
+        }
+
         //aantekening insert formulier
         public void AantekeningFormulier()
         {
-            Label label11 = new System.Windows.Forms.Label();
-            label11.AutoSize = true;
-            label11.Location = new System.Drawing.Point(40, 20);
-            label11.Name = "label11";
-            label11.Size = new System.Drawing.Size(80, 23);
-            label11.Text = "Aantekening";
-
-            TextBox textBox11 = new System.Windows.Forms.TextBox();
-            textBox11.Location = new System.Drawing.Point(160, 20);
-            textBox11.Name = "textBox11";
-            textBox11.Size = new System.Drawing.Size(180, 20);
-
-            Button button11 = new System.Windows.Forms.Button();
-            button11.Location = new System.Drawing.Point(360, 20);
-            button11.Name = "button11";
-            button11.Size = new System.Drawing.Size(100, 23);
-            button11.Text = "Aantekening Invoeren";
-            button11.UseVisualStyleBackColor = true;
-            button11.Click += new System.EventHandler(button11_Click);
-
+            Button button12 = new System.Windows.Forms.Button();
+            button12.Location = new System.Drawing.Point(600, 60);
+            button12.Name = "button11";
+            button12.Size = new System.Drawing.Size(100, 20);
+            button12.Text = "Terug";
+            button12.UseVisualStyleBackColor = true;
+            button12.Click += new System.EventHandler(button12_Click);
+            Controls.Add(button12);
         }
 
         //aantekening checking
@@ -144,25 +147,24 @@ namespace Chinees
             }
             cmd = new SqlCommand(query, conn);
             cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
-
             mdataReader = cmd.ExecuteReader();
             while (mdataReader.Read())
             {
                 //aantekening
                 Label outlabel = new System.Windows.Forms.Label();
-                outlabel.Location = new System.Drawing.Point(700, verticalpos);
+                outlabel.Location = new System.Drawing.Point(140, verticalpos);
                 outlabel.Name = "outlabel";
-                outlabel.Size = new System.Drawing.Size(180, 20);
+                outlabel.Size = new System.Drawing.Size(600, 100);
                 outlabel.Text = Convert.ToString(mdataReader.GetString(1));
                 //id button
                 Button buttonrem = new System.Windows.Forms.Button();
-                buttonrem.Location = new System.Drawing.Point(1160, verticalpos);
+                buttonrem.Location = new System.Drawing.Point(40, verticalpos);
                 buttonrem.Text = "Verwijderen";
                 buttonrem.Size = new System.Drawing.Size(75, 35);
                 buttonrem.Click += new System.EventHandler(this.buttonrem_Click);
                 buttonrem.Name = Convert.ToString(mdataReader.GetString(0));
-
                 i++;
+                verticalpos = verticalpos + 110;
             }
 
         }
@@ -179,11 +181,10 @@ namespace Chinees
         private void button11_Click(object sender, EventArgs e)
         {
             Button buttonin = (Button)sender;
-            //string commentaar = textBox11.Text;
+            string commentaar = textBox1.Text;
             //data binding
-            string commentaar = ""; 
             Inserter(selectedid, commentaar);
-        }        
+        }
 
         //aantekening remove item
         private void Removal(int delid)
@@ -280,6 +281,95 @@ namespace Chinees
             conn.Close();
         }
 
-    }
+        //hoofdmenu
+        private void openhoofdmenu(object obj)
+        {
+            Application.Run(new Form1());
+        }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //closing thread
+            this.Close();
+            th = new Thread(openhoofdmenu);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
+        }
+
+        //input forms button triggers
+        private void button12_Click(object sender, EventArgs e)
+        {
+            string trigstage = Convert.ToString(this.selectedid);
+
+            //invoking switch commands
+            Switching switcher = new Switching(trigstage);
+            Westersekruiden westersekruidenSwitch = new Westersekruiden(switcher);
+            Kruidenformules kruidenformulesSwitch = new Kruidenformules(switcher);
+            Chinesekruiden chinesekruidenSwitch = new Chinesekruiden(switcher);
+            Patentformules patentformulesSwitch = new Patentformules(switcher);
+            Syndromes syndromesSwitch = new Syndromes(switcher);
+            Syndromeactions syndromeactionsSwitch = new Syndromeactions(switcher);
+            Invoker invoked = new Invoker();
+
+            switch (this.coupling)
+            {
+                case "Kruiden":
+                    this.Close();
+                    //th = new Thread(openenkelkruiden);
+                    th = new Thread(() => invoked.Switchform(westersekruidenSwitch));
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                case "Kruidenformules":
+                    this.Close();
+                    //th = new Thread(openwesterskruiden);
+                    th = new Thread(() => invoked.Switchform(kruidenformulesSwitch));
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                case "Patentformules":
+                    this.Close();
+                    //th = new Thread(openchinesekruiden);
+                    th = new Thread(() => invoked.Switchform(patentformulesSwitch));
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                case "Actieformules":
+                    this.Close();
+                    //th = new Thread(opensyndromen);
+                    th = new Thread(() => invoked.Switchform(syndromesSwitch));
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                    /*
+                case "button5":
+                    this.Close();
+                    //th = new Thread(openactiessyndromen);
+                    th = new Thread(() => invoked.Switchform(syndromeactionsSwitch));
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                */
+                case "Chinesekruiden":
+                    this.Close();
+                    //th = new Thread(openpinjinkruiden);
+                    th = new Thread(() => invoked.Switchform(chinesekruidenSwitch));
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+                default:
+                    this.Close();
+                    //th = new Thread(openenkelkruiden);
+                    th = new Thread(() => invoked.Switchform(westersekruidenSwitch));
+                    th.SetApartmentState(ApartmentState.STA);
+                    th.Start();
+                    break;
+            }
+
+        }
+
+
+
+
+    }
 }
