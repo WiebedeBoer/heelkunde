@@ -228,27 +228,42 @@ namespace Chinees
         private void Switchform(int num)
         {
             int number = num;
+            string mystage = Convert.ToString(number);
+
+            //invoking switch commands
+            Switching switcher = new Switching(mystage);
+            Westersekruiden westersekruidenSwitch = new Westersekruiden(switcher);
+            Kruidenformules kruidenformulesSwitch = new Kruidenformules(switcher);
+            Chinesekruiden chinesekruidenSwitch = new Chinesekruiden(switcher);
+            Patentformules patentformulesSwitch = new Patentformules(switcher);
+            Syndromes syndromesSwitch = new Syndromes(switcher);
+            Syndromeactions syndromeactionsSwitch = new Syndromeactions(switcher);
+            Invoker invoked = new Invoker();
+
             switch (this.sekind)
             {
                 //kruiden
                 case "Nederlandse naam kruid":
                     //closing thread
                     this.Close();
-                    th = new Thread(openenkelkruiden);
+                    //th = new Thread(openenkelkruiden);
+                    th = new Thread(() => invoked.Switchform(westersekruidenSwitch));
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
                 case "Latijnse naam kruid":
                     //closing thread
                     this.Close();
-                    th = new Thread(openenkelkruiden);
+                    //th = new Thread(openenkelkruiden);
+                    th = new Thread(() => invoked.Switchform(westersekruidenSwitch));
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
                 case "Thermodynamisch in kruid":
                     //closing thread
                     this.Close();
-                    th = new Thread(openenkelkruiden);
+                    //th = new Thread(openenkelkruiden);
+                    th = new Thread(() => invoked.Switchform(westersekruidenSwitch));
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
@@ -256,21 +271,24 @@ namespace Chinees
                 case "Indicaties in kruidenformule":
                     //closing thread
                     this.Close();
-                    th = new Thread(openwesterskruiden);
+                    //th = new Thread(openwesterskruiden);
+                    th = new Thread(() => invoked.Switchform(kruidenformulesSwitch));
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
                 case "Naam kruidenformule":
                     //closing thread
                     this.Close();
-                    th = new Thread(openwesterskruiden);
+                    //th = new Thread(openwesterskruiden);
+                    th = new Thread(() => invoked.Switchform(kruidenformulesSwitch));
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
                 case "Kruid in kruidenformule":
                     //closing thread
                     this.Close();
-                    th = new Thread(openwesterskruiden);
+                    //th = new Thread(openwesterskruiden);
+                    th = new Thread(() => invoked.Switchform(kruidenformulesSwitch));
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
@@ -278,21 +296,24 @@ namespace Chinees
                 case "Nederlandse naam patentformule":
                     //closing thread
                     this.Close();
-                    th = new Thread(openchinesekruiden);
+                    //th = new Thread(openchinesekruiden);
+                    th = new Thread(() => invoked.Switchform(patentformulesSwitch));
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
                 case "Engelse naam patentformule":
                     //closing thread
                     this.Close();
-                    th = new Thread(openchinesekruiden);
+                    //th = new Thread(openchinesekruiden);
+                    th = new Thread(() => invoked.Switchform(patentformulesSwitch));
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
                 case "Pinjin naam patentformule":
                     //closing thread
                     this.Close();
-                    th = new Thread(openchinesekruiden);
+                    //th = new Thread(openchinesekruiden);
+                    th = new Thread(() => invoked.Switchform(patentformulesSwitch));
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
@@ -300,14 +321,16 @@ namespace Chinees
                 case "Syndroom naam":
                     //closing thread
                     this.Close();
-                    th = new Thread(opensyndromen);
+                    //th = new Thread(opensyndromen);
+                    th = new Thread(() => invoked.Switchform(syndromesSwitch));
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
                 case "Syndroom op symptomen pols en tong":
                     //closing thread
                     this.Close();
-                    th = new Thread(opensyndromen);
+                    //th = new Thread(opensyndromen);
+                    th = new Thread(() => invoked.Switchform(syndromesSwitch));
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
@@ -315,7 +338,8 @@ namespace Chinees
                 case "Patentformule op symptoom":
                     //closing thread
                     this.Close();
-                    th = new Thread(opensyndromen);
+                    //th = new Thread(opensyndromen);
+                    th = new Thread(() => invoked.Switchform(syndromesSwitch));
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
@@ -428,49 +452,6 @@ namespace Chinees
             th.Start();
         }
 
-        //open other input forms
-        //kruiden
-        private void openenkelkruiden(object obj)
-        {
-            string numbr = this.number;
-            Application.Run(new Kruiden(numbr));
-        }
-
-        //kruidenformules
-        private void openwesterskruiden(object obj)
-        {
-            string numbr = this.number;
-            Application.Run(new KruidenFormules(numbr));
-        }
-
-        //patentformules
-        private void openchinesekruiden(object obj)
-        {
-            string numbr = this.number;
-            Application.Run(new PatentFormule(numbr));
-        }
-
-        //syndromen
-        private void opensyndromen(object obj)
-        {
-            string numbr = this.number;
-            Application.Run(new Syndromen(numbr));
-        }
-
-        //syndromenacties
-        private void openactiessyndromen(object obj)
-        {
-            string numbr = this.number;
-            Application.Run(new SyndroomActie(numbr));
-        }
-
-        //chinesekruiden
-        private void openpinjinkruiden(object obj)
-        {
-            string numbr = this.number;
-            Application.Run(new ChineseKruiden(numbr));
-        }
-
         //volgende en vorige buttons
         //volgende
         private void buttonvolgende_Click(object sender, EventArgs e)
@@ -504,5 +485,52 @@ namespace Chinees
             //refresh
             Renew();
         }
+
+        /*
+//open other input forms
+//kruiden
+private void openenkelkruiden(object obj)
+{
+    string numbr = this.number;
+    Application.Run(new Kruiden(numbr));
+}
+
+//kruidenformules
+private void openwesterskruiden(object obj)
+{
+    string numbr = this.number;
+    Application.Run(new KruidenFormules(numbr));
+}
+
+//patentformules
+private void openchinesekruiden(object obj)
+{
+    string numbr = this.number;
+    Application.Run(new PatentFormule(numbr));
+}
+
+//syndromen
+private void opensyndromen(object obj)
+{
+    string numbr = this.number;
+    Application.Run(new Syndromen(numbr));
+}
+
+//syndromenacties
+private void openactiessyndromen(object obj)
+{
+    string numbr = this.number;
+    Application.Run(new SyndroomActie(numbr));
+}
+
+//chinesekruiden
+private void openpinjinkruiden(object obj)
+{
+    string numbr = this.number;
+    Application.Run(new ChineseKruiden(numbr));
+}
+*/
+
+
     }
 }
