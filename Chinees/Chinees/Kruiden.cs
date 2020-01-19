@@ -292,7 +292,6 @@ namespace Chinees
         //update
         private void openupdate(object obj)
         {
-            //Application.Run(new Updateform(this.updatenum,this.updatetype));
             Application.Run(new Kruiden(this.updatestage));
         }
 
@@ -311,8 +310,4 @@ namespace Chinees
             th.Start();
         }
     }
-
-
-
-
 }

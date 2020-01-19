@@ -19,6 +19,9 @@ namespace Chinees
         public SqlConnection conn;
         private string updatestage;
 
+        ComboBox comboBox2 = new System.Windows.Forms.ComboBox();
+        ComboBox comboBox3 = new System.Windows.Forms.ComboBox();
+
         public Syndromen(string updatestage)
         {
             InitializeComponent();
@@ -86,30 +89,179 @@ namespace Chinees
                 int verhouding = new Actieformules(updatenum).VerhoudingCheck();
                 if (verhouding >=1)
                 {
-                    ComboBox comboBox1 = new System.Windows.Forms.ComboBox();
-                    Controls.Add(comboBox1);
-                    ComboBox comboBox2 = new System.Windows.Forms.ComboBox();
-                    Controls.Add(comboBox2);
-                    ComboBox comboBox3 = new System.Windows.Forms.ComboBox();
-                    Controls.Add(comboBox3);
-                    Button button12 = new System.Windows.Forms.Button();
-                    button12.Click += new System.EventHandler(button12_Click);
+                    Combo_Load();
                 }
-
-
+                int listnum = new Actieformules(updatenum).ListCheck();
+                if (verhouding >= 1)
+                {
+                    MenuMaker(updatenum);
+                }
             }
         }
 
-        //actieformules
-        private void button12_Click(object sender, EventArgs e)
+        //comboboxes
+        private void Combo_Load()
         {
+            //connection
+            conn = new DBHandler().getConnection();
+            //combo
+            comboBox2.FormattingEnabled = true;
+            comboBox2.Location = new System.Drawing.Point(700, 340);
+            comboBox2.Name = "comboBox1";
+            comboBox2.Size = new System.Drawing.Size(180, 23);
+            //combo query
+            SqlCommand sc = new SqlCommand("SELECT ID, Naam FROM Kruidenformules ORDER BY Naam ASC", conn);
+            SqlDataReader reader;
+            reader = sc.ExecuteReader();
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ID", typeof(string));
+            dt.Columns.Add("Naam", typeof(string));
+            dt.Load(reader);
+            comboBox2.ValueMember = "ID";
+            comboBox2.DisplayMember = "Naam";
+            comboBox2.DataSource = dt;
+            //reader close
+            reader.Close();
+            sc.Dispose();
+            //combo
+            comboBox3.FormattingEnabled = true;
+            comboBox3.Location = new System.Drawing.Point(900, 340);
+            comboBox3.Name = "comboBox1";
+            comboBox3.Size = new System.Drawing.Size(180, 23);
+            //combo query
+            SqlCommand sca = new SqlCommand("SELECT ID, Nederlands FROM Patentformules ORDER BY Naam ASC", conn);
+            SqlDataReader readera;
+            readera = sc.ExecuteReader();
+            DataTable dta = new DataTable();
+            dta.Columns.Add("ID", typeof(string));
+            dta.Columns.Add("Nederlands", typeof(string));
+            dta.Load(readera);
+            comboBox3.ValueMember = "ID";
+            comboBox3.DisplayMember = "Nederlands";
+            comboBox3.DataSource = dta;
+            //reader close
+            readera.Close();
+            sca.Dispose();
+            //db close
+            conn.Close();
+            //button
+            Button buttoningre = new System.Windows.Forms.Button();
+            buttoningre.Location = new System.Drawing.Point(900, 400);
+            buttoningre.Name = "Actieformule Invoer";
+            buttoningre.Size = new System.Drawing.Size(160, 20);
+            buttoningre.Text = "Terug";
+            buttoningre.UseVisualStyleBackColor = true;
+            buttoningre.Click += new System.EventHandler(buttonin_Click);
+            //controls
+            Controls.Add(comboBox2);
+            Controls.Add(comboBox3);
+            Controls.Add(buttoningre);
+        }
+
+        //update
+        private void openupdate(object obj)
+        {
+            Application.Run(new Syndromen(this.updatestage));
+        }
+
+        //actieformules
+        //insert event
+        private void buttonin_Click(object sender, EventArgs e)
+        {
+            
+            int formuleid = Convert.ToInt32(comboBox2.SelectedValue);
+            int patentid = Convert.ToInt32(comboBox3.SelectedValue);
             int updatenum = Convert.ToInt32(this.updatestage);
-            //actieformules
-            //new Actieformules(updatenum).buttonin_Click(object sender, EventArgs e);
+            Actieformules aformule = new Actieformules(updatenum);
+            bool ins = aformule.Inserter(updatenum, formuleid, patentid);
+            if (ins == true)
+            {
+                //refresh
+                this.Close();
+                th = new Thread(openupdate);
+                th.SetApartmentState(ApartmentState.STA);
+                th.Start();
+            }
+        }
+
+        //list removal event
+        private void buttonrem_Click(object sender, EventArgs e)
+        {
+            Button buttondelete = (Button)sender;
+            int ClickedNum = Convert.ToInt32(buttondelete.Name);
+            int updatenum = Convert.ToInt32(this.updatestage);
+            Actieformules aformule = new Actieformules(updatenum);
+            bool rem = aformule.Removal(ClickedNum);
+            if (rem == true)
+            {
+                //refresh
+                this.Close();
+                th = new Thread(openupdate);
+                th.SetApartmentState(ApartmentState.STA);
+                th.Start();
+            }
+        }
+
+        //actieformules list display
+        public void MenuMaker(int searchid)
+        {
+
+            int selimiter = searchid;
+            //connection
+            conn = new DBHandler().getConnection();
+            //command and query strings
+            SqlCommand cmd;
+            SqlDataReader mdataReader;
+            String query;
+
+            //db open
+            conn.Open();
+            //select query according to type search
+            //start position
+            int verticalpos = 110;
+            int i = 0;
+
+            query = "SELECT Actieformules.ID, Kruidenformules.Naam, Patentformules.Nederlands, Syndromen.Syndroom FROM Actieformules, Kruidenformules, Patentformules, Syndromen WHERE Actieformules.Syndroom=Syndromen.ID AND Actieformules.Patentformule=Patentformules.ID AND Actieformules.Kruidenformule=Kruidenformules.ID AND Actieformules.ID=@sid";
+
+            cmd = new SqlCommand(query, conn);
+            cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
+
+            mdataReader = cmd.ExecuteReader();
+            while (mdataReader.Read())
+            {
+                //kruidenformule naam
+                Label outlabel = new System.Windows.Forms.Label();
+                outlabel.Location = new System.Drawing.Point(700, verticalpos);
+                outlabel.Name = "outlabel";
+                outlabel.Size = new System.Drawing.Size(180, 20);
+                outlabel.Text = Convert.ToString(mdataReader.GetString(1));
+                //patent formule nederlands
+                Label outlabel2 = new System.Windows.Forms.Label();
+                outlabel2.Location = new System.Drawing.Point(900, verticalpos);
+                outlabel2.Name = "outlabel2";
+                outlabel2.Size = new System.Drawing.Size(180, 20);
+                outlabel2.Text = Convert.ToString(mdataReader.GetString(2));
+                //syndroom
+                Label outlabel3 = new System.Windows.Forms.Label();
+                outlabel3.Location = new System.Drawing.Point(1100, verticalpos);
+                outlabel3.Name = "outlabel3";
+                outlabel3.Size = new System.Drawing.Size(40, 20);
+                outlabel3.Text = Convert.ToString(mdataReader.GetString(3));
+                //id
+                Button buttonrem = new System.Windows.Forms.Button();
+                buttonrem.Location = new System.Drawing.Point(1160, verticalpos);
+                buttonrem.Text = "Verwijderen";
+                buttonrem.Size = new System.Drawing.Size(75, 35);
+                buttonrem.Click += new System.EventHandler(this.buttonrem_Click);
+                buttonrem.Name = Convert.ToString(mdataReader.GetString(0));
+
+                i++;
+            }
+
         }
 
 
-
+        //insert or update event
         private void button1_Click(object sender, EventArgs e)
         {
             Button buttoned = (Button)sender;

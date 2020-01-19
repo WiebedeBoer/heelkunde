@@ -19,6 +19,9 @@ namespace Chinees
         public SqlConnection conn;
         private string updatestage;
 
+        TextBox textBoxhoe = new System.Windows.Forms.TextBox();
+        ComboBox comboBox1 = new System.Windows.Forms.ComboBox();
+
         public PatentFormule(string updatestage)
         {
             InitializeComponent();
@@ -79,6 +82,19 @@ namespace Chinees
                 buttonnote.UseVisualStyleBackColor = true;
                 buttonnote.Click += new System.EventHandler(buttonnote_Click);
                 Controls.Add(buttonnote);
+                //ingredienten
+                int updatenum = Convert.ToInt32(this.updatestage);
+                Verhoudingen ingredient = new Verhoudingen("Patentformules", updatenum);
+                int verhoudingcheck = ingredient.VerhoudingCheck();
+                if (verhoudingcheck == 1)
+                {
+                    ComboMaker();
+                }
+                int menucheck = ingredient.ListCheck();
+                if (menucheck == 1)
+                {
+                    MenuMaker(updatenum);
+                }
             }
             else
             {
@@ -109,6 +125,144 @@ namespace Chinees
                 textBox9.TabIndex = 18;
                 Controls.Add(textBox9);
             }
+        }
+
+        public void ComboMaker()
+        {
+            String query;
+            query = "SELECT ID, Engels FROM ChineseKruiden ORDER BY Engels ASC";
+            //combobox
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new System.Drawing.Point(565, 276);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new System.Drawing.Size(180, 23);
+            //connection
+            conn = new DBHandler().getConnection();
+            //first select
+            SqlCommand sc = new SqlCommand(query, conn);
+            SqlDataReader reader;
+            reader = sc.ExecuteReader();
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ID", typeof(string));
+            dt.Columns.Add("Naam", typeof(string));
+            dt.Load(reader);
+            comboBox1.ValueMember = "ID";
+            comboBox1.DisplayMember = "Naam";
+            comboBox1.DataSource = dt;
+            Controls.Add(comboBox1);
+            //hoeveelheid
+            textBoxhoe.Location = new System.Drawing.Point(565, 128);
+            textBoxhoe.Name = "textBox7";
+            textBoxhoe.Size = new System.Drawing.Size(100, 20);
+            textBoxhoe.TabIndex = 19;
+            Controls.Add(textBoxhoe);
+            //button
+            Button buttoningre = new System.Windows.Forms.Button();
+            buttoningre.Location = new System.Drawing.Point(565, 300);
+            buttoningre.Name = "Ingredient Invoer";
+            buttoningre.Size = new System.Drawing.Size(160, 20);
+            buttoningre.Text = "Terug";
+            buttoningre.UseVisualStyleBackColor = true;
+            buttoningre.Click += new System.EventHandler(buttoningre_Click);
+            Controls.Add(buttoningre);
+        }
+
+        //insert ingredient event
+        private void buttoningre_Click(object sender, EventArgs e)
+        {
+            int updatenum = Convert.ToInt32(this.updatestage);
+            string hoeveelheid = textBoxhoe.Text;
+            int hoeveel = Convert.ToInt32(hoeveelheid);
+            int selectedVal = (int)comboBox1.SelectedValue;
+            Verhoudingen ingredient = new Verhoudingen("Patentformules", updatenum);
+            bool ins = ingredient.Inserter(selectedVal, updatenum, hoeveel);
+            if (ins == true)
+            {
+                //refresh
+                this.Close();
+                th = new Thread(openupdate);
+                th.SetApartmentState(ApartmentState.STA);
+                th.Start();
+            }
+        }
+
+        //ingredient list display
+        public void MenuMaker(int searchid)
+        {
+            //string sekind = searchtype;
+            int selimiter = searchid;
+            //connection
+            conn = new DBHandler().getConnection();
+            //command and query strings
+            SqlCommand cmd;
+            SqlDataReader mdataReader;
+            String query;
+
+            //db open
+            conn.Open();
+            //select query according to type search
+            //start position
+            int verticalpos = 330;
+            //int i = 0;
+            query = "SELECT PatentEnKruiden.ID, Patentformules.Nederlands, ChineseKruiden.Engels, PatentEnKruiden.Verhouding FROM Patentformules, PantentEnKruiden, ChineseKruiden WHERE Patentformules.ID=PatentEnKruiden.Patentformule AND PatentEnKruiden.ChineseKruiden=ChineseKruiden.ID AND PatentEnKruiden.ID=@sid";
+            cmd = new SqlCommand(query, conn);
+            cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
+            mdataReader = cmd.ExecuteReader();
+            while (mdataReader.Read())
+            {
+                //formule naam
+                Label outlabel = new System.Windows.Forms.Label();
+                outlabel.Location = new System.Drawing.Point(700, verticalpos);
+                outlabel.Name = "outlabel";
+                outlabel.Size = new System.Drawing.Size(180, 20);
+                outlabel.Text = Convert.ToString(mdataReader.GetString(1));
+                //kruid naam
+                Label outlabel2 = new System.Windows.Forms.Label();
+                outlabel2.Location = new System.Drawing.Point(900, verticalpos);
+                outlabel2.Name = "outlabel2";
+                outlabel2.Size = new System.Drawing.Size(180, 20);
+                outlabel2.Text = Convert.ToString(mdataReader.GetString(2));
+                //verhouding
+                Label outlabel3 = new System.Windows.Forms.Label();
+                outlabel3.Location = new System.Drawing.Point(1100, verticalpos);
+                outlabel3.Name = "outlabel3";
+                outlabel3.Size = new System.Drawing.Size(40, 20);
+                outlabel3.Text = Convert.ToString(mdataReader.GetString(3));
+                //id
+                Button buttonrem = new System.Windows.Forms.Button();
+                buttonrem.Location = new System.Drawing.Point(1160, verticalpos);
+                buttonrem.Text = "Verwijderen";
+                buttonrem.Size = new System.Drawing.Size(75, 35);
+                buttonrem.Click += new System.EventHandler(this.buttonrem_Click);
+                buttonrem.Name = Convert.ToString(mdataReader.GetString(0));
+
+                verticalpos = verticalpos + 40;
+            }
+
+        }
+
+        //list removal event
+        private void buttonrem_Click(object sender, EventArgs e)
+        {
+            Button buttondelete = (Button)sender;
+            int ClickedNum = Convert.ToInt32(buttondelete.Name);
+            int updatenum = Convert.ToInt32(this.updatestage);
+            Verhoudingen ingredient = new Verhoudingen("Patentformules", updatenum);
+            bool rem = ingredient.Removal(ClickedNum);
+            if (rem == true)
+            {
+                //refresh
+                this.Close();
+                th = new Thread(openupdate);
+                th.SetApartmentState(ApartmentState.STA);
+                th.Start();
+            }
+        }
+
+        //update
+        private void openupdate(object obj)
+        {
+            Application.Run(new KruidenFormules(this.updatestage));
         }
 
         //aantekening
@@ -247,7 +401,10 @@ namespace Chinees
             acmd.Dispose();
             conn.Close();
             //refresh
-            this.Refresh();
+            this.Close();
+            th = new Thread(openupdate);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
         }
 
         //hoofdmenu
