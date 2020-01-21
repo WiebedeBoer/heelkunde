@@ -50,6 +50,8 @@ namespace Chinees
                 SqlCommand mcmd;
                 String mquery;
                 SqlDataReader mdataReader;
+                //db open
+                conn.Open();
                 int maxi = Convert.ToInt32(this.updatestage);
                 //select max
                 mquery = "SELECT * FROM Kruiden WHERE ID =@search";
@@ -87,7 +89,7 @@ namespace Chinees
                 buttonnote.Location = new System.Drawing.Point(405, 289);
                 buttonnote.Name = "Aantekening";
                 buttonnote.Size = new System.Drawing.Size(100, 20);
-                buttonnote.Text = "Terug";
+                buttonnote.Text = "Aantekening";
                 buttonnote.UseVisualStyleBackColor = true;
                 buttonnote.Click += new System.EventHandler(buttonnote_Click);
                 Controls.Add(buttonnote);
@@ -141,7 +143,8 @@ namespace Chinees
         private void openaantekening(object obj)
         {
             int updatenum = Convert.ToInt32(this.updatestage);
-            Application.Run(new Aantekening("Kruiden",updatenum));
+            string typering = "Kruiden";
+            Application.Run(new Aantekening(typering,updatenum));
         }
 
 
@@ -165,6 +168,8 @@ namespace Chinees
         {
             //connection
             conn = new DBHandler().getConnection();
+            //db open
+            conn.Open();
             //which one
             int maxi = Convert.ToInt32(Clicking);
             //command and query strings
@@ -257,6 +262,8 @@ namespace Chinees
             adapter.InsertCommand.Parameters.AddWithValue("@10", Actie);
             adapter.InsertCommand.Parameters.AddWithValue("@11", Gebruik);
             adapter.InsertCommand.ExecuteNonQuery();
+            //closer
+            cmd.Dispose();
             //select max
             mquery = "SELECT MAX(ID) AS Maxid FROM Kruiden";
             mcmd = new SqlCommand(mquery, conn);
@@ -267,6 +274,7 @@ namespace Chinees
             MaxID = Convert.ToInt32(Max);
             //db close
             mdataReader.Close();
+            mcmd.Dispose();
             //set updatestage
             this.updatestage = Max;
             //aantekening
@@ -277,8 +285,6 @@ namespace Chinees
             nadapter.InsertCommand.Parameters.AddWithValue("@1", Aantekeningen);
             nadapter.InsertCommand.ExecuteNonQuery();
             //db close
-            cmd.Dispose();
-            mcmd.Dispose();
             acmd.Dispose();
             conn.Close();
             //refresh

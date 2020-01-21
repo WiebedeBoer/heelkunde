@@ -44,6 +44,8 @@ namespace Chinees
                 String mquery;
                 SqlCommand mcmd;
                 SqlDataReader mdataReader;
+                //db open
+                conn.Open();
                 //which one
                 int maxi = Convert.ToInt32(this.updatestage);
                 //select max
@@ -78,7 +80,7 @@ namespace Chinees
                 buttonnote.Location = new System.Drawing.Point(448, 145);
                 buttonnote.Name = "Aantekening";
                 buttonnote.Size = new System.Drawing.Size(100, 20);
-                buttonnote.Text = "Terug";
+                buttonnote.Text = "Aantekening";
                 buttonnote.UseVisualStyleBackColor = true;
                 buttonnote.Click += new System.EventHandler(buttonnote_Click);
                 Controls.Add(buttonnote);
@@ -138,12 +140,15 @@ namespace Chinees
             comboBox1.Size = new System.Drawing.Size(180, 23);
             //connection
             conn = new DBHandler().getConnection();
+            //db open
+            conn.Open();
             //first select
             SqlCommand sc = new SqlCommand(query, conn);
             SqlDataReader reader;
             reader = sc.ExecuteReader();
+            reader.Read();
             DataTable dt = new DataTable();
-            dt.Columns.Add("ID", typeof(string));
+            dt.Columns.Add("ID", typeof(int));
             dt.Columns.Add("Naam", typeof(string));
             dt.Load(reader);
             comboBox1.ValueMember = "ID";
@@ -161,7 +166,7 @@ namespace Chinees
             buttoningre.Location = new System.Drawing.Point(565, 300);
             buttoningre.Name = "Ingredient Invoer";
             buttoningre.Size = new System.Drawing.Size(160, 20);
-            buttoningre.Text = "Terug";
+            buttoningre.Text = "Ingredient Invoer";
             buttoningre.UseVisualStyleBackColor = true;
             buttoningre.Click += new System.EventHandler(buttoningre_Click);
             Controls.Add(buttoningre);
@@ -172,7 +177,15 @@ namespace Chinees
         {
             int updatenum = Convert.ToInt32(this.updatestage);
             string hoeveelheid = textBoxhoe.Text;
-            int hoeveel = Convert.ToInt32(hoeveelheid);
+            int hoeveel;
+            if (hoeveelheid =="" || hoeveelheid == null)
+            {
+                hoeveel = 1;
+            }
+            else
+            {
+                hoeveel = Convert.ToInt32(hoeveelheid);
+            }
             int selectedVal = (int)comboBox1.SelectedValue;
             Verhoudingen ingredient = new Verhoudingen("Patentformules", updatenum);
             bool ins = ingredient.Inserter(selectedVal, updatenum, hoeveel);
@@ -197,7 +210,6 @@ namespace Chinees
             SqlCommand cmd;
             SqlDataReader mdataReader;
             String query;
-
             //db open
             conn.Open();
             //select query according to type search
@@ -262,7 +274,7 @@ namespace Chinees
         //update
         private void openupdate(object obj)
         {
-            Application.Run(new KruidenFormules(this.updatestage));
+            Application.Run(new PatentFormule(this.updatestage));
         }
 
         //aantekening
@@ -278,7 +290,8 @@ namespace Chinees
         private void openaantekening(object obj)
         {
             int updatenum = Convert.ToInt32(this.updatestage);
-            Application.Run(new Aantekening("Patentformules", updatenum));
+            string typering = "Patenformules";
+            Application.Run(new Aantekening(typering, updatenum));
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -307,6 +320,8 @@ namespace Chinees
             SqlCommand cmd;
             SqlDataAdapter adapter = new SqlDataAdapter();
             String query;
+            //db open
+            conn.Open();
             //data form variables
             string Nederlands = textBox1.Text;
             string Engels = textBox2.Text;

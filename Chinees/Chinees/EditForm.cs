@@ -56,76 +56,76 @@ namespace Chinees
             //db open
             conn.Open();
             //select query according to type search
-            switch (sekind)
+            switch (this.sekind)
             {
                 //kruiden
                 case "Nederlandse naam kruid":
-                    query = "SELECT ID, Nederlands FROM Kruiden WHERE Nederlands=@search LIMIT @limiter,10";
-                    cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Nederlands=@search ";
+                    query = "SELECT TOP 10 ID, Nederlands FROM Kruiden WHERE Nederlands LIKE @search ORDER BY ID ASC";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Nederlands LIKE @search";
                     break;
                 case "Latijnse naam kruid":
-                    query = "SELECT ID, Latijns FROM Kruiden WHERE Latijns=@search LIMIT @limiter,10";
-                    cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Latijns=@search";
+                    query = "SELECT TOP 10 ID, Latijns FROM Kruiden WHERE Latijns LIKE @search ORDER BY ID ASC";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Latijns LIKE @search";
                     break;
                 case "Thermodynamisch in kruid":
-                    query = "SELECT ID, Thermodynamisch FROM Kruiden WHERE Thermodynamisch=@search LIMIT @limiter,10";
-                    cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Thermodynamisch=@search";
+                    query = "SELECT TOP 10 ID, Thermodynamisch FROM Kruiden WHERE Thermodynamisch LIKE @search ORDER BY ID ASC";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Thermodynamisch LIKE @search";
                     break;
                 //kruidenformules
                 case "Indicaties in kruidenformule":
-                    query = "SELECT ID, Indicaties FROM Kruidenformules WHERE Indicaties=@search LIMIT @limiter,10";
-                    cquery = "SELECT COUNT(ID) AS counter FROM Kruidenformules WHERE Indicaties=@search";
+                    query = "SELECT TOP 10 ID, Indicaties FROM Kruidenformules WHERE Indicaties LIKE @search ORDER BY ID ASC";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Kruidenformules WHERE Indicaties LIKE @search";
                     break;
                 case "Naam kruidenformule":
-                    query = "SELECT ID, Naam FROM Kruidenformules WHERE Naam=@search LIMIT @limiter,10";
-                    cquery = "SELECT COUNT(ID) AS counter FROM Kruidenformules WHERE Naam=@search ";
+                    query = "SELECT TOP 10 ID, Naam FROM Kruidenformules WHERE Naam LIKE @search ORDER BY ID ASC";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Kruidenformules WHERE Naam LIKE @search ";
                     break;
                 case "Kruid in kruidenformule":
-                    query = "SELECT FormulesEnKruiden.ID, Kruidenformules.Naam FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND Kruiden.Nederlands=@search LIMIT @limiter,10";
-                    cquery = "SELECT COUNT(FormulesEnKruiden.ID) as counter FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND Kruiden.Nederlands=@search";
+                    query = "SELECT TOP 10 FormulesEnKruiden.ID, Kruidenformules.Naam FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND Kruiden.Nederlands LIKE @search ORDER BY ID ASC";
+                    cquery = "SELECT COUNT(FormulesEnKruiden.ID) as counter FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND Kruiden.Nederlands LIKE @search";
                     break;
                 //patent formules
                 case "Nederlandse naam patentformule":
-                    query = "SELECT ID, Nederlands FROM Patentformules WHERE Nederlands=@search LIMIT @limiter,10";
-                    cquery = "SELECT COUNT(ID) AS counter FROM Patentformules WHERE Nederlands=@search";
+                    query = "SELECT TOP 10 ID, Nederlands FROM Patentformules WHERE Nederlands LIKE @search ORDER BY ID ASC";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Patentformules WHERE Nederlands LIKE @search";
                     break;
                 case "Engelse naam patentformule":
-                    query = "SELECT ID, Engels FROM Patentformules WHERE Engels=@search LIMIT @limiter,10";
-                    cquery = "SELECT COUNT(ID) AS counter FROM Patentformules WHERE Engels=@search";
+                    query = "SELECT TOP 10 ID, Engels FROM Patentformules WHERE Engels LIKE @search ORDER BY ID ASC";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Patentformules WHERE Engels LIKE @search";
                     break;
                 case "Pinjin naam patentformule":
-                    query = "SELECT ID, Pinjin FROM Patentformules WHERE Pinjin=@search LIMIT @limiter,10";
-                    cquery = "SELECT COUNT(ID) AS counter FROM Patentformules WHERE Pinjin=@search";
+                    query = "SELECT TOP 10 ID, Pinjin FROM Patentformules WHERE Pinjin LIKE @search ORDER BY ID ASC";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Patentformules WHERE Pinjin LIKE @search";
                     break;
                 //syndromen
                 case "Syndroom naam":
-                    query = "SELECT ID, Syndroom FROM Syndromen WHERE Syndroom=@search LIMIT @limiter,10";
-                    cquery = "SELECT COUNT(ID) AS counter FROM Syndromen WHERE Syndroom=@search ";
+                    query = "SELECT TOP 10 ID, Syndroom FROM Syndromen WHERE Syndroom LIKE @search ORDER BY ID ASC";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Syndromen WHERE Syndroom LIKE @search ";
                     break;
                 case "Syndroom op symptomen pols en tong":
-                    query = "SELECT ID, Pols FROM Syndromen WHERE Pols=search OR Tong=@search LIMIT @limiter,10";
-                    cquery = "SELECT COUNT(ID) AS counter FROM Syndromen WHERE Pols=search OR Tong=@search";
+                    query = "SELECT TOP 10 ID, Pols FROM Syndromen WHERE Pols LIKE @search OR Tong LIKE @search ORDER BY ID ASC";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Syndromen WHERE Pols LIKE @search OR Tong LIKE @search";
                     break;
                 //complex
                 case "Patentformule op symptoom":
-                    query = "SELECT Actieformules.ID, Patentformules.Nederlands FROM Syndromen, Actiesformules, Patentformules WHERE Syndromen.ID=Actieformules.Syndroom AND Actieformules.Patentformule=Patentformules.ID AND Syndromen.Hoofdsymptoom =@search LIMIT @limiter,10";
-                    cquery = "SELECT COUNT(Actieformules.ID) AS counter FROM Syndromen, Actiesformules, Patentformules WHERE Syndromen.ID=Actieformules.Syndroom AND Actieformules.Patentformule=Patentformules.ID AND Syndromen.Hoofdsymptoom =@search";
+                    query = "SELECT TOP 10 Actieformules.ID, Patentformules.Nederlands FROM Syndromen, Actiesformules, Patentformules WHERE Syndromen.ID=Actieformules.Syndroom AND Actieformules.Patentformule=Patentformules.ID AND Syndromen.Hoofdsymptoom LIKE @search ORDER BY ID ASC";
+                    cquery = "SELECT COUNT(Actieformules.ID) AS counter FROM Syndromen, Actiesformules, Patentformules WHERE Syndromen.ID=Actieformules.Syndroom AND Actieformules.Patentformule=Patentformules.ID AND Syndromen.Hoofdsymptoom LIKE @search";
                     break;
                 default:
-                    query = "SELECT ID, Nederlands FROM Kruiden WHERE Nederlands=@search LIMIT @limiter,10";
-                    cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Nederlands=@search";
+                    query = "SELECT TOP 10 ID, Nederlands FROM Kruiden WHERE Nederlands LIKE @search ORDER BY ID ASC";
+                    cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Nederlands LIKE @search";
                     break;
             }
             //execute select
             cmd = new SqlCommand(query, conn);
-            cmd.Parameters.Add(new SqlParameter("@search", search));
-            cmd.Parameters.Add(new SqlParameter("@limiter", selimiter));
+            cmd.Parameters.Add(new SqlParameter("@search", this.search));
+            cmd.Parameters.Add(new SqlParameter("@limiter", this.selimiter));
             int verticalpos = 110;
             mdataReader = cmd.ExecuteReader();
             while (mdataReader.Read())
             {
                 //display id
-                did = mdataReader.GetString(0);
+                did = Convert.ToString(mdataReader.GetInt32(0));
                 Label idlabel = new System.Windows.Forms.Label();
                 idlabel.Location = new System.Drawing.Point(20, verticalpos);
                 idlabel.Name = "label1";
@@ -167,7 +167,8 @@ namespace Chinees
             ccmd = new SqlCommand(cquery, conn);
             ccmd.Parameters.Add(new SqlParameter("@search", search));
             cmdataReader = ccmd.ExecuteReader();
-            maxi = Convert.ToInt32(cmdataReader.GetString(0));
+            cmdataReader.Read();
+            this.maxi = cmdataReader.GetInt32(0);
             //db close
             cmdataReader.Close();
             ccmd.Dispose();
@@ -187,7 +188,7 @@ namespace Chinees
                 Controls.Add(buttonprev);
             }
             //if volgende
-            if (this.next < maxi)
+            if (this.next < this.maxi)
             {
                 Button buttonnext = new System.Windows.Forms.Button();
                 buttonnext.Location = new System.Drawing.Point(380, 65);
@@ -346,7 +347,8 @@ namespace Chinees
                 default:
                     //closing thread
                     this.Close();
-                    th = new Thread(openhoofdmenu);
+                    //th = new Thread(openenkelkruiden);
+                    th = new Thread(() => invoked.Switchform(westersekruidenSwitch));
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
@@ -378,6 +380,8 @@ namespace Chinees
             //command and query strings
             SqlCommand cmd;
             String query;
+            //db open
+            conn.Open();
             //type
             switch (this.sekind)
             {

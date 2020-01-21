@@ -83,6 +83,8 @@ namespace Chinees
             int patent = patentid;
             //connection
             conn = new DBHandler().getConnection();
+            //db open
+            conn.Open();
             //command and query strings
             SqlCommand cmd;
             String query;
@@ -122,7 +124,7 @@ namespace Chinees
             ccmd.Parameters.Add(new SqlParameter("@sid", sid));
             cdataReader = ccmd.ExecuteReader();
             cdataReader.Read();
-            ccount = Convert.ToInt32(cdataReader.GetString(0));
+            ccount = cdataReader.GetInt32(0);
             //db close
             cdataReader.Close();
             ccmd.Dispose();
@@ -144,6 +146,8 @@ namespace Chinees
             int deleteid = delid;
             //connection
             conn = new DBHandler().getConnection();
+            //db open
+            conn.Open();
             //command and query strings
             SqlCommand cmd;
             String query;

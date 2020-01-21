@@ -46,6 +46,8 @@ namespace Chinees
                 SqlCommand mcmd;
                 SqlDataReader mdataReader;
                 String mquery;
+                //db open
+                conn.Open();
                 //select max
                 mquery = "SELECT * FROM Syndromen WHERE ID =@search";
                 mcmd = new SqlCommand(mquery, conn);
@@ -74,20 +76,10 @@ namespace Chinees
                 button1.UseVisualStyleBackColor = true;
                 button1.Click += new System.EventHandler(button1_Click);
                 Controls.Add(button1);
-            }
-            else
-            {
-                button1.Location = new System.Drawing.Point(321, 315);
-                button1.Name = "button";
-                button1.Size = new System.Drawing.Size(75, 23);
-                button1.Text = "Invoeren";
-                button1.UseVisualStyleBackColor = true;
-                button1.Click += new System.EventHandler(button1_Click);
-                Controls.Add(button1);
-                int updatenum = Convert.ToInt32(this.updatestage);
                 //actieformules
+                int updatenum = Convert.ToInt32(this.updatestage);
                 int verhouding = new Actieformules(updatenum).VerhoudingCheck();
-                if (verhouding >=1)
+                if (verhouding >= 1)
                 {
                     Combo_Load();
                 }
@@ -97,6 +89,17 @@ namespace Chinees
                     MenuMaker(updatenum);
                 }
             }
+            else
+            {
+                //invoer button
+                button1.Location = new System.Drawing.Point(321, 315);
+                button1.Name = "button";
+                button1.Size = new System.Drawing.Size(75, 23);
+                button1.Text = "Invoeren";
+                button1.UseVisualStyleBackColor = true;
+                button1.Click += new System.EventHandler(button1_Click);
+                Controls.Add(button1);
+            }
         }
 
         //comboboxes
@@ -104,17 +107,20 @@ namespace Chinees
         {
             //connection
             conn = new DBHandler().getConnection();
+            //db open
+            conn.Open();
             //combo
             comboBox2.FormattingEnabled = true;
             comboBox2.Location = new System.Drawing.Point(700, 340);
             comboBox2.Name = "comboBox1";
             comboBox2.Size = new System.Drawing.Size(180, 23);
             //combo query
-            SqlCommand sc = new SqlCommand("SELECT ID, Naam FROM Kruidenformules ORDER BY Naam ASC", conn);
+            SqlCommand sc = new SqlCommand("SELECT ID, Naam FROM Kruidenformules ORDER BY ID ASC", conn);
             SqlDataReader reader;
             reader = sc.ExecuteReader();
+            reader.Read();
             DataTable dt = new DataTable();
-            dt.Columns.Add("ID", typeof(string));
+            dt.Columns.Add("ID", typeof(int));
             dt.Columns.Add("Naam", typeof(string));
             dt.Load(reader);
             comboBox2.ValueMember = "ID";
@@ -129,11 +135,12 @@ namespace Chinees
             comboBox3.Name = "comboBox1";
             comboBox3.Size = new System.Drawing.Size(180, 23);
             //combo query
-            SqlCommand sca = new SqlCommand("SELECT ID, Nederlands FROM Patentformules ORDER BY Naam ASC", conn);
+            SqlCommand sca = new SqlCommand("SELECT ID, Nederlands FROM Patentformules ORDER BY ID ASC", conn);
             SqlDataReader readera;
             readera = sc.ExecuteReader();
+            readera.Read();
             DataTable dta = new DataTable();
-            dta.Columns.Add("ID", typeof(string));
+            dta.Columns.Add("ID", typeof(int));
             dta.Columns.Add("Nederlands", typeof(string));
             dta.Load(readera);
             comboBox3.ValueMember = "ID";
@@ -149,7 +156,7 @@ namespace Chinees
             buttoningre.Location = new System.Drawing.Point(900, 400);
             buttoningre.Name = "Actieformule Invoer";
             buttoningre.Size = new System.Drawing.Size(160, 20);
-            buttoningre.Text = "Terug";
+            buttoningre.Text = "Actieformule";
             buttoningre.UseVisualStyleBackColor = true;
             buttoningre.Click += new System.EventHandler(buttonin_Click);
             //controls
@@ -213,14 +220,12 @@ namespace Chinees
             SqlCommand cmd;
             SqlDataReader mdataReader;
             String query;
-
             //db open
             conn.Open();
             //select query according to type search
             //start position
             int verticalpos = 110;
             int i = 0;
-
             query = "SELECT Actieformules.ID, Kruidenformules.Naam, Patentformules.Nederlands, Syndromen.Syndroom FROM Actieformules, Kruidenformules, Patentformules, Syndromen WHERE Actieformules.Syndroom=Syndromen.ID AND Actieformules.Patentformule=Patentformules.ID AND Actieformules.Kruidenformule=Kruidenformules.ID AND Actieformules.ID=@sid";
 
             cmd = new SqlCommand(query, conn);
@@ -282,6 +287,8 @@ namespace Chinees
         {
             //connection
             conn = new DBHandler().getConnection();
+            //db open
+            conn.Open();
             //which one
             int maxi = Convert.ToInt32(Clicking);
             //command and query strings
@@ -372,7 +379,10 @@ namespace Chinees
             mcmd.Dispose();
             conn.Close();
             //refresh
-            this.Refresh();
+            this.Close();
+            th = new Thread(openupdate);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
         }
 
         //hoofdmenu

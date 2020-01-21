@@ -65,19 +65,20 @@ namespace Chinees
             }
             //counting
             ccmd = new SqlCommand(cquery, conn);
-            //ccmd.Parameters.Add(new SqlParameter("@sid", sid));
             cdataReader = ccmd.ExecuteReader();
             cdataReader.Read();
-            leftcount = Convert.ToInt32(cdataReader.GetString(0));
+            leftcount = cdataReader.GetInt32(0);
+            //leftcount = Convert.ToInt32(leftstr);
+            //close reader
+            cdataReader.Close();
+            ccmd.Dispose();
+            //counting
             accmd = new SqlCommand(acquery, conn);
-            //accmd.Parameters.Add(new SqlParameter("@sid", sid));
             acdataReader = accmd.ExecuteReader();
             acdataReader.Read();
-            rightcount = Convert.ToInt32(acdataReader.GetString(0));
+            rightcount = Convert.ToInt32(acdataReader.GetInt32(0));
             //db close
-            cdataReader.Close();
             acdataReader.Close();
-            ccmd.Dispose();
             accmd.Dispose();
             conn.Close();
             if (leftcount > 0 && rightcount > 0)
@@ -90,6 +91,169 @@ namespace Chinees
             }
             return checking;
         }
+
+        //list checking
+        public int ListCheck()
+        {
+            //search id
+            int sid = this.selectedid;
+            int ccount, checking;
+            string sekind = this.coupling;
+            //connection
+            conn = new DBHandler().getConnection();
+            //command and query strings
+            SqlCommand ccmd;
+            String cquery;
+            SqlDataReader cdataReader;
+            //db open
+            conn.Open();
+            //counting
+            switch (sekind)
+            {
+                case "Kruiden":
+                    cquery = "SELECT COUNT(ID) AS cco FROM FormulesEnKruiden WHERE ID=@sid";
+                    break;
+                case "Kruidenformules":
+                    cquery = "SELECT COUNT(ID) AS cco FROM FormulesEnKruiden WHERE IDKruidenformule=@sid";
+                    break;
+                case "Chinesekruiden":
+                    cquery = "SELECT COUNT(ID) AS cco FROM PatentEnKruiden WHERE ID=@sid";
+                    break;
+                case "Patentformules":
+                    cquery = "SELECT COUNT(ID) AS cco FROM PatentEnKruiden WHERE ID=@sid";
+                    break;
+                default:
+                    cquery = "SELECT COUNT(ID) AS cco FROM FormulesEnKruiden WHERE ID=@sid";
+                    break;
+            }
+            ccmd = new SqlCommand(cquery, conn);
+            ccmd.Parameters.Add(new SqlParameter("@sid", sid));
+            cdataReader = ccmd.ExecuteReader();
+            cdataReader.Read();
+            ccount = cdataReader.GetInt32(0);
+
+            //db close
+            cdataReader.Close();
+            ccmd.Dispose();
+            conn.Close();
+            if (ccount > 0)
+            {
+                checking = 1;
+            }
+            else
+            {
+                checking = 999;
+            }
+            return checking;
+        }
+
+        //list remove item
+        public bool Removal(int delid)
+        {
+            int deleteid = delid;
+            //connection
+            conn = new DBHandler().getConnection();
+            //command and query strings
+            SqlCommand cmd;
+            String query;
+            string couple = this.coupling;
+            //db open
+            conn.Open();
+            switch (couple)
+            {
+                //kruiden
+                case "Kruiden":
+                    query = "DELETE FROM FormulesEnKruiden WHERE ID=@deleteid";
+                    break;
+                //kruidenformules
+                case "Kruidenformules":
+                    query = "DELETE FROM FormulesEnKruiden WHERE ID=@deleteid";
+                    break;
+                //chinese kruiden
+                case "Chinesekruiden":
+                    query = "DELETE FROM PatentEnKruiden WHERE ID=@deleteid";
+                    break;
+                //patent formules
+                case "Patentformules":
+                    query = "DELETE FROM PatentEnKruiden WHERE ID=@deleteid";
+                    break;
+                default:
+                    query = "DELETE FROM FormulesEnKruiden WHERE ID=@deleteid";
+                    break;
+            }
+            //execute delete
+            cmd = new SqlCommand(query, conn);
+            cmd.Parameters.Add(new SqlParameter("@search", deleteid));
+            cmd.ExecuteNonQuery();
+            //db close
+            cmd.Dispose();
+            conn.Close();
+            return true;
+        }
+
+        //list inserting
+        public bool Inserter(int kruidid, int formuleid, int hoeveelheid)
+        {
+            int kruid = kruidid;
+            int formule = formuleid;
+            int verhouding = hoeveelheid;
+            //connection
+            conn = new DBHandler().getConnection();
+            //command and query strings
+            SqlCommand cmd;
+            String query;
+            SqlDataAdapter adapter = new SqlDataAdapter();
+            string couple = this.coupling;
+            //db open
+            conn.Open();
+            switch (couple)
+            {
+                //kruiden
+                case "Kruiden":
+                    query = "INSERT INTO FormulesEnKruiden (IDKruidenformule, IDKruiden, Verhouding) VALUES(@0, @1, @2)";
+                    break;
+                //kruidenformules
+                case "Kruidenformules":
+                    query = "INSERT INTO FormulesEnKruiden (IDKruidenformule, IDKruiden, Verhouding) VALUES(@0, @1, @2)";
+                    break;
+                //chinese kruiden
+                case "Chinesekruiden":
+                    query = "INSERT INTO PatentEnKruiden (Patentformule, Chinesekruiden, Verhouding) VALUES(@0, @1, @2)";
+                    break;
+                //patent formules
+                case "Patentformules":
+                    query = "INSERT INTO PatentEnKruiden (Patentformule, Chinesekruiden, Verhouding) VALUES(@0, @1, @2)";
+                    break;
+                default:
+                    query = "INSERT INTO FormulesEnKruiden (IDKruidenformule, IDKruiden, Verhouding) VALUES(@0, @1, @2)";
+                    break;
+            }
+            //execute delete
+            cmd = new SqlCommand(query, conn);
+            adapter.InsertCommand = new SqlCommand(query, conn);
+            adapter.InsertCommand.Parameters.AddWithValue("@0", kruid);
+            adapter.InsertCommand.Parameters.AddWithValue("@1", formule);
+            adapter.InsertCommand.Parameters.AddWithValue("@1", verhouding);
+            adapter.InsertCommand.ExecuteNonQuery();
+            //db close
+            cmd.Dispose();
+            conn.Close();
+            return true;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+        /*
 
         //dropdown selecting
         private List<List<string>> Verhoudingmaker()
@@ -160,12 +324,19 @@ namespace Chinees
             return list;
         }
 
+        */
+
+
+
+
+
+
+
+        /*
         //dropdown display
         public void DropdownMaker ()
         {
-            //List<List<string>> list = new List<List<string>>();
             string couple = this.coupling;
-
             String query, aquery;
 
             switch (couple)
@@ -195,16 +366,16 @@ namespace Chinees
             ComboBox comboBox1 = new System.Windows.Forms.ComboBox();
             comboBox1.FormattingEnabled = true;
             //data binding
-            /*
-            comboBox1.Items.AddRange(new object[] {
-                foreach (string name in names)
-                {
-                ""
-
-
-                }
-            });
-            */
+            
+            //comboBox1.Items.AddRange(new object[] {
+            //    foreach (string name in names)
+             //   {
+             //   ""
+             //
+             //
+             //   }
+            // });
+            
             comboBox1.Location = new System.Drawing.Point(700, 40);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new System.Drawing.Size(180, 23);
@@ -227,22 +398,8 @@ namespace Chinees
             comboBox1.DisplayMember = "Naam";
             comboBox1.DataSource = dt;
 
-
-
-
-
             ComboBox comboBox2 = new System.Windows.Forms.ComboBox();
             comboBox1.FormattingEnabled = true;
-            /*
-            comboBox2.Items.AddRange(new object[] {
-                foreach (string name in names)
-                {
-                ""
-
-
-                }
-            });
-            */
             comboBox2.Location = new System.Drawing.Point(900, 40);
             comboBox2.Name = "comboBox1";
             comboBox2.Size = new System.Drawing.Size(180, 23);
@@ -271,232 +428,97 @@ namespace Chinees
             conn.Close();
 
         }
+        */
 
-        //list checking
-        public int ListCheck(string searchtype)
+        /*
+    //list display
+    public void MenuMaker(string searchtype, int searchid)
+    {            
+        string sekind = searchtype;
+        int selimiter = searchid;
+        //connection
+        conn = new DBHandler().getConnection();
+        //command and query strings
+        SqlCommand cmd;
+        SqlDataReader mdataReader;
+        String query;
+
+        //db open
+        conn.Open();
+        //select query according to type search
+        //start position
+        int verticalpos = 110;        
+        int i = 0;
+        switch (sekind)
         {
-            //search id
-            int sid = this.selectedid;
-            int ccount, checking;
-            string sekind = searchtype;
-            //connection
-            conn = new DBHandler().getConnection();
-            //command and query strings
-            SqlCommand ccmd;
-            String cquery;
-            SqlDataReader cdataReader;
-            //db open
-            conn.Open();
-            //counting
-            switch (sekind)
-            {
-                case "Kruiden":
-                    cquery = "SELECT COUNT(ID) AS cco FROM FormulesEnKruiden WHERE ID=@sid";
-                    break;
-                case "Kruidenformules":
-                    cquery = "SELECT COUNT(ID) AS cco FROM FormulesEnKruiden WHERE ID=@sid";
-                    break;
-                case "Chinesekruiden":
-                    cquery = "SELECT COUNT(ID) AS cco FROM PatentEnKruiden WHERE ID=@sid";
-                    break;
-                case "Patentformules":
-                    cquery = "SELECT COUNT(ID) AS cco FROM PatentEnKruiden WHERE ID=@sid";
-                    break;
-                default:
-                    cquery = "SELECT COUNT(ID) AS cco FROM FormulesEnKruiden WHERE ID=@sid";
-                    break;
-            }
-            ccmd = new SqlCommand(cquery, conn);
-            ccmd.Parameters.Add(new SqlParameter("@sid", sid));
-            cdataReader = ccmd.ExecuteReader();
-            cdataReader.Read();
-            ccount = Convert.ToInt32(cdataReader.GetString(0));
-
-            //db close
-            cdataReader.Close();
-            ccmd.Dispose();
-            conn.Close();
-            if (ccount > 0)
-            {
-                checking = 1;
-            }
-            else
-            {
-                checking = 999;
-            }
-            return checking;
+            case "Kruiden":
+                query = "SELECT FormulesEnKruiden.ID, Kruidenformules.Naam, Kruiden.Nederlands, FormulesEnKruiden.Verhouding FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND FormulesEnKruiden.ID=@sid";
+                break;
+            case "Kruidenformules":
+                query = "SELECT FormulesEnKruiden.ID, Kruidenformules.Naam, Kruiden.Nederlands, FormulesEnKruiden.Verhouding FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND FormulesEnKruiden.ID=@sid";
+                break;
+            case "Chinesekruiden":
+                query = "SELECT PatentEnKruiden.ID, Patentformules.Nederlands, ChineseKruiden.Engels, PatentEnKruiden.Verhouding FROM Patentformules, PantentEnKruiden, ChineseKruiden WHERE Patentformules.ID=PatentEnKruiden.Patentformule AND PatentEnKruiden.ChineseKruiden=ChineseKruiden.ID AND PatentEnKruiden.ID=@sid";
+                break;
+            case "Patentformules":
+                query = "SELECT PatentEnKruiden.ID, Patentformules.Nederlands, ChineseKruiden.Engels, PatentEnKruiden.Verhouding FROM Patentformules, PantentEnKruiden, ChineseKruiden WHERE Patentformules.ID=PatentEnKruiden.Patentformule AND PatentEnKruiden.ChineseKruiden=ChineseKruiden.ID AND PatentEnKruiden.ID=@sid";
+                break;
+            default:
+                query = "SELECT FormulesEnKruiden.ID, Kruidenformules.Naam, Kruiden.Nederlands, FormulesEnKruiden.Verhouding FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND FormulesEnKruiden.ID=@sid";
+                break;
         }
+        cmd = new SqlCommand(query, conn);            
+        cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
 
-        //list display
-        public void MenuMaker(string searchtype, int searchid)
-        {            
-            string sekind = searchtype;
-            int selimiter = searchid;
-            //connection
-            conn = new DBHandler().getConnection();
-            //command and query strings
-            SqlCommand cmd;
-            SqlDataReader mdataReader;
-            String query;
-
-            //db open
-            conn.Open();
-            //select query according to type search
-            //start position
-            int verticalpos = 110;        
-            int i = 0;
-            switch (sekind)
-            {
-                case "Kruiden":
-                    query = "SELECT FormulesEnKruiden.ID, Kruidenformules.Naam, Kruiden.Nederlands, FormulesEnKruiden.Verhouding FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND FormulesEnKruiden.ID=@sid";
-                    break;
-                case "Kruidenformules":
-                    query = "SELECT FormulesEnKruiden.ID, Kruidenformules.Naam, Kruiden.Nederlands, FormulesEnKruiden.Verhouding FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND FormulesEnKruiden.ID=@sid";
-                    break;
-                case "Chinesekruiden":
-                    query = "SELECT PatentEnKruiden.ID, Patentformules.Nederlands, ChineseKruiden.Engels, PatentEnKruiden.Verhouding FROM Patentformules, PantentEnKruiden, ChineseKruiden WHERE Patentformules.ID=PatentEnKruiden.Patentformule AND PatentEnKruiden.ChineseKruiden=ChineseKruiden.ID AND PatentEnKruiden.ID=@sid";
-                    break;
-                case "Patentformules":
-                    query = "SELECT PatentEnKruiden.ID, Patentformules.Nederlands, ChineseKruiden.Engels, PatentEnKruiden.Verhouding FROM Patentformules, PantentEnKruiden, ChineseKruiden WHERE Patentformules.ID=PatentEnKruiden.Patentformule AND PatentEnKruiden.ChineseKruiden=ChineseKruiden.ID AND PatentEnKruiden.ID=@sid";
-                    break;
-                default:
-                    query = "SELECT FormulesEnKruiden.ID, Kruidenformules.Naam, Kruiden.Nederlands, FormulesEnKruiden.Verhouding FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND FormulesEnKruiden.ID=@sid";
-                    break;
-            }
-            cmd = new SqlCommand(query, conn);            
-            cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
-
-            mdataReader = cmd.ExecuteReader();
-            while (mdataReader.Read())
-            {
-                //formule naam
-                Label outlabel = new System.Windows.Forms.Label();
-                outlabel.Location = new System.Drawing.Point(700, verticalpos);
-                outlabel.Name = "outlabel";
-                outlabel.Size = new System.Drawing.Size(180, 20);
-                outlabel.Text = Convert.ToString(mdataReader.GetString(1));
-                //kruid naam
-                Label outlabel2 = new System.Windows.Forms.Label();
-                outlabel2.Location = new System.Drawing.Point(900, verticalpos);
-                outlabel2.Name = "outlabel2";
-                outlabel2.Size = new System.Drawing.Size(180, 20);
-                outlabel2.Text = Convert.ToString(mdataReader.GetString(2));
-                //verhouding
-                Label outlabel3 = new System.Windows.Forms.Label();
-                outlabel3.Location = new System.Drawing.Point(1100, verticalpos);
-                outlabel3.Name = "outlabel3";
-                outlabel3.Size = new System.Drawing.Size(40, 20);
-                outlabel3.Text = Convert.ToString(mdataReader.GetString(3));
-                //id
-                Button buttonrem = new System.Windows.Forms.Button();
-                buttonrem.Location = new System.Drawing.Point(1160, verticalpos);
-                buttonrem.Text = "Verwijderen";
-                buttonrem.Size = new System.Drawing.Size(75, 35);
-                buttonrem.Click += new System.EventHandler(this.buttonrem_Click);
-                buttonrem.Name = Convert.ToString(mdataReader.GetString(0));
-                
-                i++;
-            }           
-
-        }        
-
-        //list removal event
-        private void buttonrem_Click(object sender, EventArgs e)
+        mdataReader = cmd.ExecuteReader();
+        while (mdataReader.Read())
         {
-            Button buttondelete = (Button)sender;
-            int ClickedNum = Convert.ToInt32(buttondelete.Name);
-            Removal(ClickedNum);
-        }
+            //formule naam
+            Label outlabel = new System.Windows.Forms.Label();
+            outlabel.Location = new System.Drawing.Point(700, verticalpos);
+            outlabel.Name = "outlabel";
+            outlabel.Size = new System.Drawing.Size(180, 20);
+            outlabel.Text = Convert.ToString(mdataReader.GetString(1));
+            //kruid naam
+            Label outlabel2 = new System.Windows.Forms.Label();
+            outlabel2.Location = new System.Drawing.Point(900, verticalpos);
+            outlabel2.Name = "outlabel2";
+            outlabel2.Size = new System.Drawing.Size(180, 20);
+            outlabel2.Text = Convert.ToString(mdataReader.GetString(2));
+            //verhouding
+            Label outlabel3 = new System.Windows.Forms.Label();
+            outlabel3.Location = new System.Drawing.Point(1100, verticalpos);
+            outlabel3.Name = "outlabel3";
+            outlabel3.Size = new System.Drawing.Size(40, 20);
+            outlabel3.Text = Convert.ToString(mdataReader.GetString(3));
+            //id
+            Button buttonrem = new System.Windows.Forms.Button();
+            buttonrem.Location = new System.Drawing.Point(1160, verticalpos);
+            buttonrem.Text = "Verwijderen";
+            buttonrem.Size = new System.Drawing.Size(75, 35);
+            buttonrem.Click += new System.EventHandler(this.buttonrem_Click);
+            buttonrem.Name = Convert.ToString(mdataReader.GetString(0));
 
-        //list remove item
-        private void Removal(int delid)
-        {
-            int deleteid = delid;
-            //connection
-            conn = new DBHandler().getConnection();
-            //command and query strings
-            SqlCommand cmd;
-            String query;
-            string couple = this.coupling;
+            i++;
+        }           
 
-            switch (couple)
-            {
-                //kruiden
-                case "Kruiden":
-                    query = "DELETE FROM FormulesEnKruiden WHERE ID=@deleteid";
-                    break;
-                //kruidenformules
-                case "Kruidenformules":
-                    query = "DELETE FROM FormulesEnKruiden WHERE ID=@deleteid";
-                    break;
-                //chinese kruiden
-                case "Chinesekruiden":
-                    query = "DELETE FROM PatentEnKruiden WHERE ID=@deleteid";
-                    break;
-                //patent formules
-                case "Patentformules":
-                    query = "DELETE FROM PatentEnKruiden WHERE ID=@deleteid";
-                    break;
-                default:
-                    query = "DELETE FROM FormulesEnKruiden WHERE ID=@deleteid";
-                    break;
-            }
-            //execute delete
-            cmd = new SqlCommand(query, conn);
-            cmd.Parameters.Add(new SqlParameter("@search", deleteid));
-            cmd.ExecuteNonQuery();
-            //db close
-            cmd.Dispose();
-            conn.Close();
-        }
+    }   
 
-        //list inserting
-        private void Inserter(int kruidid, int formuleid, int hoeveelheid)
-        {
-            int kruid = kruidid;
-            int formule = formuleid;
-            int verhouding = hoeveelheid;
-            //connection
-            conn = new DBHandler().getConnection();
-            //command and query strings
-            SqlCommand cmd;
-            String query;
-            SqlDataAdapter adapter = new SqlDataAdapter();
-            string couple = this.coupling;
+    */
 
-            switch (couple)
-            {
-                //kruiden
-                case "Kruiden":
-                    query = "INSERT INTO FormulesEnKruiden (IDKruidenformule, IDKruiden, Verhouding) VALUES(@0, @1, @2)";
-                    break;
-                //kruidenformules
-                case "Kruidenformules":
-                    query = "INSERT INTO FormulesEnKruiden (IDKruidenformule, IDKruiden, Verhouding) VALUES(@0, @1, @2)";
-                    break;
-                //chinese kruiden
-                case "Chinesekruiden":
-                    query = "INSERT INTO PatentEnKruiden (Patentformule, Chinesekruiden, Verhouding) VALUES(@0, @1, @2)";
-                    break;
-                //patent formules
-                case "Patentformules":
-                    query = "INSERT INTO PatentEnKruiden (Patentformule, Chinesekruiden, Verhouding) VALUES(@0, @1, @2)";
-                    break;
-                default:
-                    query = "INSERT INTO FormulesEnKruiden (IDKruidenformule, IDKruiden, Verhouding) VALUES(@0, @1, @2)";
-                    break;
-            }
-            //execute delete
-            cmd = new SqlCommand(query, conn);
-            adapter.InsertCommand = new SqlCommand(query, conn);
-            adapter.InsertCommand.Parameters.AddWithValue("@0", kruid);
-            adapter.InsertCommand.Parameters.AddWithValue("@1", formule);
-            adapter.InsertCommand.Parameters.AddWithValue("@1", verhouding);
-            adapter.InsertCommand.ExecuteNonQuery();
-            //db close
-            cmd.Dispose();
-            conn.Close();
-        }
+        /*
+    //list removal event
+    private void buttonrem_Click(object sender, EventArgs e)
+    {
+        Button buttondelete = (Button)sender;
+        int ClickedNum = Convert.ToInt32(buttondelete.Name);
+        Removal(ClickedNum);
+    }
+    */
+
+
+
+
 
     }
 }
