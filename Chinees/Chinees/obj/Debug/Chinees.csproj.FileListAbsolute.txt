@@ -16,3 +16,4 @@ C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.cspro
 C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.exe
 C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.pdb
 C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.ChineseKruiden.resources
+C:\Users\wiebe\Documents\minor\heelkunde\Chinees\Chinees\obj\Debug\Chinees.Aantekening.resources
