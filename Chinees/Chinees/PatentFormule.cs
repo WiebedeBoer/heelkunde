@@ -77,7 +77,7 @@ namespace Chinees
                 Controls.Add(button1);
                 //aantekening button
                 Button buttonnote = new System.Windows.Forms.Button();
-                buttonnote.Location = new System.Drawing.Point(448, 145);
+                buttonnote.Location = new System.Drawing.Point(558, 11);
                 buttonnote.Name = "Aantekening";
                 buttonnote.Size = new System.Drawing.Size(100, 20);
                 buttonnote.Text = "Aantekening";

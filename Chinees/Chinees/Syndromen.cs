@@ -224,44 +224,61 @@ namespace Chinees
             conn.Open();
             //select query according to type search
             //start position
-            int verticalpos = 110;
+            int verticalpos = 410;
             int i = 0;
             query = "SELECT Actieformules.ID, Kruidenformules.Naam, Patentformules.Nederlands, Syndromen.Syndroom FROM Actieformules, Kruidenformules, Patentformules, Syndromen WHERE Actieformules.Syndroom=Syndromen.ID AND Actieformules.Patentformule=Patentformules.ID AND Actieformules.Kruidenformule=Kruidenformules.ID AND Actieformules.ID=@sid";
 
             cmd = new SqlCommand(query, conn);
             cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
 
+            Label outlabel = new System.Windows.Forms.Label();
+            Label outlabel2 = new System.Windows.Forms.Label();
+            Label outlabel3 = new System.Windows.Forms.Label();
+            Button buttonrem = new System.Windows.Forms.Button();
+            Button buttonaan = new System.Windows.Forms.Button();
+
             mdataReader = cmd.ExecuteReader();
             while (mdataReader.Read())
             {
                 //kruidenformule naam
-                Label outlabel = new System.Windows.Forms.Label();
-                outlabel.Location = new System.Drawing.Point(700, verticalpos);
+                
+                outlabel.Location = new System.Drawing.Point(400, verticalpos);
                 outlabel.Name = "outlabel";
                 outlabel.Size = new System.Drawing.Size(180, 20);
                 outlabel.Text = Convert.ToString(mdataReader.GetString(1));
                 //patent formule nederlands
-                Label outlabel2 = new System.Windows.Forms.Label();
-                outlabel2.Location = new System.Drawing.Point(900, verticalpos);
+                
+                outlabel2.Location = new System.Drawing.Point(600, verticalpos);
                 outlabel2.Name = "outlabel2";
                 outlabel2.Size = new System.Drawing.Size(180, 20);
                 outlabel2.Text = Convert.ToString(mdataReader.GetString(2));
                 //syndroom
-                Label outlabel3 = new System.Windows.Forms.Label();
-                outlabel3.Location = new System.Drawing.Point(1100, verticalpos);
+                
+                outlabel3.Location = new System.Drawing.Point(800, verticalpos);
                 outlabel3.Name = "outlabel3";
                 outlabel3.Size = new System.Drawing.Size(40, 20);
                 outlabel3.Text = Convert.ToString(mdataReader.GetString(3));
                 //id
-                Button buttonrem = new System.Windows.Forms.Button();
-                buttonrem.Location = new System.Drawing.Point(1160, verticalpos);
+                
+                buttonrem.Location = new System.Drawing.Point(860, verticalpos);
                 buttonrem.Text = "Verwijderen";
                 buttonrem.Size = new System.Drawing.Size(75, 35);
                 buttonrem.Click += new System.EventHandler(this.buttonrem_Click);
                 buttonrem.Name = Convert.ToString(mdataReader.GetString(0));
-
+                //aantekening
+                
+                buttonaan.Location = new System.Drawing.Point(960, verticalpos);
+                buttonaan.Text = "Aantekening";
+                buttonaan.Size = new System.Drawing.Size(75, 35);
+                buttonaan.Click += new System.EventHandler(this.buttonaan_Click);
+                buttonaan.Name = Convert.ToString(mdataReader.GetString(0));
                 i++;
             }
+            Controls.Add(outlabel);
+            Controls.Add(outlabel2);
+            Controls.Add(outlabel3);
+            Controls.Add(buttonrem);
+            Controls.Add(buttonaan);
 
         }
 
@@ -399,5 +416,23 @@ namespace Chinees
             th.SetApartmentState(ApartmentState.STA);
             th.Start();
         }
+
+        private void buttonaan_Click(object sender, EventArgs e)
+        {
+            //closing thread
+            this.Close();
+            th = new Thread(openaantekening);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
+        }
+
+        private void openaantekening(object obj)
+        {
+            int updatenum = Convert.ToInt32(this.updatestage);
+            string typering = "Actieformules";
+            Application.Run(new Aantekening(typering, updatenum));
+        }
+
+
     }
 }
