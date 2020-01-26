@@ -217,7 +217,8 @@ namespace Chinees
             int verticalpos = 390;
             int i = 0;
             //query = "SELECT PatentEnKruiden.ID, Patentformules.Nederlands, ChineseKruiden.Engels, PatentEnKruiden.Verhouding FROM Patentformules, PantentEnKruiden, ChineseKruiden WHERE Patentformules.ID=PatentEnKruiden.Patentformule AND PatentEnKruiden.ChineseKruiden=ChineseKruiden.ID AND PatentEnKruiden.ID=@sid";
-            query = "SELECT ID, Chinesekruiden, Verhouding FROM PatentEnKruiden WHERE Chinesekruiden = @sid";
+            //query = "SELECT ID, Chinesekruiden, Verhouding FROM PatentEnKruiden WHERE Chinesekruiden = @sid";
+            query = "SELECT PatentEnKruiden.ID, ChineseKruiden.Engels, PatentEnKruiden.Verhouding FROM PatentEnKruiden LEFT JOIN ChineseKruiden ON PatentEnKruiden.Patentformule = ChineseKruiden.ID WHERE PatentEnKruiden.Chinesekruiden = @sid";
             cmd = new SqlCommand(query, conn);
             cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
             mdataReader = cmd.ExecuteReader();
@@ -235,7 +236,8 @@ namespace Chinees
                 outlabel2.Location = new System.Drawing.Point(500, verticalpos);
                 outlabel2.Name = "outlabel2" + i.ToString();
                 outlabel2.Size = new System.Drawing.Size(180, 20);
-                outlabel2.Text = Convert.ToString(mdataReader.GetInt32(1)); //str
+                //outlabel2.Text = Convert.ToString(mdataReader.GetInt32(1)); //str
+                outlabel2.Text = mdataReader.GetString(1);
                 Controls.Add(outlabel2);
                 //verhouding
                 Label outlabel3 = new System.Windows.Forms.Label();
@@ -250,7 +252,7 @@ namespace Chinees
                 buttonrem.Text = "Verwijderen";
                 buttonrem.Size = new System.Drawing.Size(75, 35);
                 buttonrem.Click += new System.EventHandler(this.buttonrem_Click);
-                buttonrem.Name = Convert.ToString(mdataReader.GetString(0));
+                buttonrem.Name = Convert.ToString(mdataReader.GetInt32(0));
                 Controls.Add(buttonrem);
                 verticalpos = verticalpos + 40;
                 i++;

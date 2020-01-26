@@ -227,8 +227,8 @@ namespace Chinees
             //  " AND FormulesEnKruiden.IDKruiden " +
             //   "RIGHT JOIN Kruiden.ID WHERE FormulesEnKruiden.ID = @sid";
             //query = "SELECT FormulesEnKruiden.ID, Kruidenformules.Naam, Kruiden.Nederlands, FormulesEnKruiden.Verhouding FROM FormulesEnKruiden, Kruidenformules, Kruiden LEFT JOIN FormulesEnKruiden.Kruidenformule ON WHERE FormulesEnKruiden.ID = @sid";
-            query = "SELECT ID, IDKruiden, Verhouding FROM FormulesEnKruiden WHERE IDKruiden = @sid";
-            //query = "SELECT FormulesEnKruiden.ID, Kruiden.Nederlands, FormulesEnKruiden.Verhouding FROM FormulesEnKruiden LEFT JOIN Kruiden ON FormulesEnKruiden.IDKruiden = Kruiden.ID WHERE FormulesEnKruiden.IDKruiden = @sid";
+            //query = "SELECT ID, IDKruiden, Verhouding FROM FormulesEnKruiden WHERE IDKruiden = @sid";
+            query = "SELECT FormulesEnKruiden.ID, Kruiden.Nederlands, FormulesEnKruiden.Verhouding FROM FormulesEnKruiden LEFT JOIN Kruiden ON FormulesEnKruiden.IDKruidenformule = Kruiden.ID WHERE FormulesEnKruiden.IDKruiden = @sid";
             cmd = new SqlCommand(query, conn);
             cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
             mdataReader = cmd.ExecuteReader();
@@ -258,8 +258,8 @@ namespace Chinees
                 outlabel2.Location = new System.Drawing.Point(500, verticalpos);
                 outlabel2.Name = "outlabel2" + i.ToString();
                 outlabel2.Size = new System.Drawing.Size(180, 20);
-                outlabel2.Text = Convert.ToString(mdataReader.GetInt32(1)); //str
-                //outlabel2.Text = Convert.ToString(mdataReader.GetString(1)); //str
+                //outlabel2.Text = Convert.ToString(mdataReader.GetInt32(1)); //str
+                outlabel2.Text = Convert.ToString(mdataReader.GetString(1)); //str
                 //outlabel2.Text = Convert.ToString(mydataReader.GetString(0)); //str
                 Controls.Add(outlabel2);
                 //verhouding

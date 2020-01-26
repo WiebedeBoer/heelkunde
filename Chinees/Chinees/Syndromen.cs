@@ -226,11 +226,10 @@ namespace Chinees
             int verticalpos = 425;
             int i = 0;
             //query = "SELECT Actieformules.ID, Kruidenformules.Naam, Patentformules.Nederlands, Syndromen.Syndroom FROM Actieformules, Kruidenformules, Patentformules, Syndromen WHERE Actieformules.Syndroom=Syndromen.ID AND Actieformules.Patentformule=Patentformules.ID AND Actieformules.Kruidenformule=Kruidenformules.ID AND Actieformules.ID=@sid";
-            query = "SELECT ID, Patentformule, Kruidenformule FROM Actieformules WHERE Syndroom = @sid";
+            //query = "SELECT ID, Patentformule, Kruidenformule FROM Actieformules WHERE Syndroom = @sid";
+            query = "SELECT Actieformules.ID, Kruidenformules.Naam, Patentformules.Nederlands FROM Actieformules LEFT JOIN Patentformules ON Actieformules.Patentformule = Patentformules.ID LEFT JOIN Kruidenformules ON Actieformules.Kruidenformule = Kruidenformules.ID WHERE Actieformules.Syndroom = @sid";
             cmd = new SqlCommand(query, conn);
             cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
-
-
 
             mdataReader = cmd.ExecuteReader();
             while (mdataReader.Read())
@@ -244,13 +243,15 @@ namespace Chinees
                 outlabel.Location = new System.Drawing.Point(400, verticalpos);
                 outlabel.Name = "outlabel";
                 outlabel.Size = new System.Drawing.Size(180, 20);
-                outlabel.Text = Convert.ToString(mdataReader.GetInt32(1)); //str
+                //outlabel.Text = Convert.ToString(mdataReader.GetInt32(1)); //str
+                outlabel.Text = mdataReader.GetString(1);
                 //outlabel.ID = i.ToString();
                 //patent formule nederlands                
                 outlabel2.Location = new System.Drawing.Point(600, verticalpos);
                 outlabel2.Name = "outlabel2";
                 outlabel2.Size = new System.Drawing.Size(180, 20);
-                outlabel2.Text = Convert.ToString(mdataReader.GetInt32(2)); //str
+                //outlabel2.Text = Convert.ToString(mdataReader.GetInt32(2)); //str
+                outlabel2.Text = mdataReader.GetString(2);
                 //syndroom                
                 //outlabel3.Location = new System.Drawing.Point(800, verticalpos);
                 //outlabel3.Name = "outlabel3";
