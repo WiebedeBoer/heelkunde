@@ -225,7 +225,8 @@ namespace Chinees
             //start position
             int verticalpos = 425;
             int i = 0;
-            query = "SELECT Actieformules.ID, Kruidenformules.Naam, Patentformules.Nederlands, Syndromen.Syndroom FROM Actieformules, Kruidenformules, Patentformules, Syndromen WHERE Actieformules.Syndroom=Syndromen.ID AND Actieformules.Patentformule=Patentformules.ID AND Actieformules.Kruidenformule=Kruidenformules.ID AND Actieformules.ID=@sid";
+            //query = "SELECT Actieformules.ID, Kruidenformules.Naam, Patentformules.Nederlands, Syndromen.Syndroom FROM Actieformules, Kruidenformules, Patentformules, Syndromen WHERE Actieformules.Syndroom=Syndromen.ID AND Actieformules.Patentformule=Patentformules.ID AND Actieformules.Kruidenformule=Kruidenformules.ID AND Actieformules.ID=@sid";
+            query = "SELECT ID, Patentformule, Kruidenformule FROM Actieformules WHERE Syndroom = @sid";
             cmd = new SqlCommand(query, conn);
             cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
 
@@ -236,45 +237,46 @@ namespace Chinees
             {
                 Label outlabel = new System.Windows.Forms.Label();
                 Label outlabel2 = new System.Windows.Forms.Label();
-                Label outlabel3 = new System.Windows.Forms.Label();
+                //Label outlabel3 = new System.Windows.Forms.Label();
                 Button buttonrem = new System.Windows.Forms.Button();
                 Button buttonaan = new System.Windows.Forms.Button();
                 //kruidenformule naam
                 outlabel.Location = new System.Drawing.Point(400, verticalpos);
                 outlabel.Name = "outlabel";
                 outlabel.Size = new System.Drawing.Size(180, 20);
-                outlabel.Text = Convert.ToString(mdataReader.GetString(1));
+                outlabel.Text = Convert.ToString(mdataReader.GetInt32(1)); //str
                 //outlabel.ID = i.ToString();
                 //patent formule nederlands                
                 outlabel2.Location = new System.Drawing.Point(600, verticalpos);
                 outlabel2.Name = "outlabel2";
                 outlabel2.Size = new System.Drawing.Size(180, 20);
-                outlabel2.Text = Convert.ToString(mdataReader.GetString(2));
+                outlabel2.Text = Convert.ToString(mdataReader.GetInt32(2)); //str
                 //syndroom                
-                outlabel3.Location = new System.Drawing.Point(800, verticalpos);
-                outlabel3.Name = "outlabel3";
-                outlabel3.Size = new System.Drawing.Size(40, 20);
-                outlabel3.Text = Convert.ToString(mdataReader.GetString(3));
+                //outlabel3.Location = new System.Drawing.Point(800, verticalpos);
+                //outlabel3.Name = "outlabel3";
+                //outlabel3.Size = new System.Drawing.Size(40, 20);
+                //outlabel3.Text = Convert.ToString(mdataReader.GetString(3));
                 //id                
-                buttonrem.Location = new System.Drawing.Point(860, verticalpos);
+                buttonrem.Location = new System.Drawing.Point(660, verticalpos);
                 buttonrem.Text = "Verwijderen";
                 buttonrem.Size = new System.Drawing.Size(75, 35);
                 buttonrem.Click += new System.EventHandler(this.buttonrem_Click);
                 buttonrem.Name = Convert.ToString(mdataReader.GetInt32(0));
                 //aantekening                
-                buttonaan.Location = new System.Drawing.Point(960, verticalpos);
+                buttonaan.Location = new System.Drawing.Point(760, verticalpos);
                 buttonaan.Text = "Aantekening";
                 buttonaan.Size = new System.Drawing.Size(75, 35);
                 buttonaan.Click += new System.EventHandler(this.buttonaan_Click);
                 buttonaan.Name = Convert.ToString(mdataReader.GetInt32(0));
-                i++;
-                verticalpos = verticalpos + 30;
-                //control
+                //controls
                 this.Controls.Add(outlabel);
                 this.Controls.Add(outlabel2);
-                this.Controls.Add(outlabel3);
+                //this.Controls.Add(outlabel3);
                 this.Controls.Add(buttonrem);
                 this.Controls.Add(buttonaan);
+                //pos inc
+                i++;
+                verticalpos = verticalpos + 40;
             }
 
         }

@@ -214,38 +214,39 @@ namespace Chinees
             conn.Open();
             //select query according to type search
             //start position
-            int verticalpos = 330;
+            int verticalpos = 390;
             int i = 0;
-            query = "SELECT PatentEnKruiden.ID, Patentformules.Nederlands, ChineseKruiden.Engels, PatentEnKruiden.Verhouding FROM Patentformules, PantentEnKruiden, ChineseKruiden WHERE Patentformules.ID=PatentEnKruiden.Patentformule AND PatentEnKruiden.ChineseKruiden=ChineseKruiden.ID AND PatentEnKruiden.ID=@sid";
+            //query = "SELECT PatentEnKruiden.ID, Patentformules.Nederlands, ChineseKruiden.Engels, PatentEnKruiden.Verhouding FROM Patentformules, PantentEnKruiden, ChineseKruiden WHERE Patentformules.ID=PatentEnKruiden.Patentformule AND PatentEnKruiden.ChineseKruiden=ChineseKruiden.ID AND PatentEnKruiden.ID=@sid";
+            query = "SELECT ID, Chinesekruiden, Verhouding FROM PatentEnKruiden WHERE Chinesekruiden = @sid";
             cmd = new SqlCommand(query, conn);
             cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
             mdataReader = cmd.ExecuteReader();
             while (mdataReader.Read())
             {
                 //formule naam
-                Label outlabel = new System.Windows.Forms.Label();
-                outlabel.Location = new System.Drawing.Point(700, verticalpos);
-                outlabel.Name = "outlabel" + i.ToString();
-                outlabel.Size = new System.Drawing.Size(180, 20);
-                outlabel.Text = Convert.ToString(mdataReader.GetString(1));
-                Controls.Add(outlabel);
+                //Label outlabel = new System.Windows.Forms.Label();
+                //outlabel.Location = new System.Drawing.Point(700, verticalpos);
+                //outlabel.Name = "outlabel" + i.ToString();
+                //outlabel.Size = new System.Drawing.Size(180, 20);
+                //outlabel.Text = Convert.ToString(mdataReader.GetString(1));
+                //Controls.Add(outlabel);
                 //kruid naam
                 Label outlabel2 = new System.Windows.Forms.Label();
-                outlabel2.Location = new System.Drawing.Point(900, verticalpos);
+                outlabel2.Location = new System.Drawing.Point(500, verticalpos);
                 outlabel2.Name = "outlabel2" + i.ToString();
                 outlabel2.Size = new System.Drawing.Size(180, 20);
-                outlabel2.Text = Convert.ToString(mdataReader.GetString(2));
+                outlabel2.Text = Convert.ToString(mdataReader.GetInt32(1)); //str
                 Controls.Add(outlabel2);
                 //verhouding
                 Label outlabel3 = new System.Windows.Forms.Label();
-                outlabel3.Location = new System.Drawing.Point(1100, verticalpos);
+                outlabel3.Location = new System.Drawing.Point(700, verticalpos);
                 outlabel3.Name = "outlabel3" + i.ToString();
                 outlabel3.Size = new System.Drawing.Size(40, 20);
-                outlabel3.Text = Convert.ToString(mdataReader.GetString(3));
+                outlabel3.Text = Convert.ToString(mdataReader.GetInt32(2));
                 Controls.Add(outlabel3);
                 //id
                 Button buttonrem = new System.Windows.Forms.Button();
-                buttonrem.Location = new System.Drawing.Point(1160, verticalpos);
+                buttonrem.Location = new System.Drawing.Point(760, verticalpos);
                 buttonrem.Text = "Verwijderen";
                 buttonrem.Size = new System.Drawing.Size(75, 35);
                 buttonrem.Click += new System.EventHandler(this.buttonrem_Click);

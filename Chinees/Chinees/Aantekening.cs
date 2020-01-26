@@ -144,38 +144,40 @@ namespace Chinees
             //command and query strings
             SqlCommand ccmd;
             String cquery;
-            SqlDataReader cdataReader;
+            //SqlDataReader cdataReader;
             //db open
             conn.Open();
             //counting
             switch (sekind)
             {
                 case "Kruiden":
-                    cquery = "SELECT COUNT(ID) AS cco FROM Kruidenaantekeningen WHERE Kruid=@sid";
+                    cquery = "SELECT COUNT(ID) AS cco FROM Kruidenaantekeningen WHERE Kruid =@sid";
                     break;
                 case "Kruidenformules":
-                    cquery = "SELECT COUNT(ID) AS cco FROM Formulesaantekeningen WHERE Kruid=@sid";
+                    cquery = "SELECT COUNT(ID) AS cco FROM Formulesaantekeningen WHERE Kruid =@sid";
                     break;
                 case "Chinesekruiden":
-                    cquery = "SELECT COUNT(ID) AS cco FROM Chineesaantekeningen WHERE Kruid=@sid";
+                    cquery = "SELECT COUNT(ID) AS cco FROM Chineesaantekeningen WHERE Kruid =@sid";
                     break;
                 case "Patentformules":
-                    cquery = "SELECT COUNT(ID) AS cco FROM Patentaantekeningen WHERE Patent=@sid";
+                    cquery = "SELECT COUNT(ID) AS cco FROM Patentaantekeningen WHERE Patent =@sid";
                     break;
                 case "Actieformules":
-                    cquery = "SELECT COUNT(ID) AS cco FROM Actiesaantekeningen WHERE Actie=@sid";
+                    cquery = "SELECT COUNT(ID) AS cco FROM Actiesaantekeningen WHERE Actie =@sid";
                     break;
                 default:
-                    cquery = "SELECT COUNT(ID) AS cco FROM Formulesaantekeningen WHERE Kruid=@sid";
+                    cquery = "SELECT COUNT(ID) AS cco FROM Formulesaantekeningen WHERE Kruid =@sid";
                     break;
             }
             ccmd = new SqlCommand(cquery, conn);
             ccmd.Parameters.Add(new SqlParameter("@sid", sid));
-            cdataReader = ccmd.ExecuteReader();
-            cdataReader.Read();
-            ccount = cdataReader.GetInt32(0);
+            //cdataReader = ccmd.ExecuteReader();
+            //cdataReader.Read();
+            //ccount = cdataReader.GetInt32(0);
+            ccmd.CommandText = cquery;
+            ccount = (Int32)ccmd.ExecuteScalar();
             //db close
-            cdataReader.Close();
+            //cdataReader.Close();
             ccmd.Dispose();
             conn.Close();
             if (ccount > 0)

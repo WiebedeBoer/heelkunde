@@ -54,7 +54,7 @@ namespace Chinees
             acdataReader.Close();
             accmd.Dispose();
 
-            cccmd = new SqlCommand(acquery, conn);
+            cccmd = new SqlCommand(ccquery, conn);
             //cccmd.Parameters.Add(new SqlParameter("@sid", sid));
             ccdataReader = cccmd.ExecuteReader();
             ccdataReader.Read();
@@ -119,7 +119,7 @@ namespace Chinees
             //db open
             conn.Open();
             //counting
-            cquery = "SELECT COUNT(ID) AS cco FROM Actieformules WHERE ID=@sid";
+            cquery = "SELECT COUNT(ID) AS cco FROM Actieformules WHERE Syndroom = @sid";
             ccmd = new SqlCommand(cquery, conn);
             ccmd.Parameters.Add(new SqlParameter("@sid", sid));
             cdataReader = ccmd.ExecuteReader();

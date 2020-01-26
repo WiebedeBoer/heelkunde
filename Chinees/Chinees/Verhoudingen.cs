@@ -111,26 +111,33 @@ namespace Chinees
             switch (sekind)
             {
                 case "Kruiden":
-                    cquery = "SELECT COUNT(IDKruiden) AS cco FROM FormulesEnKruiden WHERE IDKruiden =@sid";
+                    cquery = "SELECT COUNT(IDKruiden) FROM FormulesEnKruiden WHERE IDKruidenformule = @sid";
                     break;
                 case "Kruidenformules":
-                    cquery = "SELECT COUNT(IDKruidenformule) AS cco FROM FormulesEnKruiden WHERE IDKruidenformule=@sid";
+                    cquery = "SELECT COUNT(IDKruidenformule) FROM FormulesEnKruiden WHERE IDKruiden = @sid";
                     break;
                 case "Chinesekruiden":
-                    cquery = "SELECT COUNT(Chinesekruiden) AS cco FROM PatentEnKruiden WHERE Chinesekruiden =@sid";
+                    cquery = "SELECT COUNT(Chinesekruiden) FROM PatentEnKruiden WHERE Patentformule= @sid";
                     break;
                 case "Patentformules":
-                    cquery = "SELECT COUNT(Patentformule) AS cco FROM PatentEnKruiden WHERE Patentformule=@sid";
+                    cquery = "SELECT COUNT(Patentformule) FROM PatentEnKruiden WHERE Chinesekruiden  = @sid";
                     break;
                 default:
-                    cquery = "SELECT COUNT(ID) AS cco FROM FormulesEnKruiden WHERE ID =@sid";
+                    cquery = "SELECT COUNT(ID) AS cco FROM FormulesEnKruiden WHERE IDKruidenformule = @sid";
                     break;
             }
             ccmd = new SqlCommand(cquery, conn);
             ccmd.Parameters.Add(new SqlParameter("@sid", sid));
             cdataReader = ccmd.ExecuteReader();
             cdataReader.Read();
-            ccount = Convert.ToInt32(cdataReader.GetInt32(0));
+            ccount = cdataReader.GetInt32(0);
+
+            //ccmd = new SqlCommand(cquery, conn);
+            //cdataReader = ccmd.ExecuteReader();
+            //cdataReader.Read();
+            //ccount = Convert.ToInt32(cdataReader.GetInt32(0));
+
+            //ccmd.CommandText = cquery;
             //ccount = (Int32)ccmd.ExecuteScalar();
 
             //db close

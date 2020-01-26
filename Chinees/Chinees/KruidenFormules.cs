@@ -219,46 +219,72 @@ namespace Chinees
             conn.Open();
             //select query according to type search
             //start position
-            int verticalpos = 330;
+            int verticalpos = 390;
             int i = 0;
-            query = "SELECT FormulesEnKruiden.ID, Kruidenformules.Naam, Kruiden.Nederlands, FormulesEnKruiden.Verhouding FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND FormulesEnKruiden.ID=@sid";
+            //query = "SELECT FormulesEnKruiden.ID, Kruidenformules.Naam, Kruiden.Nederlands, FormulesEnKruiden.Verhouding FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND FormulesEnKruiden.ID=@sid";
+            //query = "SELECT * FROM FormulesEnKruiden.ID ei, Kruidenformules.Naam ni, Kruiden.Nederlands ki, FormulesEnKruiden.Verhouding fi       LEFT JOIN Kruiden.ID ki ON FormulesEnKruiden.IDKruiden fi RIGHT JOIN Kruidenformules.ID ki ON FormulesEnKruiden.IDKruidenformule" +
+            //   "LEFT JOIN FormulesEnKruiden.IDKruidenformule" +
+            //  " AND FormulesEnKruiden.IDKruiden " +
+            //   "RIGHT JOIN Kruiden.ID WHERE FormulesEnKruiden.ID = @sid";
+            //query = "SELECT FormulesEnKruiden.ID, Kruidenformules.Naam, Kruiden.Nederlands, FormulesEnKruiden.Verhouding FROM FormulesEnKruiden, Kruidenformules, Kruiden LEFT JOIN FormulesEnKruiden.Kruidenformule ON WHERE FormulesEnKruiden.ID = @sid";
+            query = "SELECT ID, IDKruiden, Verhouding FROM FormulesEnKruiden WHERE IDKruiden = @sid";
+            //query = "SELECT FormulesEnKruiden.ID, Kruiden.Nederlands, FormulesEnKruiden.Verhouding FROM FormulesEnKruiden LEFT JOIN Kruiden ON FormulesEnKruiden.IDKruiden = Kruiden.ID WHERE FormulesEnKruiden.IDKruiden = @sid";
             cmd = new SqlCommand(query, conn);
             cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
             mdataReader = cmd.ExecuteReader();
             while (mdataReader.Read())
             {
                 //formule naam
-                Label outlabel = new System.Windows.Forms.Label();
-                outlabel.Location = new System.Drawing.Point(700, verticalpos);
-                outlabel.Name = "outlabel" + i.ToString();
-                outlabel.Size = new System.Drawing.Size(180, 20);
-                outlabel.Text = Convert.ToString(mdataReader.GetString(1));
-                Controls.Add(outlabel);
+                //Label outlabel = new System.Windows.Forms.Label();
+                //outlabel.Location = new System.Drawing.Point(700, verticalpos);
+                //outlabel.Name = "outlabel" + i.ToString();
+                //outlabel.Size = new System.Drawing.Size(180, 20);
+                //outlabel.Text = Convert.ToString(mdataReader.GetString(1));
+                //Controls.Add(outlabel);
+
+                /*
+                //new select
+                int myint = mdataReader.GetInt32(1);
+                string myquery = "SELECT Nederlands, FormulesEnKruiden.Verhouding FROM Kruiden WHERE ID =@mint";
+                SqlCommand mycmd = new SqlCommand(myquery, conn);
+                mycmd.Parameters.Add(new SqlParameter("@sid", selimiter));
+                SqlDataReader mydataReader = mycmd.ExecuteReader();
+                mydataReader.Close();
+                mycmd.Dispose();
+                */
+
                 //kruid naam
                 Label outlabel2 = new System.Windows.Forms.Label();
-                outlabel2.Location = new System.Drawing.Point(900, verticalpos);
+                outlabel2.Location = new System.Drawing.Point(500, verticalpos);
                 outlabel2.Name = "outlabel2" + i.ToString();
                 outlabel2.Size = new System.Drawing.Size(180, 20);
-                outlabel2.Text = Convert.ToString(mdataReader.GetString(2));
+                outlabel2.Text = Convert.ToString(mdataReader.GetInt32(1)); //str
+                //outlabel2.Text = Convert.ToString(mdataReader.GetString(1)); //str
+                //outlabel2.Text = Convert.ToString(mydataReader.GetString(0)); //str
                 Controls.Add(outlabel2);
                 //verhouding
                 Label outlabel3 = new System.Windows.Forms.Label();
-                outlabel3.Location = new System.Drawing.Point(1100, verticalpos);
+                outlabel3.Location = new System.Drawing.Point(700, verticalpos);
                 outlabel3.Name = "outlabel3" + i.ToString();
                 outlabel3.Size = new System.Drawing.Size(40, 20);
-                outlabel3.Text = Convert.ToString(mdataReader.GetString(3));
+                outlabel3.Text = Convert.ToString(mdataReader.GetInt32(2));
                 Controls.Add(outlabel3);
                 //id
                 Button buttonrem = new System.Windows.Forms.Button();
-                buttonrem.Location = new System.Drawing.Point(1160, verticalpos);
+                buttonrem.Location = new System.Drawing.Point(760, verticalpos);
                 buttonrem.Text = "Verwijderen";
                 buttonrem.Size = new System.Drawing.Size(75, 35);
                 buttonrem.Click += new System.EventHandler(this.buttonrem_Click);
-                buttonrem.Name = Convert.ToString(mdataReader.GetString(0));
+                buttonrem.Name = Convert.ToString(mdataReader.GetInt32(0));
                 Controls.Add(buttonrem);
+                //pos inc
                 verticalpos = verticalpos + 40;
                 i++;
             }
+            //db close
+            mdataReader.Close();
+            cmd.Dispose();
+            conn.Close();
 
         }
 
