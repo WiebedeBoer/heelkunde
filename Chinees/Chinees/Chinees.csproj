@@ -60,9 +60,7 @@
       <DependentUpon>ChineseKruiden.cs</DependentUpon>
     </Compile>
     <Compile Include="DBHandler.cs" />
-    <Compile Include="EditForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Include="EditForm.cs" />
     <Compile Include="EditForm.Designer.cs">
       <DependentUpon>EditForm.cs</DependentUpon>
     </Compile>

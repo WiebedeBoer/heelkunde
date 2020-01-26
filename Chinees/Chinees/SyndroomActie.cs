@@ -19,6 +19,8 @@ namespace Chinees
         public SqlConnection conn;
         private string updatestage;
 
+        ComboBox comboBox1 = new System.Windows.Forms.ComboBox();
+
         public SyndroomActie(string updatestage)
         {
             InitializeComponent();
@@ -38,11 +40,13 @@ namespace Chinees
             {
                 //connection
                 conn = new DBHandler().getConnection();
+                //db open
+                conn.Open();
                 //which one
                 int maxi = Convert.ToInt32(this.updatestage);
-                String mquery;
-                SqlCommand mcmd;
-                SqlDataReader mdataReader;
+                String mquery, aquery;
+                SqlCommand mcmd, acmd;
+                SqlDataReader mdataReader, aReader;
                 //select max
                 mquery = "SELECT * FROM Syndromenacties WHERE ID =@search";
                 mcmd = new SqlCommand(mquery, conn);
@@ -50,13 +54,32 @@ namespace Chinees
                 mdataReader = mcmd.ExecuteReader();
                 mdataReader.Read();
                 //convert to string
-                textBox1.Text = Convert.ToString(mdataReader.GetValue(1));
+                int actie = Convert.ToInt32(mdataReader.GetValue(1));
                 textBox2.Text = Convert.ToString(mdataReader.GetValue(2));
                 textBox3.Text = Convert.ToString(mdataReader.GetValue(3));
                 textBox4.Text = Convert.ToString(mdataReader.GetValue(4));
-                //db close
+                //reader close
                 mdataReader.Close();
                 mcmd.Dispose();
+                //display syndroom
+                aquery = "SELECT Syndroom FROM Syndromen WHERE ID =@search";
+                acmd = new SqlCommand(aquery, conn);
+                acmd.Parameters.Add(new SqlParameter("@search", actie));
+                aReader = acmd.ExecuteReader();
+                aReader.Read();
+
+                Label label5 = new System.Windows.Forms.Label();
+                label5.AutoSize = true;
+                label5.Location = new System.Drawing.Point(244, 54);
+                label5.Name = "label5";
+                label5.Size = new System.Drawing.Size(70, 13);
+                label5.TabIndex = 5;
+                label5.Text = Convert.ToString(aReader.GetValue(0));
+
+                //reader close
+                aReader.Close();
+                acmd.Dispose();
+                //db close
                 conn.Close();
                 //button
                 button1.Location = new System.Drawing.Point(394, 161);
@@ -69,6 +92,7 @@ namespace Chinees
             }
             else
             {
+                ComboMaker();
                 button1.Location = new System.Drawing.Point(394, 161);
                 button1.Name = "button";
                 button1.Size = new System.Drawing.Size(75, 23);
@@ -99,6 +123,8 @@ namespace Chinees
         {
             //connection
             conn = new DBHandler().getConnection();
+            //db open
+            conn.Open();
             //which one
             int maxi = Convert.ToInt32(Clicking);
             //command and query strings
@@ -106,21 +132,54 @@ namespace Chinees
             SqlDataAdapter adapter = new SqlDataAdapter();
             String query;
             //data form variables
-            string Syndroom = textBox1.Text;
+            string Syndroom = Convert.ToString(comboBox1.SelectedValue);
             string Actie = textBox2.Text;
             string Acupunctuurpunten = textBox3.Text;
             string Opmerkingen = textBox4.Text;
             //updating
-            query = "UPDATE Syndromenacties SET Syndroom =@0, Actie =@1, Acupunctuurpunten =@2, Opmerkingen =@3 WHERE ID =@search";
+            query = "UPDATE Syndromenacties SET Actie =@0, Acupunctuurpunten =@1, Opmerkingen =@2 WHERE ID =@search";
             cmd = new SqlCommand(query, conn);
             cmd.Parameters.Add(new SqlParameter("@search", maxi));
-            cmd.Parameters.AddWithValue("@0", Syndroom);
-            cmd.Parameters.AddWithValue("@1", Actie);
-            cmd.Parameters.AddWithValue("@2", Acupunctuurpunten);
-            cmd.Parameters.AddWithValue("@3", Opmerkingen);
+            //cmd.Parameters.AddWithValue("@0", Syndroom);
+            cmd.Parameters.AddWithValue("@0", Actie);
+            cmd.Parameters.AddWithValue("@1", Acupunctuurpunten);
+            cmd.Parameters.AddWithValue("@2", Opmerkingen);
             cmd.ExecuteNonQuery();
             //db close
             cmd.Dispose();
+            conn.Close();
+        }
+
+        public void ComboMaker()
+        {
+            
+            String query;
+            query = "SELECT ID, Syndroom FROM Syndromen ORDER BY Syndroom ASC";
+            //combobox
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new System.Drawing.Point(244, 54);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new System.Drawing.Size(140, 23);
+            //connection
+            conn = new DBHandler().getConnection();
+            //db open
+            conn.Open();
+            //first select
+            SqlCommand sc = new SqlCommand(query, conn);
+            SqlDataReader reader;
+            reader = sc.ExecuteReader();
+            reader.Read();
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ID", typeof(int));
+            dt.Columns.Add("Syndroom", typeof(string));
+            dt.Load(reader);
+            comboBox1.ValueMember = "ID";
+            comboBox1.DisplayMember = "Syndroom";
+            comboBox1.DataSource = dt;
+            Controls.Add(comboBox1);
+            //close
+            reader.Close();
+            sc.Dispose();
             conn.Close();
         }
 
@@ -129,7 +188,7 @@ namespace Chinees
             //connection
             conn = new DBHandler().getConnection();
             //data form variables
-            string Syndroom = textBox1.Text;
+            int Syndroom = (int)comboBox1.SelectedValue;
             string Actie = textBox2.Text;
             string Acupunctuurpunten = textBox3.Text;
             string Opmerkingen = textBox4.Text;
@@ -168,6 +227,17 @@ namespace Chinees
             cmd.Dispose();
             mcmd.Dispose();
             conn.Close();
+            //refresh
+            this.Close();
+            th = new Thread(openupdate);
+            th.SetApartmentState(ApartmentState.STA);
+            th.Start();
+        }
+
+        //update
+        private void openupdate(object obj)
+        {
+            Application.Run(new SyndroomActie(this.updatestage));
         }
 
         //hoofdmenu

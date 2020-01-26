@@ -76,7 +76,7 @@ namespace Chinees
                 Controls.Add(button1);
                 //aantekening button
                 Button buttonnote = new System.Windows.Forms.Button();
-                buttonnote.Location = new System.Drawing.Point(558, 11);
+                buttonnote.Location = new System.Drawing.Point(658, 11);
                 buttonnote.Name = "Aantekening";
                 buttonnote.Size = new System.Drawing.Size(100, 20);
                 buttonnote.Text = "Aantekening";
@@ -178,7 +178,7 @@ namespace Chinees
             string Werking = textBox8.Text;
             string Indicaties = textBox9.Text;
             string Dosering = textBox10.Text;
-            string Aantekeningen = textBox10.Text;
+            //string Aantekeningen = textBox11.Text;
             //updating
             query = "UPDATE ChineseKruiden SET Engels =@0, Latijn =@1, Pinjin =@2, Klasse =@3, Thermodynamisch =@4, Meridiaan =@5, Qi =@6, Werking =@7, Indicaties =@8, Dosering =@9 WHERE ID =@search";
             cmd = new SqlCommand(query, conn);

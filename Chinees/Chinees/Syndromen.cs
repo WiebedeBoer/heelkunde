@@ -84,7 +84,7 @@ namespace Chinees
                     Combo_Load();
                 }
                 int listnum = new Actieformules(updatenum).ListCheck();
-                if (verhouding >= 1)
+                if (listnum ==1)
                 {
                     MenuMaker(updatenum);
                 }
@@ -137,7 +137,7 @@ namespace Chinees
             //combo query
             SqlCommand sca = new SqlCommand("SELECT ID, Nederlands FROM Patentformules ORDER BY ID ASC", conn);
             SqlDataReader readera;
-            readera = sc.ExecuteReader();
+            readera = sca.ExecuteReader();
             readera.Read();
             DataTable dta = new DataTable();
             dta.Columns.Add("ID", typeof(int));
@@ -212,7 +212,6 @@ namespace Chinees
         //actieformules list display
         public void MenuMaker(int searchid)
         {
-
             int selimiter = searchid;
             //connection
             conn = new DBHandler().getConnection();
@@ -224,64 +223,61 @@ namespace Chinees
             conn.Open();
             //select query according to type search
             //start position
-            int verticalpos = 410;
+            int verticalpos = 425;
             int i = 0;
             query = "SELECT Actieformules.ID, Kruidenformules.Naam, Patentformules.Nederlands, Syndromen.Syndroom FROM Actieformules, Kruidenformules, Patentformules, Syndromen WHERE Actieformules.Syndroom=Syndromen.ID AND Actieformules.Patentformule=Patentformules.ID AND Actieformules.Kruidenformule=Kruidenformules.ID AND Actieformules.ID=@sid";
-
             cmd = new SqlCommand(query, conn);
             cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
 
-            Label outlabel = new System.Windows.Forms.Label();
-            Label outlabel2 = new System.Windows.Forms.Label();
-            Label outlabel3 = new System.Windows.Forms.Label();
-            Button buttonrem = new System.Windows.Forms.Button();
-            Button buttonaan = new System.Windows.Forms.Button();
+
 
             mdataReader = cmd.ExecuteReader();
             while (mdataReader.Read())
             {
+                Label outlabel = new System.Windows.Forms.Label();
+                Label outlabel2 = new System.Windows.Forms.Label();
+                Label outlabel3 = new System.Windows.Forms.Label();
+                Button buttonrem = new System.Windows.Forms.Button();
+                Button buttonaan = new System.Windows.Forms.Button();
                 //kruidenformule naam
-                
                 outlabel.Location = new System.Drawing.Point(400, verticalpos);
                 outlabel.Name = "outlabel";
                 outlabel.Size = new System.Drawing.Size(180, 20);
                 outlabel.Text = Convert.ToString(mdataReader.GetString(1));
-                //patent formule nederlands
-                
+                //outlabel.ID = i.ToString();
+                //patent formule nederlands                
                 outlabel2.Location = new System.Drawing.Point(600, verticalpos);
                 outlabel2.Name = "outlabel2";
                 outlabel2.Size = new System.Drawing.Size(180, 20);
                 outlabel2.Text = Convert.ToString(mdataReader.GetString(2));
-                //syndroom
-                
+                //syndroom                
                 outlabel3.Location = new System.Drawing.Point(800, verticalpos);
                 outlabel3.Name = "outlabel3";
                 outlabel3.Size = new System.Drawing.Size(40, 20);
                 outlabel3.Text = Convert.ToString(mdataReader.GetString(3));
-                //id
-                
+                //id                
                 buttonrem.Location = new System.Drawing.Point(860, verticalpos);
                 buttonrem.Text = "Verwijderen";
                 buttonrem.Size = new System.Drawing.Size(75, 35);
                 buttonrem.Click += new System.EventHandler(this.buttonrem_Click);
-                buttonrem.Name = Convert.ToString(mdataReader.GetString(0));
-                //aantekening
-                
+                buttonrem.Name = Convert.ToString(mdataReader.GetInt32(0));
+                //aantekening                
                 buttonaan.Location = new System.Drawing.Point(960, verticalpos);
                 buttonaan.Text = "Aantekening";
                 buttonaan.Size = new System.Drawing.Size(75, 35);
                 buttonaan.Click += new System.EventHandler(this.buttonaan_Click);
-                buttonaan.Name = Convert.ToString(mdataReader.GetString(0));
+                buttonaan.Name = Convert.ToString(mdataReader.GetInt32(0));
                 i++;
+                verticalpos = verticalpos + 30;
+                //control
+                this.Controls.Add(outlabel);
+                this.Controls.Add(outlabel2);
+                this.Controls.Add(outlabel3);
+                this.Controls.Add(buttonrem);
+                this.Controls.Add(buttonaan);
             }
-            Controls.Add(outlabel);
-            Controls.Add(outlabel2);
-            Controls.Add(outlabel3);
-            Controls.Add(buttonrem);
-            Controls.Add(buttonaan);
 
         }
-
 
         //insert or update event
         private void button1_Click(object sender, EventArgs e)

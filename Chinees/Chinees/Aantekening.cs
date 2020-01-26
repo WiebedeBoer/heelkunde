@@ -124,7 +124,11 @@ namespace Chinees
             bool ins = Inserter(selectedid, commentaar);
             if (ins == true)
             {
-                Renew();
+                //closing thread
+                this.Close();
+                th = new Thread(Renew);
+                th.SetApartmentState(ApartmentState.STA);
+                th.Start();
             }
         }
 
@@ -150,7 +154,7 @@ namespace Chinees
                     cquery = "SELECT COUNT(ID) AS cco FROM Kruidenaantekeningen WHERE Kruid=@sid";
                     break;
                 case "Kruidenformules":
-                    cquery = "SELECT COUNT(ID) AS cco FROM Formulesaantekeningen WHEREKruid=@sid";
+                    cquery = "SELECT COUNT(ID) AS cco FROM Formulesaantekeningen WHERE Kruid=@sid";
                     break;
                 case "Chinesekruiden":
                     cquery = "SELECT COUNT(ID) AS cco FROM Chineesaantekeningen WHERE Kruid=@sid";
@@ -261,7 +265,11 @@ namespace Chinees
             bool rem = Removal(ClickedNum);
             if (rem ==true)
             {
-                Renew();
+                //closing thread
+                this.Close();
+                th = new Thread(Renew);
+                th.SetApartmentState(ApartmentState.STA);
+                th.Start();
             }
         }
 
@@ -304,7 +312,7 @@ namespace Chinees
             }
             //execute delete
             cmd = new SqlCommand(query, conn);
-            cmd.Parameters.Add(new SqlParameter("@search", deleteid));
+            cmd.Parameters.Add(new SqlParameter("@deleteid", deleteid));
             cmd.ExecuteNonQuery();
             //db close
             cmd.Dispose();
@@ -365,7 +373,7 @@ namespace Chinees
         }
 
         //renew
-        public void Renew()
+        public void Renew(object obj)
         {
             Application.Run(new Aantekening(this.coupling,this.selectedid));
         }

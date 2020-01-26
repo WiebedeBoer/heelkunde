@@ -13,6 +13,19 @@ using System.Data.SqlClient;
 
 namespace Chinees
 {
+
+    public class ComboboxItem
+    {
+        public string Text { get; set; }
+        public object Value { get; set; }
+
+        public override string ToString()
+        {
+            return Text;
+        }
+    }
+
+
     public partial class EditForm : Form
     {
         Thread th;
@@ -40,6 +53,14 @@ namespace Chinees
             }            
         }
 
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ComboBox cmb = (ComboBox)sender;
+            int selectedIndex = cmb.SelectedIndex;
+            this.sekind = Convert.ToString(cmb.SelectedValue);            
+
+        }
+
         //search
         private void Search(string searchtext, string searchtype, int searchstart)
         {
@@ -58,56 +79,56 @@ namespace Chinees
             //select query according to type search
             switch (this.sekind)
             {
-                //kruiden
-                case "Nederlandse naam kruid":
+
+                case "0":
                     query = "SELECT TOP 10 ID, Nederlands FROM Kruiden WHERE Nederlands LIKE @search ORDER BY ID ASC";
                     cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Nederlands LIKE @search";
                     break;
-                case "Latijnse naam kruid":
+                case "1":
                     query = "SELECT TOP 10 ID, Latijns FROM Kruiden WHERE Latijns LIKE @search ORDER BY ID ASC";
                     cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Latijns LIKE @search";
                     break;
-                case "Thermodynamisch in kruid":
+                case "2":
                     query = "SELECT TOP 10 ID, Thermodynamisch FROM Kruiden WHERE Thermodynamisch LIKE @search ORDER BY ID ASC";
                     cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Thermodynamisch LIKE @search";
                     break;
                 //kruidenformules
-                case "Indicaties in kruidenformule":
+                case "3":
                     query = "SELECT TOP 10 ID, Indicaties FROM Kruidenformules WHERE Indicaties LIKE @search ORDER BY ID ASC";
                     cquery = "SELECT COUNT(ID) AS counter FROM Kruidenformules WHERE Indicaties LIKE @search";
                     break;
-                case "Naam kruidenformule":
+                case "4":
                     query = "SELECT TOP 10 ID, Naam FROM Kruidenformules WHERE Naam LIKE @search ORDER BY ID ASC";
                     cquery = "SELECT COUNT(ID) AS counter FROM Kruidenformules WHERE Naam LIKE @search ";
                     break;
-                case "Kruid in kruidenformule":
+                case "5":
                     query = "SELECT TOP 10 FormulesEnKruiden.ID, Kruidenformules.Naam FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND Kruiden.Nederlands LIKE @search ORDER BY ID ASC";
                     cquery = "SELECT COUNT(FormulesEnKruiden.ID) as counter FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND Kruiden.Nederlands LIKE @search";
                     break;
                 //patent formules
-                case "Nederlandse naam patentformule":
+                case "6":
                     query = "SELECT TOP 10 ID, Nederlands FROM Patentformules WHERE Nederlands LIKE @search ORDER BY ID ASC";
                     cquery = "SELECT COUNT(ID) AS counter FROM Patentformules WHERE Nederlands LIKE @search";
                     break;
-                case "Engelse naam patentformule":
+                case "7":
                     query = "SELECT TOP 10 ID, Engels FROM Patentformules WHERE Engels LIKE @search ORDER BY ID ASC";
                     cquery = "SELECT COUNT(ID) AS counter FROM Patentformules WHERE Engels LIKE @search";
                     break;
-                case "Pinjin naam patentformule":
+                case "8":
                     query = "SELECT TOP 10 ID, Pinjin FROM Patentformules WHERE Pinjin LIKE @search ORDER BY ID ASC";
                     cquery = "SELECT COUNT(ID) AS counter FROM Patentformules WHERE Pinjin LIKE @search";
                     break;
                 //syndromen
-                case "Syndroom naam":
+                case "9":
                     query = "SELECT TOP 10 ID, Syndroom FROM Syndromen WHERE Syndroom LIKE @search ORDER BY ID ASC";
                     cquery = "SELECT COUNT(ID) AS counter FROM Syndromen WHERE Syndroom LIKE @search ";
                     break;
-                case "Syndroom op symptomen pols en tong":
+                case "10":
                     query = "SELECT TOP 10 ID, Pols FROM Syndromen WHERE Pols LIKE @search OR Tong LIKE @search ORDER BY ID ASC";
                     cquery = "SELECT COUNT(ID) AS counter FROM Syndromen WHERE Pols LIKE @search OR Tong LIKE @search";
                     break;
                 //complex
-                case "Patentformule op symptoom":
+                case "11":
                     query = "SELECT TOP 10 Actieformules.ID, Patentformules.Nederlands FROM Syndromen, Actiesformules, Patentformules WHERE Syndromen.ID=Actieformules.Syndroom AND Actieformules.Patentformule=Patentformules.ID AND Syndromen.Hoofdsymptoom LIKE @search ORDER BY ID ASC";
                     cquery = "SELECT COUNT(Actieformules.ID) AS counter FROM Syndromen, Actiesformules, Patentformules WHERE Syndromen.ID=Actieformules.Syndroom AND Actieformules.Patentformule=Patentformules.ID AND Syndromen.Hoofdsymptoom LIKE @search";
                     break;
@@ -115,6 +136,7 @@ namespace Chinees
                     query = "SELECT TOP 10 ID, Nederlands FROM Kruiden WHERE Nederlands LIKE @search ORDER BY ID ASC";
                     cquery = "SELECT COUNT(ID) AS counter FROM Kruiden WHERE Nederlands LIKE @search";
                     break;
+
             }
             //execute select
             cmd = new SqlCommand(query, conn);
@@ -244,7 +266,7 @@ namespace Chinees
             switch (this.sekind)
             {
                 //kruiden
-                case "Nederlandse naam kruid":
+                case "0":
                     //closing thread
                     this.Close();
                     //th = new Thread(openenkelkruiden);
@@ -252,7 +274,7 @@ namespace Chinees
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
-                case "Latijnse naam kruid":
+                case "1":
                     //closing thread
                     this.Close();
                     //th = new Thread(openenkelkruiden);
@@ -260,7 +282,7 @@ namespace Chinees
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
-                case "Thermodynamisch in kruid":
+                case "2":
                     //closing thread
                     this.Close();
                     //th = new Thread(openenkelkruiden);
@@ -269,7 +291,7 @@ namespace Chinees
                     th.Start();
                     break;
                 //kruidenformules
-                case "Indicaties in kruidenformule":
+                case "3":
                     //closing thread
                     this.Close();
                     //th = new Thread(openwesterskruiden);
@@ -277,7 +299,7 @@ namespace Chinees
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
-                case "Naam kruidenformule":
+                case "4":
                     //closing thread
                     this.Close();
                     //th = new Thread(openwesterskruiden);
@@ -285,7 +307,7 @@ namespace Chinees
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
-                case "Kruid in kruidenformule":
+                case "5":
                     //closing thread
                     this.Close();
                     //th = new Thread(openwesterskruiden);
@@ -294,7 +316,7 @@ namespace Chinees
                     th.Start();
                     break;
                 //patent formules
-                case "Nederlandse naam patentformule":
+                case "6":
                     //closing thread
                     this.Close();
                     //th = new Thread(openchinesekruiden);
@@ -302,7 +324,7 @@ namespace Chinees
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
-                case "Engelse naam patentformule":
+                case "7":
                     //closing thread
                     this.Close();
                     //th = new Thread(openchinesekruiden);
@@ -310,7 +332,7 @@ namespace Chinees
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
-                case "Pinjin naam patentformule":
+                case "8":
                     //closing thread
                     this.Close();
                     //th = new Thread(openchinesekruiden);
@@ -319,7 +341,7 @@ namespace Chinees
                     th.Start();
                     break;
                 //syndromen
-                case "Syndroom naam":
+                case "9":
                     //closing thread
                     this.Close();
                     //th = new Thread(opensyndromen);
@@ -327,7 +349,7 @@ namespace Chinees
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
-                case "Syndroom op symptomen pols en tong":
+                case "10":
                     //closing thread
                     this.Close();
                     //th = new Thread(opensyndromen);
@@ -336,7 +358,7 @@ namespace Chinees
                     th.Start();
                     break;
                 //complex
-                case "Patentformule op symptoom":
+                case "11":
                     //closing thread
                     this.Close();
                     //th = new Thread(opensyndromen);
@@ -352,6 +374,8 @@ namespace Chinees
                     th.SetApartmentState(ApartmentState.STA);
                     th.Start();
                     break;
+
+
             }
         }
 
@@ -432,7 +456,7 @@ namespace Chinees
             }
             //execute delete
             cmd = new SqlCommand(query, conn);
-            cmd.Parameters.Add(new SqlParameter("@search", deleteid));
+            cmd.Parameters.Add(new SqlParameter("@deleteid", deleteid));
             cmd.ExecuteNonQuery();
             //db close
             cmd.Dispose();
@@ -460,10 +484,7 @@ namespace Chinees
         //volgende
         private void buttonvolgende_Click(object sender, EventArgs e)
         {
-            //string searchtext = this.search;
-            //string searchtype = this.sekind;
             this.selimiter = this.next;
-            //Search(searchtext, searchtype, searchstart);
             //refresh
             Renew();
         }
@@ -471,8 +492,6 @@ namespace Chinees
         //vorige
         private void buttonvorige_Click(object sender, EventArgs e)
         {
-            //string searchtext = this.search;
-            //string searchtype = this.sekind;
             this.selimiter = this.prev;
             //Search(searchtext, searchtype, searchstart);
             //refresh
@@ -483,58 +502,15 @@ namespace Chinees
         private void button1_Click(object sender, EventArgs e)
         {
             this.search = textBox1.Text;
-            this.sekind = comboBox1.SelectedText;
+            //this.sekind = Convert.ToString(comboBox1.SelectedText);
+            //this.sekind = comboBox1.SelectedText;
+            //this.sekind = Convert.ToString(comboBox1.SelectedValue);
+            this.sekind = Convert.ToString(comboBox1.SelectedIndex);
             this.selimiter = 0;
             //Search(searchtext, searchtype, searchstart);
             //refresh
             Renew();
         }
-
-        /*
-//open other input forms
-//kruiden
-private void openenkelkruiden(object obj)
-{
-    string numbr = this.number;
-    Application.Run(new Kruiden(numbr));
-}
-
-//kruidenformules
-private void openwesterskruiden(object obj)
-{
-    string numbr = this.number;
-    Application.Run(new KruidenFormules(numbr));
-}
-
-//patentformules
-private void openchinesekruiden(object obj)
-{
-    string numbr = this.number;
-    Application.Run(new PatentFormule(numbr));
-}
-
-//syndromen
-private void opensyndromen(object obj)
-{
-    string numbr = this.number;
-    Application.Run(new Syndromen(numbr));
-}
-
-//syndromenacties
-private void openactiessyndromen(object obj)
-{
-    string numbr = this.number;
-    Application.Run(new SyndroomActie(numbr));
-}
-
-//chinesekruiden
-private void openpinjinkruiden(object obj)
-{
-    string numbr = this.number;
-    Application.Run(new ChineseKruiden(numbr));
-}
-*/
-
 
     }
 }

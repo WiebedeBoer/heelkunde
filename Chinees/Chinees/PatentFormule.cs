@@ -77,7 +77,7 @@ namespace Chinees
                 Controls.Add(button1);
                 //aantekening button
                 Button buttonnote = new System.Windows.Forms.Button();
-                buttonnote.Location = new System.Drawing.Point(558, 11);
+                buttonnote.Location = new System.Drawing.Point(658, 11);
                 buttonnote.Name = "Aantekening";
                 buttonnote.Size = new System.Drawing.Size(100, 20);
                 buttonnote.Text = "Aantekening";
@@ -88,12 +88,12 @@ namespace Chinees
                 int updatenum = Convert.ToInt32(this.updatestage);
                 Verhoudingen ingredient = new Verhoudingen("Patentformules", updatenum);
                 int verhoudingcheck = ingredient.VerhoudingCheck();
-                if (verhoudingcheck == 1)
+                if (verhoudingcheck ==1)
                 {
                     ComboMaker();
                 }
                 int menucheck = ingredient.ListCheck();
-                if (menucheck == 1)
+                if (menucheck ==1)
                 {
                     MenuMaker(updatenum);
                 }
@@ -149,10 +149,10 @@ namespace Chinees
             reader.Read();
             DataTable dt = new DataTable();
             dt.Columns.Add("ID", typeof(int));
-            dt.Columns.Add("Naam", typeof(string));
+            dt.Columns.Add("Engels", typeof(string));
             dt.Load(reader);
             comboBox1.ValueMember = "ID";
-            comboBox1.DisplayMember = "Naam";
+            comboBox1.DisplayMember = "Engels";
             comboBox1.DataSource = dt;
             Controls.Add(comboBox1);
             //hoeveelheid
@@ -215,7 +215,7 @@ namespace Chinees
             //select query according to type search
             //start position
             int verticalpos = 330;
-            //int i = 0;
+            int i = 0;
             query = "SELECT PatentEnKruiden.ID, Patentformules.Nederlands, ChineseKruiden.Engels, PatentEnKruiden.Verhouding FROM Patentformules, PantentEnKruiden, ChineseKruiden WHERE Patentformules.ID=PatentEnKruiden.Patentformule AND PatentEnKruiden.ChineseKruiden=ChineseKruiden.ID AND PatentEnKruiden.ID=@sid";
             cmd = new SqlCommand(query, conn);
             cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
@@ -225,21 +225,24 @@ namespace Chinees
                 //formule naam
                 Label outlabel = new System.Windows.Forms.Label();
                 outlabel.Location = new System.Drawing.Point(700, verticalpos);
-                outlabel.Name = "outlabel";
+                outlabel.Name = "outlabel" + i.ToString();
                 outlabel.Size = new System.Drawing.Size(180, 20);
                 outlabel.Text = Convert.ToString(mdataReader.GetString(1));
+                Controls.Add(outlabel);
                 //kruid naam
                 Label outlabel2 = new System.Windows.Forms.Label();
                 outlabel2.Location = new System.Drawing.Point(900, verticalpos);
-                outlabel2.Name = "outlabel2";
+                outlabel2.Name = "outlabel2" + i.ToString();
                 outlabel2.Size = new System.Drawing.Size(180, 20);
                 outlabel2.Text = Convert.ToString(mdataReader.GetString(2));
+                Controls.Add(outlabel2);
                 //verhouding
                 Label outlabel3 = new System.Windows.Forms.Label();
                 outlabel3.Location = new System.Drawing.Point(1100, verticalpos);
-                outlabel3.Name = "outlabel3";
+                outlabel3.Name = "outlabel3" + i.ToString();
                 outlabel3.Size = new System.Drawing.Size(40, 20);
                 outlabel3.Text = Convert.ToString(mdataReader.GetString(3));
+                Controls.Add(outlabel3);
                 //id
                 Button buttonrem = new System.Windows.Forms.Button();
                 buttonrem.Location = new System.Drawing.Point(1160, verticalpos);
@@ -247,8 +250,9 @@ namespace Chinees
                 buttonrem.Size = new System.Drawing.Size(75, 35);
                 buttonrem.Click += new System.EventHandler(this.buttonrem_Click);
                 buttonrem.Name = Convert.ToString(mdataReader.GetString(0));
-
+                Controls.Add(buttonrem);
                 verticalpos = verticalpos + 40;
+                i++;
             }
 
         }

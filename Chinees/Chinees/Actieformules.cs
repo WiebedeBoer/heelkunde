@@ -95,7 +95,7 @@ namespace Chinees
             adapter.InsertCommand = new SqlCommand(query, conn);
             adapter.InsertCommand.Parameters.AddWithValue("@0", syndroom);
             adapter.InsertCommand.Parameters.AddWithValue("@1", patent);
-            adapter.InsertCommand.Parameters.AddWithValue("@1", formule);
+            adapter.InsertCommand.Parameters.AddWithValue("@2", formule);
             adapter.InsertCommand.ExecuteNonQuery();
             //db close
             cmd.Dispose();
@@ -154,7 +154,7 @@ namespace Chinees
             query = "DELETE FROM Actieformules WHERE ID=@deleteid";
             //execute delete
             cmd = new SqlCommand(query, conn);
-            cmd.Parameters.Add(new SqlParameter("@search", deleteid));
+            cmd.Parameters.Add(new SqlParameter("@deleteid", deleteid));
             cmd.ExecuteNonQuery();
             //db close
             cmd.Dispose();

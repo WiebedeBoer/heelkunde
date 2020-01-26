@@ -111,26 +111,27 @@ namespace Chinees
             switch (sekind)
             {
                 case "Kruiden":
-                    cquery = "SELECT COUNT(ID) AS cco FROM FormulesEnKruiden WHERE ID=@sid";
+                    cquery = "SELECT COUNT(IDKruiden) AS cco FROM FormulesEnKruiden WHERE IDKruiden =@sid";
                     break;
                 case "Kruidenformules":
-                    cquery = "SELECT COUNT(ID) AS cco FROM FormulesEnKruiden WHERE IDKruidenformule=@sid";
+                    cquery = "SELECT COUNT(IDKruidenformule) AS cco FROM FormulesEnKruiden WHERE IDKruidenformule=@sid";
                     break;
                 case "Chinesekruiden":
-                    cquery = "SELECT COUNT(ID) AS cco FROM PatentEnKruiden WHERE ID=@sid";
+                    cquery = "SELECT COUNT(Chinesekruiden) AS cco FROM PatentEnKruiden WHERE Chinesekruiden =@sid";
                     break;
                 case "Patentformules":
-                    cquery = "SELECT COUNT(ID) AS cco FROM PatentEnKruiden WHERE ID=@sid";
+                    cquery = "SELECT COUNT(Patentformule) AS cco FROM PatentEnKruiden WHERE Patentformule=@sid";
                     break;
                 default:
-                    cquery = "SELECT COUNT(ID) AS cco FROM FormulesEnKruiden WHERE ID=@sid";
+                    cquery = "SELECT COUNT(ID) AS cco FROM FormulesEnKruiden WHERE ID =@sid";
                     break;
             }
             ccmd = new SqlCommand(cquery, conn);
             ccmd.Parameters.Add(new SqlParameter("@sid", sid));
             cdataReader = ccmd.ExecuteReader();
             cdataReader.Read();
-            ccount = cdataReader.GetInt32(0);
+            ccount = Convert.ToInt32(cdataReader.GetInt32(0));
+            //ccount = (Int32)ccmd.ExecuteScalar();
 
             //db close
             cdataReader.Close();
@@ -233,7 +234,7 @@ namespace Chinees
             adapter.InsertCommand = new SqlCommand(query, conn);
             adapter.InsertCommand.Parameters.AddWithValue("@0", kruid);
             adapter.InsertCommand.Parameters.AddWithValue("@1", formule);
-            adapter.InsertCommand.Parameters.AddWithValue("@1", verhouding);
+            adapter.InsertCommand.Parameters.AddWithValue("@2", verhouding);
             adapter.InsertCommand.ExecuteNonQuery();
             //db close
             cmd.Dispose();

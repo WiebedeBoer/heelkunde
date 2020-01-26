@@ -78,7 +78,7 @@ namespace Chinees
                 Controls.Add(button1);
                 //aantekening button
                 Button buttonnote = new System.Windows.Forms.Button();
-                buttonnote.Location = new System.Drawing.Point(558, 11);
+                buttonnote.Location = new System.Drawing.Point(658, 11);
                 buttonnote.Name = "Aantekening";
                 buttonnote.Size = new System.Drawing.Size(100, 20);
                 buttonnote.Text = "Aantekening";
@@ -94,7 +94,7 @@ namespace Chinees
                     ComboMaker();                    
                 }
                 int menucheck = ingredient.ListCheck();
-                if (menucheck == 1)
+                if (menucheck ==1)
                 {
                     MenuMaker(updatenum);
                 }
@@ -131,14 +131,13 @@ namespace Chinees
         }
 
 
-
+        //ingredient combo
         public void ComboMaker()
         {
             String query;
             //query = "SELECT ID, Nederlands FROM Kruiden ORDER BY Nederlands ASC";
             query = "SELECT ID, Nederlands FROM Kruiden";
             //combobox
-
             comboBox1.FormattingEnabled = true;
             comboBox1.Location = new System.Drawing.Point(565, 276);
             comboBox1.Name = "comboBox1";
@@ -153,23 +152,22 @@ namespace Chinees
             reader = sc.ExecuteReader();
             reader.Read();
             DataTable dt = new DataTable();
-            dt.Columns.Add("ID", typeof(string));
-            dt.Columns.Add("Naam", typeof(string));
+            dt.Columns.Add("ID", typeof(int));
+            dt.Columns.Add("Nederlands", typeof(string));
             dt.Load(reader);
             comboBox1.ValueMember = "ID";
-            comboBox1.DisplayMember = "Naam";
+            comboBox1.DisplayMember = "Nederlands";
             comboBox1.DataSource = dt;
             Controls.Add(comboBox1);
-            //hoeveelheid
-            
-            textBoxhoe.Location = new System.Drawing.Point(565, 128);
+            //hoeveelheid            
+            textBoxhoe.Location = new System.Drawing.Point(565, 300);
             textBoxhoe.Name = "textBox7";
             textBoxhoe.Size = new System.Drawing.Size(100, 20);
             textBoxhoe.TabIndex = 19;
             Controls.Add(textBoxhoe);
             //button
             Button buttoningre = new System.Windows.Forms.Button();
-            buttoningre.Location = new System.Drawing.Point(565, 300);
+            buttoningre.Location = new System.Drawing.Point(565, 330);
             buttoningre.Name = "Ingredient Invoer";
             buttoningre.Size = new System.Drawing.Size(160, 20);
             buttoningre.Text = "Ingredient Invoer";
@@ -222,7 +220,7 @@ namespace Chinees
             //select query according to type search
             //start position
             int verticalpos = 330;
-            //int i = 0;
+            int i = 0;
             query = "SELECT FormulesEnKruiden.ID, Kruidenformules.Naam, Kruiden.Nederlands, FormulesEnKruiden.Verhouding FROM Kruidenformules, FormulesEnKruiden, Kruiden WHERE Kruidenformules.ID=FormulesEnKruiden.IDKruidenformule AND FormulesEnKruiden.IDKruiden=Kruiden.ID AND FormulesEnKruiden.ID=@sid";
             cmd = new SqlCommand(query, conn);
             cmd.Parameters.Add(new SqlParameter("@sid", selimiter));
@@ -232,21 +230,24 @@ namespace Chinees
                 //formule naam
                 Label outlabel = new System.Windows.Forms.Label();
                 outlabel.Location = new System.Drawing.Point(700, verticalpos);
-                outlabel.Name = "outlabel";
+                outlabel.Name = "outlabel" + i.ToString();
                 outlabel.Size = new System.Drawing.Size(180, 20);
                 outlabel.Text = Convert.ToString(mdataReader.GetString(1));
+                Controls.Add(outlabel);
                 //kruid naam
                 Label outlabel2 = new System.Windows.Forms.Label();
                 outlabel2.Location = new System.Drawing.Point(900, verticalpos);
-                outlabel2.Name = "outlabel2";
+                outlabel2.Name = "outlabel2" + i.ToString();
                 outlabel2.Size = new System.Drawing.Size(180, 20);
                 outlabel2.Text = Convert.ToString(mdataReader.GetString(2));
+                Controls.Add(outlabel2);
                 //verhouding
                 Label outlabel3 = new System.Windows.Forms.Label();
                 outlabel3.Location = new System.Drawing.Point(1100, verticalpos);
-                outlabel3.Name = "outlabel3";
+                outlabel3.Name = "outlabel3" + i.ToString();
                 outlabel3.Size = new System.Drawing.Size(40, 20);
                 outlabel3.Text = Convert.ToString(mdataReader.GetString(3));
+                Controls.Add(outlabel3);
                 //id
                 Button buttonrem = new System.Windows.Forms.Button();
                 buttonrem.Location = new System.Drawing.Point(1160, verticalpos);
@@ -254,8 +255,9 @@ namespace Chinees
                 buttonrem.Size = new System.Drawing.Size(75, 35);
                 buttonrem.Click += new System.EventHandler(this.buttonrem_Click);
                 buttonrem.Name = Convert.ToString(mdataReader.GetString(0));
-
+                Controls.Add(buttonrem);
                 verticalpos = verticalpos + 40;
+                i++;
             }
 
         }
